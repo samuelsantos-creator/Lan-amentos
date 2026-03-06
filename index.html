@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protheus · Apontamento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #ffffff;
+            --surface2: #f8fafc;
+            --border: #e2e8f0;
+            --border2: #cbd5e1;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --blue: #3b82f6;
+            --green: #10b981;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --text: #0f172a;
+            --text2: #475569;
+            --text3: #94a3b8;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-blue: 0 10px 25px -5px rgba(37, 99, 235, 0.1), 0 8px 10px -6px rgba(37, 99, 235, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* ── SCREENS ── */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 860px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── HOME ── */
+        .home-wrap {
+            text-align: center;
+        }
+
+        .home-logo {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -1px;
+            margin-bottom: .3rem;
+        }
+
+        .home-logo span {
+            color: var(--text2);
+            font-weight: 400;
+        }
+
+        .home-sub {
+            color: var(--text2);
+            font-size: .95rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .home-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .home-card {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.2rem;
+            cursor: pointer;
+            transition: .2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .home-card:hover {
+            border-color: var(--accent);
+            background: var(--surface2);
+            transform: translateY(-3px);
+        }
+
+        .home-card .card-icon {
+            font-size: 2.4rem;
+        }
+
+        .home-card .card-icon.prod {
+            color: var(--blue);
+        }
+
+        .home-card .card-icon.stop {
+            color: var(--red);
+        }
+
+        .home-card .card-icon.help {
+            color: var(--yellow);
+        }
+
+        .home-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .home-card p {
+            font-size: .78rem;
+            color: var(--text2);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* ── FORM PAGE ── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-header .ph-icon {
+            font-size: 1.5rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .page-header .badge {
+            font-size: .72rem;
+            font-family: 'IBM Plex Mono';
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 3px 10px;
+            border-radius: 20px;
+            color: var(--text2);
+        }
+
+        /* ── GRID FIELDS ── */
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.4rem 1.4rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-blue);
+        }
+
+        .form-card h4 {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text3);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .fields-grid {
+            display: grid;
+            gap: .9rem;
+        }
+
+        .fields-grid.cols-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .fields-grid.cols-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .fields-grid.cols-4 {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .fields-grid.cols-5 {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .field label {
+            font-size: .72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--text2);
+        }
+
+        .field-inner {
+            position: relative;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: .85rem;
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: var(--text);
+            transition: .15s;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px #ff8c4220;
+        }
+
+        .field input[readonly] {
+            color: var(--text2);
+            cursor: default;
+        }
+
+        .field input[disabled],
+        .field select[disabled] {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        .field .help-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            font-size: .7rem;
+            color: var(--text2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .field input.with-btn {
+            padding-right: 36px;
+        }
+
+        .field-span2 {
+            grid-column: span 2;
+        }
+
+        .field-span3 {
+            grid-column: span 3;
+        }
+
+        /* ── BUTTONS ROW ── */
+        .actions-row {
+            display: flex;
+            gap: .8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            padding-top: .5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: .85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: .15s;
+            border: 1.5px solid transparent;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent2);
+            border-color: var(--accent2);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text2);
+            border-color: var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--surface2);
+            color: var(--text);
+            border-color: var(--border2);
+        }
+
+        .btn-red {
+            background: transparent;
+            color: var(--red);
+            border-color: var(--red);
+        }
+
+        .btn-red:hover {
+            background: #ef444415;
+        }
+
+        .btn-blue {
+            background: transparent;
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .btn-blue:hover {
+            background: #3b82f615;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: .78rem;
+        }
+
+        .ml-auto {
+            margin-left: auto;
+        }
+
+        /* ── PARADAS TABLE ── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin: .8rem 0;
+        }
+
+        table.apt-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .8rem;
+        }
+
+        table.apt-table th {
+            background: var(--surface2);
+            padding: 9px 8px;
+            text-align: left;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--text2);
+            white-space: nowrap;
+        }
+
+        table.apt-table td {
+            padding: 7px 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table.apt-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.apt-table input,
+        table.apt-table select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-size: .78rem;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .btn-rm {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            font-size: .9rem;
+            padding: 4px;
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            width: 460px;
+            max-width: 95vw;
+            animation: fadeIn .2s;
+        }
+
+        .modal-box.type-erro {
+            border-color: var(--red);
+        }
+
+        .modal-box.type-aviso {
+            border-color: var(--yellow);
+        }
+
+        .modal-box.type-sucesso {
+            border-color: var(--green);
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-head i {
+            font-size: 1.8rem;
+        }
+
+        .modal-head h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            font-size: .88rem;
+            line-height: 1.6;
+            color: var(--text2);
+            max-height: 55vh;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-body ul {
+            padding-left: 1.4rem;
+        }
+
+        .modal-body li {
+            margin-bottom: .4rem;
+        }
+
+        .modal-foot {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* ── HELP ── */
+        .help-section {
+            margin-bottom: 1.2rem;
+        }
+
+        .help-section h4 {
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: .5rem;
+        }
+
+        .help-section p,
+        .help-section li {
+            font-size: .83rem;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        .help-section ul {
+            padding-left: 1.4rem;
+        }
+
+        .rule-tag {
+            display: inline-block;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: .75rem;
+            font-family: 'IBM Plex Mono';
+            color: var(--accent);
+            margin-right: 4px;
+        }
+
+        /* ── SHIFT TABLE ── */
+        .shift-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+
+        .shift-table th {
+            background: var(--surface2);
+            padding: 8px;
+            text-align: left;
+            color: var(--text2);
+            font-size: .72rem;
+            text-transform: uppercase;
+        }
+
+        .shift-table td {
+            padding: 7px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .shift-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tag-green {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        /* ── SUMMARY GRID ── */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .6rem;
+            margin-top: .8rem;
+        }
+
+        .summary-item {
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: .6rem .8rem;
+        }
+
+        .summary-item .s-label {
+            font-size: .7rem;
+            text-transform: uppercase;
+            color: var(--text3);
+            letter-spacing: .5px;
+        }
+
+        .summary-item .s-val {
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'IBM Plex Mono';
+            color: var(--text);
+            margin-top: 2px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 700px) {
+            .home-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .fields-grid.cols-2,
+            .fields-grid.cols-3,
+            .fields-grid.cols-4,
+            .fields-grid.cols-5 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .field-span3 {
+                grid-column: span 2;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .fields-grid.cols-4,
+            .fields-grid.cols-5 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ════════════════════════════════ HOME ════════════════════════════════ -->
+    <div class="screen active" id="screen-home">
+        <div class="home-wrap">
+            <div class="home-logo">Protheus <span>· Apontamento</span></div>
+            <div class="home-sub">Sistema de registro de produção e horas paradas — Modelo 1 (subtração)</div>
+            <div class="home-cards">
+                <div class="home-card" onclick="goTo('screen-prod')">
+                    <i class="fas fa-industry card-icon prod"></i>
+                    <h3>Apontar Produção</h3>
+                    <p>Registrar OP, produto, recurso, quantidades e período de produção</p>
+                </div>
+                <div class="home-card" onclick="goTo('screen-parada')">
+                    <i class="fas fa-pause-circle card-icon stop"></i>
+                    <h3>Apontar Parada</h3>
+                    <p>Registrar motivo, recurso e período de horas paradas da máquina</p>
+                </div>
+                <div class="home-card" onclick="goTo('screen-duvidas')">
+                    <i class="fas fa-question-circle card-icon help"></i>
+                    <h3>Dúvidas</h3>
+                    <p>Regras de apontamento, turnos, gaps e exemplos práticos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════ PRODUÇÃO ════════════════════════════════ -->
+    <div class="screen" id="screen-prod">
+        <div class="page-header">
+            <i class="fas fa-industry ph-icon" style="color:var(--blue)"></i>
+            <h2>Apontamento de Produção</h2>
+            <span class="badge">Modelo 1 · Subtração</span>
+            <div style="display:flex;gap:.5rem;margin-left:auto;">
+                <button class="btn btn-red btn-sm" onclick="goTo('screen-parada')"><i class="fas fa-pause-circle"></i>
+                    Apontar Parada</button>
+                <button class="btn btn-ghost btn-sm" onclick="goTo('screen-home')"><i class="fas fa-home"></i></button>
+            </div>
+        </div>
+
+        <!-- Operador -->
+        <div class="form-card">
+            <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
+            <div class="fields-grid cols-2">
+                <div class="field">
+                    <label>Matrícula</label>
+                    <input type="number" id="p-matricula" placeholder="Digite a matrícula">
+                </div>
+                <div class="field">
+                    <label>Nome do Colaborador</label>
+                    <input type="text" id="p-nome" readonly placeholder="Preenchimento automático">
+                </div>
+            </div>
+        </div>
+
+        <!-- Turno / Data -->
+        <div class="form-card">
+            <h4><i class="fas fa-calendar-alt" style="margin-right:6px;color:var(--accent)"></i>Turno e Data</h4>
+            <div class="fields-grid cols-3">
+                <div class="field">
+                    <label>Turno</label>
+                    <select id="p-turno">
+                        <option value="1|06:00|14:00">1 - 1º Turno (06:00–14:00)</option>
+                        <option value="2|14:00|22:00">2 - 2º Turno (14:00–22:00)</option>
+                        <option value="3|22:00|06:00">3 - 3º Turno (22:00–06:00)</option>
+                        <option value="S1|06:00|16:00">S1 - Sábado (06:00–16:00)</option>
+                        <option value="S2|09:00|19:00">S2 - Sábado (09:00–19:00)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Data Inicial</label>
+                    <div class="field-inner">
+                        <input type="date" id="p-data-ini" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Data Final</label>
+                    <div class="field-inner">
+                        <input type="date" id="p-data-fim" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Hora Inicial</label>
+                    <input type="text" id="p-hora-ini" placeholder="00:00" maxlength="5">
+                </div>
+                <div class="field">
+                    <label>Hora Final</label>
+                    <input type="text" id="p-hora-fim" placeholder="00:00" maxlength="5">
+                </div>
+            </div>
+        </div>
+
+        <!-- OP / Produto / Recurso -->
+        <div class="form-card">
+            <h4><i class="fas fa-cubes" style="margin-right:6px;color:var(--accent)"></i>Identificação</h4>
+            <div class="fields-grid cols-2">
+                <div class="field">
+                    <label>O.P.</label>
+                    <div class="field-inner">
+                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Produto</label>
+                    <div class="field-inner">
+                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field field-span2">
+                    <label>Descrição</label>
+                    <input type="text" id="p-desc" readonly placeholder="Preenchimento automático">
+                </div>
+                <div class="field">
+                    <label>Cód. Recurso</label>
+                    <div class="field-inner">
+                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Recurso</label>
+                    <input type="text" id="p-recurso" readonly placeholder="Preenchimento automático">
+                </div>
+            </div>
+        </div>
+
+        <!-- Quantidades -->
+        <div class="form-card">
+            <h4><i class="fas fa-sort-numeric-up" style="margin-right:6px;color:var(--accent)"></i>Quantidades</h4>
+            <div class="fields-grid cols-5">
+                <div class="field">
+                    <label>Qtd. Produzida</label>
+                    <div class="field-inner">
+                        <input type="number" id="p-qtd" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Qtd. Retrabalhada</label>
+                    <div class="field-inner">
+                        <input type="number" id="p-qtd-ret" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Peças Setup</label>
+                    <div class="field-inner">
+                        <input type="number" id="p-setup" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Peças NC (RNC)</label>
+                    <div class="field-inner">
+                        <input type="number" id="p-rnc" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Qtde Cestos</label>
+                    <input type="number" id="p-cestos" placeholder="1" min="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-row">
+            <button class="btn btn-ghost" onclick="carregarExemploProd('correto')"><i class="fas fa-check"></i> Exemplo
+                correto</button>
+            <button class="btn btn-ghost" onclick="carregarExemploProd('gap')"><i class="fas fa-times"></i> Exemplo
+                gap</button>
+            <button class="btn btn-ghost" onclick="carregarExemploProd('parcial')"><i class="fas fa-arrow-right"></i>
+                Parcial</button>
+            <div class="ml-auto" style="display:flex;gap:.8rem;">
+                <button class="btn btn-ghost" onclick="limparFormProd()"><i class="fas fa-eraser"></i> Limpar</button>
+                <button class="btn btn-primary" onclick="confirmarProd()"><i class="fas fa-check-circle"></i>
+                    Confirmar</button>
+            </div>
+        </div>
+
+        <!-- lista de produções registradas nesta sessão -->
+        <div id="prod-lista-wrap" style="margin-top:1.4rem;display:none;">
+            <div class="form-card">
+                <h4><i class="fas fa-list" style="margin-right:6px;color:var(--accent)"></i>Produções registradas neste
+                    turno</h4>
+                <div class="table-wrap">
+                    <table class="apt-table" id="prod-lista-table">
+                        <thead>
+                            <tr>
+                                <th>OP</th>
+                                <th>Produto</th>
+                                <th>Recurso</th>
+                                <th>Hr Ini</th>
+                                <th>Hr Fim</th>
+                                <th>Qtd</th>
+                                <th>Ret.</th>
+                                <th>Setup</th>
+                                <th>RNC</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="prod-lista-body"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top:.8rem;display:flex;justify-content:flex-end;">
+                    <button class="btn btn-primary" onclick="validarTudo()"><i class="fas fa-vial"></i> Validar turno
+                        completo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════ PARADA ════════════════════════════════ -->
+    <div class="screen" id="screen-parada">
+        <div class="page-header">
+            <i class="fas fa-pause-circle ph-icon" style="color:var(--red)"></i>
+            <h2>Apontamento de Horas Paradas</h2>
+            <span class="badge">Modelo 1 · Subtração</span>
+            <div style="display:flex;gap:.5rem;margin-left:auto;">
+                <button class="btn btn-blue btn-sm" onclick="goTo('screen-prod')"><i class="fas fa-industry"></i>
+                    Apontar Produção</button>
+                <button class="btn btn-ghost btn-sm" onclick="goTo('screen-home')"><i class="fas fa-home"></i></button>
+            </div>
+        </div>
+
+        <!-- Operador Parada -->
+        <div class="form-card">
+            <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
+            <div class="fields-grid cols-2">
+                <div class="field">
+                    <label>Matrícula</label>
+                    <input type="number" id="s-matricula" placeholder="Digite a matrícula">
+                </div>
+                <div class="field">
+                    <label>Nome do Colaborador</label>
+                    <input type="text" id="s-nome" readonly placeholder="Preenchimento automático">
+                </div>
+            </div>
+        </div>
+
+        <!-- Turno / Data parada -->
+        <div class="form-card">
+            <h4><i class="fas fa-calendar-alt" style="margin-right:6px;color:var(--accent)"></i>Turno e Período</h4>
+            <div class="fields-grid cols-3">
+                <div class="field">
+                    <label>Turno</label>
+                    <select id="s-turno">
+                        <option value="1|06:00|14:00">1 - 1º Turno (06:00–14:00)</option>
+                        <option value="2|14:00|22:00">2 - 2º Turno (14:00–22:00)</option>
+                        <option value="3|22:00|06:00">3 - 3º Turno (22:00–06:00)</option>
+                        <option value="S1|06:00|16:00">S1 - Sábado (06:00–16:00)</option>
+                        <option value="S2|09:00|19:00">S2 - Sábado (09:00–19:00)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Data Inicial</label>
+                    <div class="field-inner">
+                        <input type="date" id="s-data-ini" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Data Final</label>
+                    <div class="field-inner">
+                        <input type="date" id="s-data-fim" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Hora Inicial</label>
+                    <input type="text" id="s-hora-ini" placeholder="00:00" maxlength="5">
+                </div>
+                <div class="field">
+                    <label>Hora Final</label>
+                    <input type="text" id="s-hora-fim" placeholder="00:00" maxlength="5">
+                </div>
+            </div>
+        </div>
+
+        <!-- Motivo / OP / Recurso -->
+        <div class="form-card">
+            <h4><i class="fas fa-tag" style="margin-right:6px;color:var(--accent)"></i>Identificação da Parada</h4>
+            <div class="fields-grid cols-2">
+                <div class="field">
+                    <label>O.P.</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Produto</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field field-span2">
+                    <label>Descrição</label>
+                    <input type="text" id="s-desc" readonly placeholder="Preenchimento automático">
+                </div>
+                <div class="field">
+                    <label>Cód. Motivo</label>
+                    <div class="field-inner">
+                        <select id="s-motivo-cod">
+                            <option value="">— Selecione —</option>
+                            <option value="AM">AM - AMOSTRA</option>
+                            <option value="FR">FR - FERRAMENTAL</option>
+                            <option value="LE">LE - FALTA DE EMBALAGEM</option>
+                            <option value="LM">LM - FALTA DE MATÉRIA PRIMA</option>
+                            <option value="LP">LP - FALTA DE PROGRAMAÇÃO</option>
+                            <option value="PL">PL - LIMPEZA / ORGANIZAÇÃO</option>
+                            <option value="ME">ME - MANUTENÇÃO ELÉTRICA</option>
+                            <option value="MM">MM - MANUTENÇÃO MECÂNICA</option>
+                            <option value="MP">MP - MANUTENÇÃO PREVENTIVA</option>
+                            <option value="IP">IP - INSPEÇÃO</option>
+                            <option value="MU">MU - PANE EM UTILIDADES</option>
+                            <option value="PD">PD - MÃO DE OBRA DESLOCADA</option>
+                            <option value="PJ">PJ - AJUSTE DE OPERAÇÃO</option>
+                            <option value="PM">PM - FALTA DE MÃO DE OBRA</option>
+                            <option value="PR">PR - REFEIÇÃO / NECESS. PESSOAIS</option>
+                            <option value="PT">PT - PROTÓTIPO</option>
+                            <option value="QM">QM - MATÉRIA PRIMA NÃO CONFORME</option>
+                            <option value="QP">QP - PRODUTO NÃO CONFORME</option>
+                            <option value="PC">PC - PROCESSO SUBSEQUENTE CHEIO</option>
+                            <option value="ST">ST - SET-UP</option>
+                            <option value="TO">TO - TRY-OUT</option>
+                            <option value="TR">TR - TREINAMENTO / REUNIÃO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Descrição Motivo</label>
+                    <input type="text" id="s-motivo-desc" readonly placeholder="Preenchimento automático">
+                </div>
+                <div class="field">
+                    <label>Cód. Recurso</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Recurso</label>
+                    <input type="text" id="s-recurso" readonly placeholder="Preenchimento automático">
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-row">
+            <button class="btn btn-ghost" onclick="limparFormParada()"><i class="fas fa-eraser"></i> Limpar</button>
+            <div class="ml-auto" style="display:flex;gap:.8rem;">
+                <button class="btn btn-primary" onclick="confirmarParada()"><i class="fas fa-check-circle"></i>
+                    Confirmar</button>
+            </div>
+        </div>
+
+        <!-- lista de paradas registradas -->
+        <div id="parada-lista-wrap" style="margin-top:1.4rem;display:none;">
+            <div class="form-card">
+                <h4><i class="fas fa-list" style="margin-right:6px;color:var(--accent)"></i>Paradas registradas neste
+                    turno</h4>
+                <div class="table-wrap">
+                    <table class="apt-table" id="parada-lista-table">
+                        <thead>
+                            <tr>
+                                <th>Motivo</th>
+                                <th>O.P.</th>
+                                <th>Recurso</th>
+                                <th>Hr Ini</th>
+                                <th>Hr Fim</th>
+                                <th>Duração</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="parada-lista-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════ DÚVIDAS ════════════════════════════════ -->
+    <div class="screen" id="screen-duvidas">
+        <div class="page-header">
+            <i class="fas fa-question-circle ph-icon" style="color:var(--yellow)"></i>
+            <h2>Dúvidas · Regras de Apontamento</h2>
+            <button class="btn btn-ghost btn-sm ml-auto" onclick="goTo('screen-home')"><i class="fas fa-home"></i>
+                Início</button>
+        </div>
+
+        <div class="form-card">
+            <h4>Turnos disponíveis</h4>
+            <table class="shift-table">
+                <thead>
+                    <tr>
+                        <th>Cód.</th>
+                        <th>Descrição</th>
+                        <th>Horário</th>
+                        <th>Duração</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>1º Turno</td>
+                        <td>06:00 – 14:00</td>
+                        <td class="tag-green">480 min</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2º Turno</td>
+                        <td>14:00 – 22:00</td>
+                        <td class="tag-green">480 min</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>3º Turno †</td>
+                        <td>22:00 – 06:00</td>
+                        <td class="tag-green">480 min</td>
+                    </tr>
+                    <tr>
+                        <td>S1</td>
+                        <td>Sábado 1</td>
+                        <td>06:00 – 16:00</td>
+                        <td class="tag-green">600 min</td>
+                    </tr>
+                    <tr>
+                        <td>S2</td>
+                        <td>Sábado 2</td>
+                        <td>09:00 – 19:00</td>
+                        <td class="tag-green">600 min</td>
+                    </tr>
+                    <tr>
+                        <td>ADM</td>
+                        <td>Administrativo</td>
+                        <td>07:00 – 16:48</td>
+                        <td class="tag-green">588 min</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size:.75rem;color:var(--text3);margin-top:.6rem;">† Turno 3: data referência = dia do início
+                (22:00), término no dia seguinte (06:00).</p>
+        </div>
+
+        <div class="form-card">
+            <h4>Regras — Modelo Subtração</h4>
+            <div class="help-section">
+                <h4>1. Produção contínua sem sobreposição</h4>
+                <p>Dois registros de produção não podem ter horários sobrepostos no mesmo recurso.</p>
+            </div>
+            <div class="help-section">
+                <h4>2. Parada contida dentro de produção</h4>
+                <p>Toda parada deve estar completamente dentro de um período de produção ativo. Paradas fora da produção
+                    são inválidas.</p>
+            </div>
+            <div class="help-section">
+                <h4>3. Duração mínima de parada</h4>
+                <p>Registrar apenas paradas com duração <strong>maior que 5 minutos</strong>. Paradas de ≤5 min são
+                    ignoradas.</p>
+            </div>
+            <div class="help-section">
+                <h4>4. Sem lacunas (gaps) entre produções</h4>
+                <p>Entre duas produções consecutivas, o horário de fim da primeira deve ser exatamente igual ao horário
+                    de início da segunda. Se há um gap, deve ser coberto por uma parada.</p>
+            </div>
+            <div class="help-section">
+                <h4>5. Início no horário do turno</h4>
+                <p>A primeira produção do turno deve iniciar exatamente no horário de início do turno selecionado.</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h4>Exemplos práticos — Turno 1 (06:00–14:00)</h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-top:.5rem;">
+                <div style="background:var(--surface2);border:1px solid var(--green);border-radius:10px;padding:1rem;">
+                    <p style="color:var(--green);font-weight:700;margin-bottom:.5rem;font-size:.8rem;"><i
+                            class="fas fa-check-circle"></i> CORRETO</p>
+                    <p style="font-size:.78rem;color:var(--text2);">Prod A: 06:00–09:00<br>Prod B:
+                        09:00–14:00<br>Paradas: ST 09–10, PR 12–13</p>
+                </div>
+                <div style="background:var(--surface2);border:1px solid var(--red);border-radius:10px;padding:1rem;">
+                    <p style="color:var(--red);font-weight:700;margin-bottom:.5rem;font-size:.8rem;"><i
+                            class="fas fa-exclamation-triangle"></i> GAP (ERRO)</p>
+                    <p style="font-size:.78rem;color:var(--text2);">Prod A: 06:00–09:00<br>Prod B: 10:00–14:00<br>Gap
+                        sem parada → inválido</p>
+                </div>
+                <div style="background:var(--surface2);border:1px solid var(--red);border-radius:10px;padding:1rem;">
+                    <p style="color:var(--red);font-weight:700;margin-bottom:.5rem;font-size:.8rem;"><i
+                            class="fas fa-calendar-times"></i> PARADA FORA</p>
+                    <p style="font-size:.78rem;color:var(--text2);">Prod: 06:00–14:00<br>Parada: 05:50–06:10<br>Início
+                        fora do período</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:.8rem;justify-content:center;margin-top:.5rem;">
+            <button class="btn btn-blue" onclick="goTo('screen-prod')"><i class="fas fa-industry"></i> Apontar
+                Produção</button>
+            <button class="btn btn-red" onclick="goTo('screen-parada')"><i class="fas fa-pause-circle"></i> Apontar
+                Parada</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════ MODAL ════════════════════════════════ -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box" id="modalBox">
+            <div class="modal-head" id="modalHead">
+                <i id="modalIcon" class="fas fa-info-circle"></i>
+                <h3 id="modalTitle">Título</h3>
+            </div>
+            <div class="modal-body" id="modalBody">Mensagem</div>
+            <div class="modal-foot">
+                <button class="btn btn-ghost" id="fecharModal">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            // ── STATE ──
+            const state = {
+                produções: [],   // { op, produto, desc, recursoCod, recurso, dataIni, horaIni, dataFim, horaFim, qtd, ret, setup, rnc, cestos }
+                paradas: []      // { motivo, op, recursoCod, recurso, dataIni, horaIni, dataFim, horaFim }
+            };
+
+            const motivos = {
+                AM: 'AMOSTRA', FR: 'FERRAMENTAL', LE: 'FALTA DE EMBALAGEM', LM: 'FALTA DE MATÉRIA PRIMA',
+                LP: 'FALTA DE PROGRAMAÇÃO', PL: 'LIMPEZA / ORGANIZAÇÃO', ME: 'MANUTENÇÃO ELÉTRICA',
+                MM: 'MANUTENÇÃO MECÂNICA', MP: 'MANUTENÇÃO PREVENTIVA', IP: 'INSPEÇÃO',
+                MU: 'PANE EM UTILIDADES', PD: 'MÃO DE OBRA DESLOCADA', PJ: 'AJUSTE DE OPERAÇÃO',
+                PM: 'FALTA DE MÃO DE OBRA (OPERADOR)', PR: 'REFEIÇÃO/NECESS. PESSOAIS',
+                PT: 'PROTÓTIPO', QM: 'MATÉRIA PRIMA NÃO CONFORME', QP: 'PRODUTO NÃO CONFORME',
+                PC: 'PROCESSO SUBSEQUENTE CHEIO', ST: 'SET-UP', TO: 'TRY-OUT', TR: 'TREINAMENTO / REUNIÃO'
+            };
+
+            const db = {
+                colaboradores: { '101': 'Samuel Inácio', '102': 'João Silva', '103': 'Maria Oliveira' },
+                produtos: { 'P001': 'Abraçadeira T10 Blue', 'P002': 'Suporte L50 Metal', 'P003': 'Anel O-Ring 22mm' },
+                recursos: { 'INJ-01': 'Injetora Romi 130T', 'INJ-02': 'Injetora Haitian 200T', 'PRE-01': 'Prensa Hidráulica 50T' }
+            };
+
+            // Auto-fill colaborador produção
+            document.getElementById('p-matricula').addEventListener('blur', function () {
+                document.getElementById('p-nome').value = db.colaboradores[this.value] || 'Colaborador não encontrado';
+            });
+
+            // Auto-fill colaborador parada
+            document.getElementById('s-matricula').addEventListener('blur', function () {
+                document.getElementById('s-nome').value = db.colaboradores[this.value] || 'Colaborador não encontrado';
+            });
+
+            // Auto-fill produto produção
+            document.getElementById('p-produto').addEventListener('blur', function () {
+                document.getElementById('p-desc').value = db.produtos[this.value.toUpperCase()] || 'Produto não encontrado';
+            });
+
+            // Auto-fill produto parada
+            document.getElementById('s-produto').addEventListener('blur', function () {
+                document.getElementById('s-desc').value = db.produtos[this.value.toUpperCase()] || 'Produto não encontrado';
+            });
+
+            // Auto-fill recurso produção
+            document.getElementById('p-recurso-cod').addEventListener('blur', function () {
+                document.getElementById('p-recurso').value = db.recursos[this.value.toUpperCase()] || 'Recurso não encontrado';
+            });
+
+            // Auto-fill recurso parada
+            document.getElementById('s-recurso-cod').addEventListener('blur', function () {
+                document.getElementById('s-recurso').value = db.recursos[this.value.toUpperCase()] || 'Recurso não encontrado';
+            });
+
+            // Auto-fill motivo description
+            document.getElementById('s-motivo-cod').addEventListener('change', function () {
+                document.getElementById('s-motivo-desc').value = motivos[this.value] || '';
+            });
+
+            // ── NAVIGATION ──
+            window.goTo = function (id) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                window.scrollTo(0, 0);
+            };
+
+            // ── MODAL ──
+            function showModal(type, title, html) {
+                const box = document.getElementById('modalBox');
+                box.className = 'modal-box type-' + type;
+                const icons = { erro: 'fas fa-times-circle', aviso: 'fas fa-exclamation-triangle', sucesso: 'fas fa-check-circle' };
+                const colors = { erro: 'var(--red)', aviso: 'var(--yellow)', sucesso: 'var(--green)' };
+                const ico = document.getElementById('modalIcon');
+                ico.className = icons[type];
+                ico.style.color = colors[type];
+                document.getElementById('modalTitle').style.color = colors[type];
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalBody').innerHTML = html;
+                document.getElementById('modalOverlay').classList.add('open');
+            }
+            document.getElementById('fecharModal').onclick = () => document.getElementById('modalOverlay').classList.remove('open');
+            document.getElementById('modalOverlay').onclick = e => { if (e.target.id === 'modalOverlay') e.target.classList.remove('open'); };
+
+            // ── HELPERS ──
+            function maskTime(id) {
+                const el = document.getElementById(id);
+                el.addEventListener('input', e => {
+                    let v = e.target.value.replace(/\D/g, "");
+                    if (v.length > 4) v = v.slice(0, 4);
+                    if (v.length > 2) v = v.slice(0, 2) + ":" + v.slice(2);
+                    e.target.value = v;
+                });
+                el.addEventListener('blur', e => {
+                    let v = e.target.value;
+                    if (v.length === 0) return;
+                    if (v.length === 1) v = "0" + v + ":00";
+                    else if (v.length === 2) v = v + ":00";
+                    else if (v.length === 3) v = v.slice(0, 2) + ":" + v[2] + "0";
+                    else if (v.length === 4) v = v.slice(0, 3) + "0" + v[3]; // format case like 12:3 to 12:03
+                    e.target.value = v;
+                });
+            }
+            ['p-hora-ini', 'p-hora-fim', 's-hora-ini', 's-hora-fim'].forEach(maskTime);
+
+            function parseDateTime(d, t) { if (!d || !t) return null; return new Date(d + 'T' + t + ':00'); }
+            function fmt(d) { return d.toTimeString().slice(0, 5); }
+            function today() { return new Date().toISOString().slice(0, 10); }
+
+            // Init dates
+            document.getElementById('p-data-ini').value = today();
+            document.getElementById('p-data-fim').value = today();
+            document.getElementById('s-data-ini').value = today();
+            document.getElementById('s-data-fim').value = today();
+
+            // ── CONFIRMAR PRODUÇÃO ──
+            window.confirmarProd = function () {
+                const op = document.getElementById('p-op').value.trim();
+                const prod = document.getElementById('p-produto').value.trim();
+                const rCod = document.getElementById('p-recurso-cod').value.trim();
+                const dIni = document.getElementById('p-data-ini').value;
+                const hIni = document.getElementById('p-hora-ini').value;
+                const dFim = document.getElementById('p-data-fim').value;
+                const hFim = document.getElementById('p-hora-fim').value;
+                const qtd = parseFloat(document.getElementById('p-qtd').value) || 0;
+                const ret = parseFloat(document.getElementById('p-qtd-ret').value) || 0;
+                const setup = parseFloat(document.getElementById('p-setup').value) || 0;
+                const rnc = parseFloat(document.getElementById('p-rnc').value) || 0;
+                const cestos = parseInt(document.getElementById('p-cestos').value) || 1;
+
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as Datas e Horários.'); return; }
+                const start = parseDateTime(dIni, hIni);
+                const end = parseDateTime(dFim, hFim);
+                if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
+
+                state.produções.push({ op, produto: prod, desc: '', recursoCod: rCod, recurso: '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos });
+                renderProdLista();
+                showModal('sucesso', 'Produção registrada!',
+                    `<b>OP:</b> ${op}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Qtd. Produzida:</b> ${qtd.toFixed(2)}<br><b>Qtd. Retrabalhada:</b> ${ret.toFixed(2)}<br><b>Peças Setup:</b> ${setup.toFixed(2)}<br><b>RNC:</b> ${rnc.toFixed(2)}<br><br>Registro adicionado. Clique em <b>Validar turno completo</b> para verificar o turno.`
+                );
+                limparFormProd();
+            };
+
+            // ── CONFIRMAR PARADA ──
+            window.confirmarParada = function () {
+                const motCod = document.getElementById('s-motivo-cod').value;
+                const op = document.getElementById('s-op').value.trim();
+                const rCod = document.getElementById('s-recurso-cod').value.trim();
+                const dIni = document.getElementById('s-data-ini').value;
+                const hIni = document.getElementById('s-hora-ini').value;
+                const dFim = document.getElementById('s-data-fim').value;
+                const hFim = document.getElementById('s-hora-fim').value;
+
+                if (!motCod) { showModal('erro', 'Motivo obrigatório', 'Selecione o motivo da parada.'); return; }
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as datas e horários.'); return; }
+
+                const start = parseDateTime(dIni, hIni);
+                const end = parseDateTime(dFim, hFim);
+                if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
+
+                const durMin = (end - start) / 60000;
+                if (durMin <= 5) { showModal('aviso', 'Parada curta', `Paradas de ≤5 min (${durMin} min) não devem ser registradas conforme regra de apontamento.`); return; }
+
+                state.paradas.push({ motCod, motDesc: motivos[motCod] || '', op, recursoCod: rCod, dIni, hIni, dFim, hFim });
+                renderParadaLista();
+                showModal('sucesso', 'Parada registrada!',
+                    `<b>Motivo:</b> ${motCod} - ${motivos[motCod] || ''}<br><b>OP:</b> ${op || '—'}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Duração:</b> ${durMin} min`
+                );
+                limparFormParada();
+            };
+
+            // ── RENDERIZAR LISTAS ──
+            function renderProdLista() {
+                const body = document.getElementById('prod-lista-body');
+                body.innerHTML = '';
+                state.produções.forEach((p, i) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${p.op}</td><td>${p.produto || '—'}</td><td>${p.recursoCod || '—'}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${p.qtd.toFixed(2)}</td><td>${p.ret.toFixed(2)}</td><td>${p.setup.toFixed(2)}</td><td>${p.rnc.toFixed(2)}</td><td><button class="btn-rm" onclick="removeProd(${i})"><i class="fas fa-trash"></i></button></td>`;
+                    body.appendChild(tr);
+                });
+                document.getElementById('prod-lista-wrap').style.display = state.produções.length ? '' : 'none';
+            }
+            function renderParadaLista() {
+                const body = document.getElementById('parada-lista-body');
+                body.innerHTML = '';
+                state.paradas.forEach((p, i) => {
+                    const s = parseDateTime(p.dIni, p.hIni);
+                    const e = parseDateTime(p.dFim, p.hFim);
+                    const dur = s && e ? Math.round((e - s) / 60000) + ' min' : '—';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${p.motCod} - ${p.motDesc}</td><td>${p.op || '—'}</td><td>${p.recursoCod || '—'}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${dur}</td><td><button class="btn-rm" onclick="removeParada(${i})"><i class="fas fa-trash"></i></button></td>`;
+                    body.appendChild(tr);
+                });
+                document.getElementById('parada-lista-wrap').style.display = state.paradas.length ? '' : 'none';
+            }
+            window.removeProd = i => { state.produções.splice(i, 1); renderProdLista(); };
+            window.removeParada = i => { state.paradas.splice(i, 1); renderParadaLista(); };
+
+            // ── LIMPAR FORMS ──
+            window.limparFormProd = function () {
+                ['p-matricula', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => document.getElementById(id).value = '');
+            };
+            window.limparFormParada = function () {
+                ['s-matricula', 's-nome', 's-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('s-motivo-cod').value = '';
+            };
+
+            // ── EXEMPLOS (usa turno da tela de produção) ──
+            window.carregarExemploProd = function (tipo) {
+                const d = today();
+                document.getElementById('p-data-ini').value = d;
+                document.getElementById('p-data-fim').value = d;
+                if (tipo === 'correto') {
+                    document.getElementById('p-matricula').value = '101';
+                    document.getElementById('p-nome').value = db.colaboradores['101'];
+                    document.getElementById('p-turno').value = '1|06:00|14:00';
+                    document.getElementById('p-op').value = 'OP2456A';
+                    document.getElementById('p-produto').value = 'PROD001';
+                    document.getElementById('p-hora-ini').value = '06:00';
+                    document.getElementById('p-hora-fim').value = '09:00';
+                    document.getElementById('p-qtd').value = '150';
+                } else if (tipo === 'gap') {
+                    document.getElementById('p-turno').value = '1|06:00|14:00';
+                    document.getElementById('p-op').value = 'OP2456B';
+                    document.getElementById('p-produto').value = 'PROD001';
+                    document.getElementById('p-hora-ini').value = '10:00';
+                    document.getElementById('p-hora-fim').value = '14:00';
+                    document.getElementById('p-qtd').value = '200';
+                } else if (tipo === 'parcial') {
+                    document.getElementById('p-turno').value = '1|06:00|14:00';
+                    document.getElementById('p-op').value = 'OP2456C';
+                    document.getElementById('p-produto').value = 'PROD002';
+                    document.getElementById('p-hora-ini').value = '06:00';
+                    document.getElementById('p-hora-fim').value = '10:00';
+                    document.getElementById('p-qtd').value = '100';
+                }
+            };
+
+            // ── VALIDAR TURNO COMPLETO ──
+            window.validarTudo = function () {
+                const turnoInfo = document.getElementById('p-turno').value.split('|');
+                const iniT = turnoInfo[1], fimT = turnoInfo[2];
+                const dataBase = document.getElementById('p-data-ini').value;
+                if (!dataBase) { showModal('erro', 'Data inválida', 'Selecione a data de referência.'); return; }
+                if (state.produções.length === 0) { showModal('erro', 'Sem produção', 'Registre ao menos uma produção.'); return; }
+
+                const prodInts = state.produções.map(p => ({
+                    ...p,
+                    start: parseDateTime(p.dIni, p.hIni),
+                    end: parseDateTime(p.dFim, p.hFim)
+                })).filter(p => p.start && p.end).sort((a, b) => a.start - b.start);
+
+                const paradaInts = state.paradas.map(p => ({
+                    ...p,
+                    start: parseDateTime(p.dIni, p.hIni),
+                    end: parseDateTime(p.dFim, p.hFim)
+                })).filter(p => p.start && p.end).sort((a, b) => a.start - b.start);
+
+                let shiftStart = new Date(dataBase + 'T' + iniT + ':00');
+                let shiftEnd = new Date(dataBase + 'T' + fimT + ':00');
+                if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
+                const shiftMin = (shiftEnd - shiftStart) / 60000;
+
+                let errors = [], warnings = [];
+
+                // sobreposição prod
+                for (let i = 0; i < prodInts.length; i++) for (let j = i + 1; j < prodInts.length; j++)
+                    if (prodInts[j].start < prodInts[i].end) {
+                        const opA = prodInts[i].op || 'Sem O.P.';
+                        const opB = prodInts[j].op || 'Sem O.P.';
+                        errors.push(`Sobreposição: "${opA}" e "${opB}".`);
+                    }
+
+                // sobreposição parada
+                for (let i = 0; i < paradaInts.length; i++) for (let j = i + 1; j < paradaInts.length; j++)
+                    if (paradaInts[j].start < paradaInts[i].end)
+                        errors.push(`Paradas sobrepostas: ${paradaInts[i].motCod} e ${paradaInts[j].motCod}.`);
+
+                // parada contida em produção
+                paradaInts.forEach(par => {
+                    if (!prodInts.some(p => par.start >= p.start && par.end <= p.end))
+                        errors.push(`Parada ${par.motCod} (${par.hIni}–${par.hFim}) fora de produção.`);
+                    const dur = (par.end - par.start) / 60000;
+                    if (dur <= 5) errors.push(`Parada ${par.motCod} ≤5 min (${dur} min).`);
+                });
+
+                // gaps
+                for (let i = 0; i < prodInts.length - 1; i++) {
+                    if (Math.abs(prodInts[i + 1].start - prodInts[i].end) > 60000)
+                        errors.push(`Gap entre ${fmt(prodInts[i].end)} e ${fmt(prodInts[i + 1].start)}. Cubra com produção ou parada.`);
+                }
+
+                const first = prodInts[0], last = prodInts[prodInts.length - 1];
+                if (Math.abs(first.start - shiftStart) > 60000)
+                    errors.push(`Produção deve iniciar às ${iniT}. Início: ${fmt(first.start)}.`);
+                const diffEnd = (last.end - shiftEnd) / 60000;
+                if (diffEnd > 1)
+                    errors.push(`Produção ultrapassa fim do turno (${fimT}): término ${fmt(last.end)}.`);
+                else if (diffEnd < -1 && errors.length === 0)
+                    warnings.push(`✅ Apontamento lançado! Registre próxima produção a partir das ${fmt(last.end)} para continuar o turno.`);
+
+                if (errors.length) {
+                    showModal('erro', `Erros encontrados (${errors.length})`, `<ul>${errors.map(e => '<li>' + e + '</li>').join('')}</ul>`);
+                } else if (warnings.length) {
+                    showModal('aviso', 'Atenção', warnings[0]);
+                } else {
+                    const totPar = paradaInts.reduce((a, p) => a + (p.end - p.start) / 60000, 0);
+                    const bruta = (last.end - first.start) / 60000;
+                    const liq = bruta - totPar;
+                    showModal('sucesso', 'Turno válido! ✅',
+                        `<b>Turno:</b> ${Math.round(shiftMin)} min<br><b>Produção bruta:</b> ${Math.round(bruta)} min<br><b>Paradas:</b> ${Math.round(totPar)} min<br><b>Produção líquida:</b> ${Math.round(liq)} min<br><br><b>Produções registradas:</b> ${state.produções.length} &nbsp;|&nbsp; <b>Paradas:</b> ${state.paradas.length}`
+                    );
+                }
+            };
+
+        })();
+
+        // ── SERVICE WORKER ──
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registrado', reg))
+                    .catch(err => console.log('Erro SW', err));
+            });
+        }
+    </script>
+</body>
+
+</html>
