@@ -700,8 +700,8 @@
             <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
             <div class="fields-grid cols-3">
                 <div class="field">
-                    <label>Matrícula</label>
-                    <input type="number" id="p-matricula" placeholder="Matrícula">
+                    <label>Usuário</label>
+                    <input type="text" id="p-matricula" placeholder="Usuário">
                 </div>
                 <div class="field">
                     <label>Senha</label>
@@ -898,8 +898,8 @@
             <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
             <div class="fields-grid cols-3">
                 <div class="field">
-                    <label>Matrícula</label>
-                    <input type="number" id="s-matricula" placeholder="Matrícula">
+                    <label>Usuário</label>
+                    <input type="text" id="s-matricula" placeholder="Usuário">
                 </div>
                 <div class="field">
                     <label>Senha</label>
@@ -1228,10 +1228,10 @@
                     document.getElementById(prefix + 'nome').value = db.colaboradores[key] || 'Colaborador/Senha inválidos';
                 }
             }
-            document.getElementById('p-matricula').addEventListener('blur', () => fillColab(true));
-            document.getElementById('p-senha').addEventListener('blur', () => fillColab(true));
-            document.getElementById('s-matricula').addEventListener('blur', () => fillColab(false));
-            document.getElementById('s-senha').addEventListener('blur', () => fillColab(false));
+            document.getElementById('p-matricula').addEventListener('input', () => fillColab(true));
+            document.getElementById('p-senha').addEventListener('input', () => fillColab(true));
+            document.getElementById('s-matricula').addEventListener('input', () => fillColab(false));
+            document.getElementById('s-senha').addEventListener('input', () => fillColab(false));
 
             // Auto-fill OP
             function fillOP(isProd) {
@@ -1243,19 +1243,21 @@
                     document.getElementById(prefix + 'desc').value = db.produtos[prodCod] || db.ops[op].desc || 'Descrição não encontrada';
                 }
             }
-            document.getElementById('p-op').addEventListener('blur', () => fillOP(true));
-            document.getElementById('s-op').addEventListener('blur', () => fillOP(false));
+            document.getElementById('p-op').addEventListener('input', () => fillOP(true));
+            document.getElementById('s-op').addEventListener('input', () => fillOP(false));
 
             // Auto-fill produto (individual)
             function fillProd(isProd) {
                 const prefix = isProd ? 'p-' : 's-';
-                const cod = document.getElementById(prefix + 'produto').value.trim().toUpperCase();
-                if (db.produtos[cod]) {
-                    document.getElementById(prefix + 'desc').value = db.produtos[cod];
+                const cod = document.getElementById(prefix + 'produto').value.trim();
+                // Case-insensitive search
+                const foundKey = Object.keys(db.produtos).find(k => k.toUpperCase() === cod.toUpperCase());
+                if (foundKey) {
+                    document.getElementById(prefix + 'desc').value = db.produtos[foundKey];
                 }
             }
-            document.getElementById('p-produto').addEventListener('blur', () => fillProd(true));
-            document.getElementById('s-produto').addEventListener('blur', () => fillProd(false));
+            document.getElementById('p-produto').addEventListener('input', () => fillProd(true));
+            document.getElementById('s-produto').addEventListener('input', () => fillProd(false));
 
             // Auto-fill recurso
             function fillRecurso(isProd) {
@@ -1265,11 +1267,11 @@
                     document.getElementById(prefix + 'recurso').value = db.recursos[cod];
                 }
             }
-            document.getElementById('p-recurso-cod').addEventListener('blur', () => fillRecurso(true));
-            document.getElementById('s-recurso-cod').addEventListener('blur', () => fillRecurso(false));
+            document.getElementById('p-recurso-cod').addEventListener('input', () => fillRecurso(true));
+            document.getElementById('s-recurso-cod').addEventListener('input', () => fillRecurso(false));
 
             // Auto-fill motivo parada
-            document.getElementById('s-motivo-cod').addEventListener('blur', function () {
+            document.getElementById('s-motivo-cod').addEventListener('input', function () {
                 const cod = this.value.trim().toUpperCase();
                 document.getElementById('s-motivo-desc').value = db.motivos[cod] || 'Motivo não encontrado';
             });
