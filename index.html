@@ -979,31 +979,7 @@
                 <div class="field">
                     <label>Cód. Motivo</label>
                     <div class="field-inner">
-                        <select id="s-motivo-cod">
-                            <option value="">— Selecione —</option>
-                            <option value="AM">AM - AMOSTRA</option>
-                            <option value="FR">FR - FERRAMENTAL</option>
-                            <option value="LE">LE - FALTA DE EMBALAGEM</option>
-                            <option value="LM">LM - FALTA DE MATÉRIA PRIMA</option>
-                            <option value="LP">LP - FALTA DE PROGRAMAÇÃO</option>
-                            <option value="PL">PL - LIMPEZA / ORGANIZAÇÃO</option>
-                            <option value="ME">ME - MANUTENÇÃO ELÉTRICA</option>
-                            <option value="MM">MM - MANUTENÇÃO MECÂNICA</option>
-                            <option value="MP">MP - MANUTENÇÃO PREVENTIVA</option>
-                            <option value="IP">IP - INSPEÇÃO</option>
-                            <option value="MU">MU - PANE EM UTILIDADES</option>
-                            <option value="PD">PD - MÃO DE OBRA DESLOCADA</option>
-                            <option value="PJ">PJ - AJUSTE DE OPERAÇÃO</option>
-                            <option value="PM">PM - FALTA DE MÃO DE OBRA</option>
-                            <option value="PR">PR - REFEIÇÃO / NECESS. PESSOAIS</option>
-                            <option value="PT">PT - PROTÓTIPO</option>
-                            <option value="QM">QM - MATÉRIA PRIMA NÃO CONFORME</option>
-                            <option value="QP">QP - PRODUTO NÃO CONFORME</option>
-                            <option value="PC">PC - PROCESSO SUBSEQUENTE CHEIO</option>
-                            <option value="ST">ST - SET-UP</option>
-                            <option value="TO">TO - TRY-OUT</option>
-                            <option value="TR">TR - TREINAMENTO / REUNIÃO</option>
-                        </select>
+                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)">
                     </div>
                 </div>
                 <div class="field">
@@ -1206,6 +1182,7 @@
         </div>
     </div>
 
+    <script src="db-data.js"></script>
     <script>
         (function () {
             // ── STATE ──
@@ -1214,7 +1191,7 @@
                 paradas: []      // { motivo, op, recursoCod, recurso, dataIni, horaIni, dataFim, horaFim }
             };
 
-            const motivos = {
+            const motifsStatic = {
                 AM: 'AMOSTRA', FR: 'FERRAMENTAL', LE: 'FALTA DE EMBALAGEM', LM: 'FALTA DE MATÉRIA PRIMA',
                 LP: 'FALTA DE PROGRAMAÇÃO', PL: 'LIMPEZA / ORGANIZAÇÃO', ME: 'MANUTENÇÃO ELÉTRICA',
                 MM: 'MANUTENÇÃO MECÂNICA', MP: 'MANUTENÇÃO PREVENTIVA', IP: 'INSPEÇÃO',
@@ -1225,44 +1202,76 @@
             };
 
             const db = {
-                colaboradores: { '101': 'Samuel Inácio', '102': 'João Silva', '103': 'Maria Oliveira' },
+                colaboradores: { '101|123': 'Samuel Inácio', '102|123': 'João Silva', '103|123': 'Maria Oliveira' },
                 produtos: { 'P001': 'Abraçadeira T10 Blue', 'P002': 'Suporte L50 Metal', 'P003': 'Anel O-Ring 22mm' },
-                recursos: { 'INJ-01': 'Injetora Romi 130T', 'INJ-02': 'Injetora Haitian 200T', 'PRE-01': 'Prensa Hidráulica 50T' }
+                recursos: { 'INJ-01': 'Injetora Romi 130T', 'INJ-02': 'Injetora Haitian 200T', 'PRE-01': 'Prensa Hidráulica 50T' },
+                motivos: motifsStatic,
+                ops: {}
             };
 
-            // Auto-fill colaborador produção
-            document.getElementById('p-matricula').addEventListener('blur', function () {
-                document.getElementById('p-nome').value = db.colaboradores[this.value] || 'Colaborador não encontrado';
-            });
+            // Merge with Excel data if available
+            if (window.APP_DB) {
+                Object.assign(db.colaboradores, window.APP_DB.colaboradores);
+                Object.assign(db.produtos, window.APP_DB.produtos);
+                Object.assign(db.recursos, window.APP_DB.recursos);
+                Object.assign(db.motivos, window.APP_DB.motivos);
+                Object.assign(db.ops, window.APP_DB.ops);
+            }
 
-            // Auto-fill colaborador parada
-            document.getElementById('s-matricula').addEventListener('blur', function () {
-                document.getElementById('s-nome').value = db.colaboradores[this.value] || 'Colaborador não encontrado';
-            });
+            // Auto-fill colaborador (Matrícula + Senha)
+            function fillColab(isProd) {
+                const prefix = isProd ? 'p-' : 's-';
+                const mat = document.getElementById(prefix + 'matricula').value.trim();
+                const sen = document.getElementById(prefix + 'senha').value.trim();
+                if (mat && sen) {
+                    const key = `${mat}|${sen}`;
+                    document.getElementById(prefix + 'nome').value = db.colaboradores[key] || 'Colaborador/Senha inválidos';
+                }
+            }
+            document.getElementById('p-matricula').addEventListener('blur', () => fillColab(true));
+            document.getElementById('p-senha').addEventListener('blur', () => fillColab(true));
+            document.getElementById('s-matricula').addEventListener('blur', () => fillColab(false));
+            document.getElementById('s-senha').addEventListener('blur', () => fillColab(false));
 
-            // Auto-fill produto produção
-            document.getElementById('p-produto').addEventListener('blur', function () {
-                document.getElementById('p-desc').value = db.produtos[this.value.toUpperCase()] || 'Produto não encontrado';
-            });
+            // Auto-fill OP
+            function fillOP(isProd) {
+                const prefix = isProd ? 'p-' : 's-';
+                const op = document.getElementById(prefix + 'op').value.trim();
+                if (db.ops[op]) {
+                    const prodCod = db.ops[op].produto;
+                    document.getElementById(prefix + 'produto').value = prodCod;
+                    document.getElementById(prefix + 'desc').value = db.produtos[prodCod] || db.ops[op].desc || 'Descrição não encontrada';
+                }
+            }
+            document.getElementById('p-op').addEventListener('blur', () => fillOP(true));
+            document.getElementById('s-op').addEventListener('blur', () => fillOP(false));
 
-            // Auto-fill produto parada
-            document.getElementById('s-produto').addEventListener('blur', function () {
-                document.getElementById('s-desc').value = db.produtos[this.value.toUpperCase()] || 'Produto não encontrado';
-            });
+            // Auto-fill produto (individual)
+            function fillProd(isProd) {
+                const prefix = isProd ? 'p-' : 's-';
+                const cod = document.getElementById(prefix + 'produto').value.trim().toUpperCase();
+                if (db.produtos[cod]) {
+                    document.getElementById(prefix + 'desc').value = db.produtos[cod];
+                }
+            }
+            document.getElementById('p-produto').addEventListener('blur', () => fillProd(true));
+            document.getElementById('s-produto').addEventListener('blur', () => fillProd(false));
 
-            // Auto-fill recurso produção
-            document.getElementById('p-recurso-cod').addEventListener('blur', function () {
-                document.getElementById('p-recurso').value = db.recursos[this.value.toUpperCase()] || 'Recurso não encontrado';
-            });
+            // Auto-fill recurso
+            function fillRecurso(isProd) {
+                const prefix = isProd ? 'p-' : 's-';
+                const cod = document.getElementById(prefix + 'recurso-cod').value.trim().toUpperCase();
+                if (db.recursos[cod]) {
+                    document.getElementById(prefix + 'recurso').value = db.recursos[cod];
+                }
+            }
+            document.getElementById('p-recurso-cod').addEventListener('blur', () => fillRecurso(true));
+            document.getElementById('s-recurso-cod').addEventListener('blur', () => fillRecurso(false));
 
-            // Auto-fill recurso parada
-            document.getElementById('s-recurso-cod').addEventListener('blur', function () {
-                document.getElementById('s-recurso').value = db.recursos[this.value.toUpperCase()] || 'Recurso não encontrado';
-            });
-
-            // Auto-fill motivo description
-            document.getElementById('s-motivo-cod').addEventListener('change', function () {
-                document.getElementById('s-motivo-desc').value = motivos[this.value] || '';
+            // Auto-fill motivo parada
+            document.getElementById('s-motivo-cod').addEventListener('blur', function () {
+                const cod = this.value.trim().toUpperCase();
+                document.getElementById('s-motivo-desc').value = db.motivos[cod] || 'Motivo não encontrado';
             });
 
             // ── NAVIGATION ──
@@ -1374,10 +1383,10 @@
                 const durMin = (end - start) / 60000;
                 if (durMin <= 5) { showModal('aviso', 'Parada curta', `Paradas de ≤5 min (${durMin} min) não devem ser registradas conforme regra de apontamento.`); return; }
 
-                state.paradas.push({ matricula, senha, motCod, motDesc: motivos[motCod] || '', op, recursoCod: rCod, dIni, hIni, dFim, hFim });
+                state.paradas.push({ matricula, senha, motCod, motDesc: db.motivos[motCod] || '', op, recursoCod: rCod, dIni, hIni, dFim, hFim });
                 renderParadaLista();
                 showModal('sucesso', 'Parada registrada!',
-                    `<b>Motivo:</b> ${motCod} - ${motivos[motCod] || ''}<br><b>OP:</b> ${op || '—'}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Duração:</b> ${durMin} min`
+                    `<b>Motivo:</b> ${motCod} - ${db.motivos[motCod] || ''}<br><b>OP:</b> ${op || '—'}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Duração:</b> ${durMin} min`
                 );
                 limparFormParada();
             };

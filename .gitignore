@@ -1,0 +1,10 @@
+node_modules/
+extract_data.js
+generate_db.js
+read_excel.py
+*.xlsx
+/tmp/
+.gemini/
+.DS_Store
+Thumbs.db
+desktop.ini
