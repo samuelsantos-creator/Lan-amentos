@@ -4,8 +4,7 @@ const ASSETS = [
   './index.html',
   './manifest.json',
   './logo progeral azul.png',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './icons/app-icon.jpg',
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];

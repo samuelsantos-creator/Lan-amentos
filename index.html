@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/jpeg" href="icons/app-icon.jpg">
     
     <!-- PWA Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +20,7 @@
     <meta name="apple-mobile-web-app-title" content="Apontamento">
     <meta name="theme-color" content="#3b82f6">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/app-icon.jpg">
     <style>
         :root {
             --bg: #ffffff;
@@ -684,7 +685,9 @@
             <img src="logo progeral azul.png" class="logo-img-header" alt="Logo Progeral">
             <i class="fas fa-industry ph-icon" style="color:var(--blue)"></i>
             <h2>Apontamento de Produção</h2>
-            <span class="badge">Modelo 1 · Subtração</span>
+            <button class="btn btn-ghost btn-sm" onclick="goTo('screen-duvidas')">
+                <i class="fas fa-question-circle"></i> Dúvidas
+            </button>
             <div style="display:flex;gap:.5rem;margin-left:auto;">
                 <button class="btn btn-red btn-sm" onclick="goTo('screen-parada')"><i class="fas fa-pause-circle"></i>
                     Apontar Parada</button>
@@ -719,10 +722,13 @@
                     <label>Turno</label>
                     <select id="p-turno">
                         <option value="1|06:00|14:00">1 - 1º Turno (06:00–14:00)</option>
+                        <option value="S1|06:00|16:00">S1 - Sab. 1º Turno (06:00–16:00)</option>
                         <option value="2|14:00|22:00">2 - 2º Turno (14:00–22:00)</option>
+                        <option value="S2|09:00|19:00">S2 - Sab. 2º Turno (09:00–19:00)</option>
                         <option value="3|22:00|06:00">3 - 3º Turno (22:00–06:00)</option>
-                        <option value="S1|06:00|16:00">S1 - Sábado (06:00–16:00)</option>
-                        <option value="S2|09:00|19:00">S2 - Sábado (09:00–19:00)</option>
+                        <option value="A|07:00|16:48">A - Administrativo (07:00–16:48)</option>
+                        <option value="121|06:00|18:00">121 - Turno 12h 6~18 (06:00–18:00)</option>
+                        <option value="122|18:00|06:00">122 - Turno 12h 18~6 (18:00–06:00)</option>
                     </select>
                 </div>
                 <div class="field">
@@ -877,7 +883,9 @@
             <img src="logo progeral azul.png" class="logo-img-header" alt="Logo Progeral">
             <i class="fas fa-pause-circle ph-icon" style="color:var(--red)"></i>
             <h2>Apontamento de Horas Paradas</h2>
-            <span class="badge">Modelo 1 · Subtração</span>
+            <button class="btn btn-ghost btn-sm" onclick="goTo('screen-duvidas')">
+                <i class="fas fa-question-circle"></i> Dúvidas
+            </button>
             <div style="display:flex;gap:.5rem;margin-left:auto;">
                 <button class="btn btn-blue btn-sm" onclick="goTo('screen-prod')"><i class="fas fa-industry"></i>
                     Apontar Produção</button>
@@ -912,10 +920,13 @@
                     <label>Turno</label>
                     <select id="s-turno">
                         <option value="1|06:00|14:00">1 - 1º Turno (06:00–14:00)</option>
+                        <option value="S1|06:00|16:00">S1 - Sab. 1º Turno (06:00–16:00)</option>
                         <option value="2|14:00|22:00">2 - 2º Turno (14:00–22:00)</option>
+                        <option value="S2|09:00|19:00">S2 - Sab. 2º Turno (09:00–19:00)</option>
                         <option value="3|22:00|06:00">3 - 3º Turno (22:00–06:00)</option>
-                        <option value="S1|06:00|16:00">S1 - Sábado (06:00–16:00)</option>
-                        <option value="S2|09:00|19:00">S2 - Sábado (09:00–19:00)</option>
+                        <option value="A|07:00|16:48">A - Administrativo (07:00–16:48)</option>
+                        <option value="121|06:00|18:00">121 - Turno 12h 6~18 (06:00–18:00)</option>
+                        <option value="122|18:00|06:00">122 - Turno 12h 18~6 (18:00–06:00)</option>
                     </select>
                 </div>
                 <div class="field">
@@ -1075,10 +1086,22 @@
                         <td class="tag-green">480 min</td>
                     </tr>
                     <tr>
+                        <td>S1</td>
+                        <td>Sab. 1º Turno</td>
+                        <td>06:00 – 16:00</td>
+                        <td class="tag-green">600 min</td>
+                    </tr>
+                    <tr>
                         <td>2</td>
                         <td>2º Turno</td>
                         <td>14:00 – 22:00</td>
                         <td class="tag-green">480 min</td>
+                    </tr>
+                    <tr>
+                        <td>S2</td>
+                        <td>Sab. 2º Turno</td>
+                        <td>09:00 – 19:00</td>
+                        <td class="tag-green">600 min</td>
                     </tr>
                     <tr>
                         <td>3</td>
@@ -1087,22 +1110,22 @@
                         <td class="tag-green">480 min</td>
                     </tr>
                     <tr>
-                        <td>S1</td>
-                        <td>Sábado 1</td>
-                        <td>06:00 – 16:00</td>
-                        <td class="tag-green">600 min</td>
-                    </tr>
-                    <tr>
-                        <td>S2</td>
-                        <td>Sábado 2</td>
-                        <td>09:00 – 19:00</td>
-                        <td class="tag-green">600 min</td>
-                    </tr>
-                    <tr>
-                        <td>ADM</td>
+                        <td>A</td>
                         <td>Administrativo</td>
                         <td>07:00 – 16:48</td>
                         <td class="tag-green">588 min</td>
+                    </tr>
+                    <tr>
+                        <td>121</td>
+                        <td>Turno 12h 6~18</td>
+                        <td>06:00 – 18:00</td>
+                        <td class="tag-green">720 min</td>
+                    </tr>
+                    <tr>
+                        <td>122</td>
+                        <td>Turno 12h 18~6 †</td>
+                        <td>18:00 – 06:00</td>
+                        <td class="tag-green">720 min</td>
                     </tr>
                 </tbody>
             </table>
