@@ -760,7 +760,7 @@
         <div class="form-card">
             <h4><i class="fas fa-cubes" style="margin-right:6px;color:var(--accent)"></i>Identificação</h4>
             <div class="fields-grid cols-2">
-                <div class="field">
+                <div class="field field-span2">
                     <label>O.P.</label>
                     <div class="field-inner">
                         <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn">
@@ -774,7 +774,7 @@
                         <button class="help-btn">?</button>
                     </div>
                 </div>
-                <div class="field field-span2">
+                <div class="field">
                     <label>Descrição</label>
                     <input type="text" id="p-desc" readonly placeholder="Preenchimento automático">
                 </div>
@@ -958,7 +958,7 @@
         <div class="form-card">
             <h4><i class="fas fa-tag" style="margin-right:6px;color:var(--accent)"></i>Identificação da Parada</h4>
             <div class="fields-grid cols-2">
-                <div class="field">
+                <div class="field field-span2">
                     <label>O.P.</label>
                     <div class="field-inner">
                         <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn">
@@ -972,7 +972,7 @@
                         <button class="help-btn">?</button>
                     </div>
                 </div>
-                <div class="field field-span2">
+                <div class="field">
                     <label>Descrição</label>
                     <input type="text" id="s-desc" readonly placeholder="Preenchimento automático">
                 </div>
@@ -1299,6 +1299,8 @@
             }
             document.getElementById('fecharModal').onclick = () => document.getElementById('modalOverlay').classList.remove('open');
             document.getElementById('modalOverlay').onclick = e => { if (e.target.id === 'modalOverlay') e.target.classList.remove('open'); };
+
+            // ── HELPERS ──
 
             // ── HELPERS ──
             function maskTime(id) {
