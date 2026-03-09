@@ -12,6 +12,14 @@
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PWA Settings -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Apontamento">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
     <style>
         :root {
             --bg: #ffffff;
@@ -687,10 +695,14 @@
         <!-- Operador -->
         <div class="form-card">
             <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
-            <div class="fields-grid cols-2">
+            <div class="fields-grid cols-3">
                 <div class="field">
                     <label>Matrícula</label>
-                    <input type="number" id="p-matricula" placeholder="Digite a matrícula">
+                    <input type="number" id="p-matricula" placeholder="Matrícula">
+                </div>
+                <div class="field">
+                    <label>Senha</label>
+                    <input type="password" id="p-senha" placeholder="••••••">
                 </div>
                 <div class="field">
                     <label>Nome do Colaborador</label>
@@ -876,10 +888,14 @@
         <!-- Operador Parada -->
         <div class="form-card">
             <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
-            <div class="fields-grid cols-2">
+            <div class="fields-grid cols-3">
                 <div class="field">
                     <label>Matrícula</label>
-                    <input type="number" id="s-matricula" placeholder="Digite a matrícula">
+                    <input type="number" id="s-matricula" placeholder="Matrícula">
+                </div>
+                <div class="field">
+                    <label>Senha</label>
+                    <input type="password" id="s-senha" placeholder="••••••">
                 </div>
                 <div class="field">
                     <label>Nome do Colaborador</label>
@@ -1296,12 +1312,15 @@
                 const rnc = parseFloat(document.getElementById('p-rnc').value) || 0;
                 const cestos = parseInt(document.getElementById('p-cestos').value) || 1;
 
+                const matricula = document.getElementById('p-matricula').value;
+                const senha = document.getElementById('p-senha').value;
+
                 if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as Datas e Horários.'); return; }
                 const start = parseDateTime(dIni, hIni);
                 const end = parseDateTime(dFim, hFim);
                 if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
 
-                state.produções.push({ op, produto: prod, desc: '', recursoCod: rCod, recurso: '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos });
+                state.produções.push({ matricula, senha, op, produto: prod, desc: '', recursoCod: rCod, recurso: '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos });
                 renderProdLista();
                 showModal('sucesso', 'Produção registrada!',
                     `<b>OP:</b> ${op}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Qtd. Produzida:</b> ${qtd.toFixed(2)}<br><b>Qtd. Retrabalhada:</b> ${ret.toFixed(2)}<br><b>Peças Setup:</b> ${setup.toFixed(2)}<br><b>RNC:</b> ${rnc.toFixed(2)}<br><br>Registro adicionado. Clique em <b>Validar turno completo</b> para verificar o turno.`
@@ -1319,6 +1338,9 @@
                 const dFim = document.getElementById('s-data-fim').value;
                 const hFim = document.getElementById('s-hora-fim').value;
 
+                const matricula = document.getElementById('s-matricula').value;
+                const senha = document.getElementById('s-senha').value;
+
                 if (!motCod) { showModal('erro', 'Motivo obrigatório', 'Selecione o motivo da parada.'); return; }
                 if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as datas e horários.'); return; }
 
@@ -1329,7 +1351,7 @@
                 const durMin = (end - start) / 60000;
                 if (durMin <= 5) { showModal('aviso', 'Parada curta', `Paradas de ≤5 min (${durMin} min) não devem ser registradas conforme regra de apontamento.`); return; }
 
-                state.paradas.push({ motCod, motDesc: motivos[motCod] || '', op, recursoCod: rCod, dIni, hIni, dFim, hFim });
+                state.paradas.push({ matricula, senha, motCod, motDesc: motivos[motCod] || '', op, recursoCod: rCod, dIni, hIni, dFim, hFim });
                 renderParadaLista();
                 showModal('sucesso', 'Parada registrada!',
                     `<b>Motivo:</b> ${motCod} - ${motivos[motCod] || ''}<br><b>OP:</b> ${op || '—'}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Duração:</b> ${durMin} min`
@@ -1366,10 +1388,10 @@
 
             // ── LIMPAR FORMS ──
             window.limparFormProd = function () {
-                ['p-matricula', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                ['p-matricula', 'p-senha', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => document.getElementById(id).value = '');
             };
             window.limparFormParada = function () {
-                ['s-matricula', 's-nome', 's-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                ['s-matricula', 's-senha', 's-nome', 's-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
                 document.getElementById('s-motivo-cod').value = '';
             };
 
