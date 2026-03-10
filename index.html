@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apontamentos de produção e horas paradas.
-    
+
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@300;400;600;700;800&family=DM+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/jpeg" href="icons/app-icon.jpg">
-    
+
     <!-- PWA Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -386,6 +386,16 @@
             background: #3b82f615;
         }
 
+        .btn-warning {
+            background: transparent;
+            color: var(--yellow);
+            border-color: var(--yellow);
+        }
+
+        .btn-warning:hover {
+            background: #f59e0b15;
+        }
+
         .btn-sm {
             padding: 6px 14px;
             font-size: .78rem;
@@ -438,6 +448,107 @@
             font-size: .78rem;
             color: var(--text);
             width: 100%;
+        }
+
+        /* ── ESTADOS DOS CAMPOS (Identidade Visual) ── */
+        input.field-empty,
+        select.field-empty {
+            background-color: #fffde7 !important;
+            border-color: #fdd835 !important;
+        }
+
+        input.field-valid,
+        select.field-valid {
+            background-color: #e8f5e9 !important;
+            border-color: #81c784 !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232e7d32' width='18px' height='18px'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 30px !important;
+        }
+
+        input.field-invalid,
+        select.field-invalid {
+            background-color: #ffebee !important;
+            border-color: #e57373 !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c62828' width='18px' height='18px'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 30px !important;
+        }
+
+        /* ── TIMELINE ── */
+        .timeline-container {
+            margin: 15px 0 5px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .timeline-bar {
+            height: 14px;
+            background: #e2e8f0;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            border: 1px solid var(--border);
+        }
+
+        .timeline-segment {
+            height: 100%;
+            position: absolute;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .segment-prod {
+            background: var(--green);
+        }
+
+        .segment-para {
+            background: var(--red);
+        }
+
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text2);
+            text-transform: uppercase;
+        }
+
+        /* ── CONFIRM SUMMARY ── */
+        .confirm-summary {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .confirm-summary h4 {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+
+        .confirm-summary p {
+            margin: 6px 0;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .confirm-summary b {
+            color: var(--text);
         }
 
         .btn-rm {
@@ -754,6 +865,20 @@
                     <input type="text" id="p-hora-fim" placeholder="00:00" maxlength="5">
                 </div>
             </div>
+
+            <!-- TIMELINE VISUAL -->
+            <div class="timeline-container" id="p-timeline-wrap">
+                <div class="timeline-bar" id="p-timeline-bar"></div>
+                <div id="p-timeline-alert"
+                    style="display:none; color:var(--red); font-size:10px; font-weight:700; margin-top:5px; text-align:center;">
+                    <i class="fas fa-exclamation-triangle"></i> ATENÇÃO: HÁ UM GAP (ESPAÇO VAZIO) ANTES DESTE HORÁRIO
+                </div>
+                <div class="timeline-labels">
+                    <span id="p-timeline-start">06:00</span>
+                    <span style="color:var(--accent); font-size: 9px;">PREENCHIMENTO DO TURNO</span>
+                    <span id="p-timeline-end">14:00</span>
+                </div>
+            </div>
         </div>
 
         <!-- OP / Produto / Recurso -->
@@ -799,7 +924,8 @@
                 <div class="field">
                     <label>Qtd. Produzida</label>
                     <div class="field-inner">
-                        <input type="number" id="p-qtd" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <input type="number" id="p-qtd" placeholder="0.00" step="0.01" min="0"
+                            class="with-btn p-ignore-focus">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
@@ -832,16 +958,11 @@
         </div>
 
         <div class="actions-row">
-            <button class="btn btn-ghost" onclick="carregarExemploProd('correto')"><i class="fas fa-check"></i> Exemplo
-                correto</button>
-            <button class="btn btn-ghost" onclick="carregarExemploProd('gap')"><i class="fas fa-times"></i> Exemplo
-                gap</button>
-            <button class="btn btn-ghost" onclick="carregarExemploProd('parcial')"><i class="fas fa-arrow-right"></i>
-                Parcial</button>
-            <div class="ml-auto" style="display:flex;gap:.8rem;">
+            <div class="ml-auto" style="display:flex;gap:.8rem; width: 100%; justify-content: flex-end; flex-wrap:wrap;">
+                <button class="btn btn-ghost" onclick="sairOperadorProd()"><i class="fas fa-door-open"></i> Sair</button>
                 <button class="btn btn-ghost" onclick="limparFormProd()"><i class="fas fa-eraser"></i> Limpar</button>
-                <button class="btn btn-primary" onclick="confirmarProd()"><i class="fas fa-check-circle"></i>
-                    Confirmar</button>
+                <button class="btn btn-warning" id="p-btn-testar" onclick="testarProd()"><i class="fas fa-vial"></i> Testar</button>
+                <button class="btn btn-primary" id="p-btn-confirmar" onclick="confirmarProd()"><i class="fas fa-check-circle"></i> Confirmar</button>
             </div>
         </div>
 
@@ -952,6 +1073,20 @@
                     <input type="text" id="s-hora-fim" placeholder="00:00" maxlength="5">
                 </div>
             </div>
+
+            <!-- TIMELINE VISUAL -->
+            <div class="timeline-container" id="s-timeline-wrap">
+                <div class="timeline-bar" id="s-timeline-bar"></div>
+                <div id="s-timeline-alert"
+                    style="display:none; color:var(--red); font-size:10px; font-weight:700; margin-top:5px; text-align:center;">
+                    <i class="fas fa-exclamation-triangle"></i> ATENÇÃO: HÁ UM GAP (ESPAÇO VAZIO) ANTES DESTE HORÁRIO
+                </div>
+                <div class="timeline-labels">
+                    <span id="s-timeline-start">06:00</span>
+                    <span style="color:var(--accent); font-size: 9px;">PREENCHIMENTO DO TURNO</span>
+                    <span id="s-timeline-end">14:00</span>
+                </div>
+            </div>
         </div>
 
         <!-- Motivo / OP / Recurso -->
@@ -1001,10 +1136,11 @@
         </div>
 
         <div class="actions-row">
-            <button class="btn btn-ghost" onclick="limparFormParada()"><i class="fas fa-eraser"></i> Limpar</button>
-            <div class="ml-auto" style="display:flex;gap:.8rem;">
-                <button class="btn btn-primary" onclick="confirmarParada()"><i class="fas fa-check-circle"></i>
-                    Confirmar</button>
+            <div class="ml-auto" style="display:flex;gap:.8rem; width: 100%; justify-content: flex-end; flex-wrap:wrap;">
+                <button class="btn btn-ghost" onclick="sairOperadorParada()"><i class="fas fa-door-open"></i> Sair</button>
+                <button class="btn btn-ghost" onclick="limparFormParadaCompleto()"><i class="fas fa-eraser"></i> Limpar</button>
+                <button class="btn btn-warning" id="s-btn-testar" onclick="testarParada()"><i class="fas fa-vial"></i> Testar</button>
+                <button class="btn btn-primary" id="s-btn-confirmar" onclick="confirmarParada()"><i class="fas fa-check-circle"></i> Confirmar</button>
             </div>
         </div>
 
@@ -1043,129 +1179,1338 @@
                 Início</button>
         </div>
 
-        <div class="form-card">
-            <h4>Turnos disponíveis</h4>
-            <table class="shift-table">
-                <thead>
-                    <tr>
-                        <th>Cód.</th>
-                        <th>Descrição</th>
-                        <th>Horário</th>
-                        <th>Duração</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>1º Turno</td>
-                        <td>06:00 – 14:00</td>
-                        <td class="tag-green">480 min</td>
-                    </tr>
-                    <tr>
-                        <td>S1</td>
-                        <td>Sab. 1º Turno</td>
-                        <td>06:00 – 16:00</td>
-                        <td class="tag-green">600 min</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2º Turno</td>
-                        <td>14:00 – 22:00</td>
-                        <td class="tag-green">480 min</td>
-                    </tr>
-                    <tr>
-                        <td>S2</td>
-                        <td>Sab. 2º Turno</td>
-                        <td>09:00 – 19:00</td>
-                        <td class="tag-green">600 min</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>3º Turno †</td>
-                        <td>22:00 – 06:00</td>
-                        <td class="tag-green">480 min</td>
-                    </tr>
-                    <tr>
-                        <td>A</td>
-                        <td>Administrativo</td>
-                        <td>07:00 – 16:48</td>
-                        <td class="tag-green">588 min</td>
-                    </tr>
-                    <tr>
-                        <td>121</td>
-                        <td>Turno 12h 6~18</td>
-                        <td>06:00 – 18:00</td>
-                        <td class="tag-green">720 min</td>
-                    </tr>
-                    <tr>
-                        <td>122</td>
-                        <td>Turno 12h 18~6 †</td>
-                        <td>18:00 – 06:00</td>
-                        <td class="tag-green">720 min</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p style="font-size:.75rem;color:var(--text3);margin-top:.6rem;">† Turno 3: data referência = dia do início
-                (22:00), término no dia seguinte (06:00).</p>
+        <!-- ══ GUIA.HTML EMBUTIDO — NÃO EDITAR MANUALMENTE ══ -->
+        <style>
+#screen-duvidas {
+    --blue:    #1A3C6E;
+    --blue2:   #2563EB;
+    --blue3:   #DBEAFE;
+    --green:   #166534;
+    --green2:  #DCFCE7;
+    --red:     #991B1B;
+    --red2:    #FEE2E2;
+    --orange:  #92400E;
+    --orange2: #FEF3C7;
+    --gray:    #F1F5F9;
+    --dark:    #0F172A;
+    --mid:     #475569;
+    --light:   #CBD5E1;
+    --white:   #FFFFFF;
+    --radius:  14px;
+    --shadow:  0 4px 24px rgba(0,0,0,.08);
+  }
+#screen-duvidas *, #screen-duvidas *::before, #screen-duvidas *::after { box-sizing: border-box; margin: 0; padding: 0; }
+#screen-duvidas {
+    font-family: 'Sora', sans-serif;
+    background: #F8FAFC;
+    color: var(--dark);
+    min-height: 100vh;
+  }
+#screen-duvidas /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0F172A 0%, #1A3C6E 60%, #1e4e8c 100%);
+    color: white;
+    padding: 56px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+#screen-duvidas .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 110%, rgba(37,99,235,.35) 0%, transparent 70%);
+  }
+#screen-duvidas .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    position: relative;
+  }
+#screen-duvidas .hero h1 {
+    font-size: clamp(26px, 5vw, 46px);
+    font-weight: 800;
+    line-height: 1.1;
+    position: relative;
+    margin-bottom: 12px;
+    letter-spacing: -.02em;
+  }
+#screen-duvidas .hero h1 span { color: #60A5FA; }
+#screen-duvidas .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,.7);
+    max-width: 540px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+    position: relative;
+  }
+#screen-duvidas /* ── NAV PILLS ── */
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    position: relative;
+    padding: 0 16px;
+  }
+#screen-duvidas .nav-pill {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.18);
+    color: white;
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+#screen-duvidas .nav-pill:hover, #screen-duvidas .nav-pill.active {
+    background: var(--blue2);
+    border-color: var(--blue2);
+    transform: translateY(-1px);
+  }
+#screen-duvidas /* ── LAYOUT ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+#screen-duvidas .sections { padding: 40px 20px 80px; }
+#screen-duvidas /* ── SECTION BLOCK ── */
+  .section {
+    max-width: 860px;
+    margin: 0 auto 32px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    animation: slideUp .4s ease both;
+  }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+#screen-duvidas .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 28px;
+    cursor: pointer;
+    user-select: none;
+    gap: 16px;
+    transition: background .2s;
+    border-radius: 20px;
+  }
+#screen-duvidas .section-header:hover { background: var(--gray); }
+#screen-duvidas .section.open .section-header { border-radius: 20px 20px 0 0; }
+#screen-duvidas .section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+#screen-duvidas .section-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+#screen-duvidas .section-title { font-size: 16px; font-weight: 700; line-height: 1.3; }
+#screen-duvidas .section-subtitle { font-size: 12px; color: var(--mid); margin-top: 2px; }
+#screen-duvidas .chevron {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--gray);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform .3s, background .2s;
+    font-size: 14px;
+    color: var(--mid);
+  }
+#screen-duvidas .section.open .chevron { transform: rotate(180deg); background: var(--blue3); color: var(--blue2); }
+#screen-duvidas .section-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .45s cubic-bezier(.4,0,.2,1);
+  }
+#screen-duvidas .section.open .section-body { max-height: 9999px; }
+#screen-duvidas .section-content { padding: 0 28px 28px; }
+#screen-duvidas /* ── COLOR THEMES PER SECTION ── */
+  .theme-blue  .section-icon { background: var(--blue3); color: var(--blue2); }
+#screen-duvidas .theme-red   .section-icon { background: var(--red2);  color: var(--red);   }
+#screen-duvidas .theme-green .section-icon { background: var(--green2);color: var(--green); }
+#screen-duvidas .theme-orange.section-icon { background: var(--orange2);color: var(--orange);}
+#screen-duvidas .theme-orange .section-icon { background: var(--orange2); color: var(--orange); }
+#screen-duvidas /* ── ALERT BOXES ── */
+  .alert {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+#screen-duvidas .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+#screen-duvidas .alert strong { display: block; font-size: 14px; margin-bottom: 4px; }
+#screen-duvidas .alert-red { background: var(--red2);    border-left: 4px solid var(--red);    color: var(--red); }
+#screen-duvidas .alert-green { background: var(--green2);  border-left: 4px solid var(--green);  color: var(--green); }
+#screen-duvidas .alert-blue { background: var(--blue3);   border-left: 4px solid var(--blue2);  color: var(--blue); }
+#screen-duvidas .alert-orange { background: var(--orange2); border-left: 4px solid var(--orange); color: var(--orange); }
+#screen-duvidas .alert-dark { background: var(--dark);    border-left: 4px solid var(--blue2);  color: white; }
+#screen-duvidas .alert-text { color: inherit; }
+#screen-duvidas .alert-text p { margin-top: 4px; font-weight: 400; opacity: .85; }
+#screen-duvidas /* ── BODY TEXT ── */
+  .body-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--mid);
+    margin: 12px 0;
+  }
+#screen-duvidas .label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin: 20px 0 8px;
+  }
+#screen-duvidas /* ── TIMELINE BAR ── */
+  .timeline-wrap { margin: 16px 0; }
+#screen-duvidas .timeline-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--mid);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+#screen-duvidas .timeline-bar {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 48px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+#screen-duvidas .tl-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: white;
+    text-align: center;
+    line-height: 1.3;
+    padding: 4px 6px;
+    transition: opacity .2s;
+    position: relative;
+  }
+#screen-duvidas .tl-seg:hover { opacity: .9; }
+#screen-duvidas .tl-seg.prod { background: #2563EB; }
+#screen-duvidas .tl-seg.stop { background: #DC2626; }
+#screen-duvidas .tl-seg.over { background: #EA580C; }
+#screen-duvidas .tl-seg.ok { background: #16A34A; color: white; }
+#screen-duvidas .tl-seg.dark { background: #374151; }
+#screen-duvidas .timeline-times {
+    display: flex;
+    margin-top: 4px;
+  }
+#screen-duvidas .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--mid);
+    text-align: center;
+  }
+#screen-duvidas /* ── COMPARE CARDS ── */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+@media(max-width: 520px) {#screen-duvidas .compare { grid-template-columns: 1fr; } }
+#screen-duvidas .compare-card {
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+#screen-duvidas .compare-card strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+#screen-duvidas .compare-card.good { background: var(--green2); color: var(--green); }
+#screen-duvidas .compare-card.bad { background: var(--red2);   color: var(--red);   }
+#screen-duvidas .compare-card p { opacity: .85; }
+#screen-duvidas .mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+#screen-duvidas /* ── STEP CARDS ── */
+  .steps { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+#screen-duvidas .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--gray);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+#screen-duvidas .step-num {
+    width: 36px; height: 36px;
+    background: var(--blue2);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+#screen-duvidas .step-body strong { font-size: 14px; display: block; margin-bottom: 4px; }
+#screen-duvidas .step-body p { font-size: 13px; color: var(--mid); line-height: 1.6; }
+#screen-duvidas /* ── CHECKLIST ── */
+  .checklist { margin: 16px 0; display: flex; flex-direction: column; gap: 8px; }
+#screen-duvidas .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--gray);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s;
+    user-select: none;
+  }
+#screen-duvidas .check-item:hover { background: #E2E8F0; }
+#screen-duvidas .check-item.checked { background: var(--green2); color: var(--green); }
+#screen-duvidas .check-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--light);
+    background: white;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    transition: all .2s;
+  }
+#screen-duvidas .check-item.checked .check-box { background: var(--green); border-color: var(--green); color: white; }
+#screen-duvidas /* ── FAQ ACCORDION (inner) ── */
+  .faq-list { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+#screen-duvidas .faq-item {
+    border-radius: var(--radius);
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+  }
+#screen-duvidas .faq-q {
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: background .2s;
+    background: white;
+    line-height: 1.4;
+  }
+#screen-duvidas .faq-q:hover { background: var(--gray); }
+#screen-duvidas .faq-item.open .faq-q { background: var(--blue3); color: var(--blue); border-bottom: 1px solid #BFDBFE; }
+#screen-duvidas .faq-arrow { font-size: 12px; color: var(--mid); flex-shrink: 0; transition: transform .3s; }
+#screen-duvidas .faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--blue2); }
+#screen-duvidas .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+    background: white;
+  }
+#screen-duvidas .faq-item.open .faq-a { max-height: 400px; }
+#screen-duvidas .faq-a-inner { padding: 14px 18px; font-size: 13px; color: var(--mid); line-height: 1.7; }
+#screen-duvidas /* ── IMPACT GRID ── */
+  .impact-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 16px 0; }
+@media(max-width: 540px) {#screen-duvidas .impact-grid { grid-template-columns: 1fr; } }
+#screen-duvidas .impact-card {
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+#screen-duvidas .impact-card strong { display: block; font-size: 13px; margin-bottom: 8px; font-weight: 700; }
+#screen-duvidas .impact-card li { margin-left: 14px; margin-top: 4px; }
+#screen-duvidas .impact-card.bad { background: var(--red2);    color: var(--red);    }
+#screen-duvidas .impact-card.warn { background: var(--orange2); color: var(--orange); }
+#screen-duvidas .impact-card.good { background: var(--green2);  color: var(--green);  }
+#screen-duvidas /* ── TURNO TABLE ── */
+  .turno-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 16px 0; }
+@media(max-width: 480px) {#screen-duvidas .turno-grid { grid-template-columns: 1fr; } }
+#screen-duvidas .turno-card {
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+    color: white;
+  }
+#screen-duvidas .turno-card .t-num { font-size: 12px; font-weight: 700; opacity: .7; letter-spacing: .1em; }
+#screen-duvidas .turno-card .t-name { font-size: 16px; font-weight: 800; margin: 4px 0; }
+#screen-duvidas .turno-card .t-hours { font-family: 'DM Mono', monospace; font-size: 14px; opacity: .85; }
+#screen-duvidas .t1 { background: linear-gradient(135deg,#1D4ED8,#2563EB); }
+#screen-duvidas .t2 { background: linear-gradient(135deg,#0369A1,#0EA5E9); }
+#screen-duvidas .t3 { background: linear-gradient(135deg,#1E293B,#334155); }
+#screen-duvidas /* ── RULE BOX ── */
+  .rule-box {
+    background: var(--dark);
+    color: white;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+#screen-duvidas .rule-box strong { font-size: 15px; display: block; margin-bottom: 8px; }
+#screen-duvidas .rule-box ol { margin-left: 20px; }
+#screen-duvidas .rule-box ol li { font-size: 13px; line-height: 1.8; opacity: .85; }
+#screen-duvidas /* ── DIVIDER ── */
+  .divider { height: 1px; background: #E2E8F0; margin: 20px 0; }
+#screen-duvidas /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 12px;
+    color: var(--light);
+    border-top: 1px solid #E2E8F0;
+  }
+#screen-duvidas /* ── PROGRESS ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2563EB, #60A5FA);
+    z-index: 1000;
+    transition: width .2s;
+    box-shadow: 0 0 8px rgba(37,99,235,.5);
+  }
+#screen-duvidas /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed;
+    bottom: 28px;
+    right: 24px;
+    width: 44px; height: 44px;
+    background: var(--blue2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(37,99,235,.4);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all .3s;
+    z-index: 900;
+  }
+#screen-duvidas .back-top.show { opacity: 1; transform: translateY(0); }
+#screen-duvidas .back-top:hover { background: var(--blue); }
+#screen-duvidas /* ── SEARCH ── */
+  .search-wrap {
+    max-width: 860px;
+    margin: -20px auto 0;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+  }
+#screen-duvidas .search-box {
+    width: 100%;
+    padding: 14px 20px 14px 48px;
+    border-radius: 100px;
+    border: none;
+    box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    outline: none;
+    color: var(--dark);
+    background: white;
+  }
+#screen-duvidas .search-icon {
+    position: absolute;
+    left: 38px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--mid);
+    font-size: 16px;
+  }
+#screen-duvidas /* ── TABS ── */
+  .tabs { display: none; }
+#screen-duvidas /* hidden, #screen-duvidas sections handle nav */
+
+  /* ── OPEN ALL ── */
+  .toolbar {
+    max-width: 860px;
+    margin: 24px auto 16px;
+    padding: 0 20px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+#screen-duvidas .btn-sm {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 100px;
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--mid);
+    font-family: 'Sora', sans-serif;
+    transition: all .2s;
+  }
+#screen-duvidas .btn-sm:hover { background: var(--blue3); color: var(--blue2); border-color: var(--blue2); }
+#screen-duvidas /* ── HIDDEN SEARCH ── */
+  .section.hidden-search { display: none; }
+/* ── Override: hero com fundo branco ── */
+#screen-duvidas .hero {
+  background: #F8FAFC !important;
+  color: #0F172A !important;
+}
+#screen-duvidas .hero::before { display: none !important; }
+#screen-duvidas .hero p       { color: #64748B !important; }
+#screen-duvidas .hero h1      { color: #0F172A !important; letter-spacing: -.02em; }
+#screen-duvidas .hero h1 span { color: #2563EB !important; }
+#screen-duvidas .hero-badge   {
+  background: rgba(0,0,0,.06) !important;
+  border-color: rgba(0,0,0,.12) !important;
+  color: #1A3C6E !important;
+}
+#screen-duvidas .nav-pill {
+  background: rgba(37,99,235,.08) !important;
+  border-color: rgba(37,99,235,.2) !important;
+  color: #1A3C6E !important;
+}
+#screen-duvidas .nav-pill:hover,
+#screen-duvidas .nav-pill.active {
+  background: #2563EB !important;
+  border-color: #2563EB !important;
+  color: #fff !important;
+}
+/* progress-bar e back-top: não usar position:fixed dentro do app */
+#screen-duvidas .progress-bar { display: none !important; }
+#screen-duvidas .back-top     { position: sticky !important; bottom: 16px; right: 16px; align-self: flex-end; }
+
+        </style>
+
+<!-- HERO -->
+<div class="hero" id="top">
+  <div class="hero-badge">📋 Uso Interno · Operadores de Produção</div>
+  <h1>Guia de <span>Apontamento</span><br>de Produção</h1>
+  <p>Tudo o que você precisa saber sobre como registrar corretamente sua produção, evitar erros e o que fazer quando algo der errado.</p>
+  <nav class="nav-pills">
+    <a class="nav-pill" href="#sec-oque">O que é</a>
+    <a class="nav-pill" href="#sec-importancia">Importância</a>
+    <a class="nav-pill" href="#sec-nao-consegue">Não consigo apontar</a>
+    <a class="nav-pill" href="#sec-saldo">Falta de saldo</a>
+    <a class="nav-pill" href="#sec-erros-prod">Erros de produção</a>
+    <a class="nav-pill" href="#sec-erros-parada">Erros de parada</a>
+    <a class="nav-pill" href="#sec-data">Data e turno</a>
+    <a class="nav-pill" href="#sec-boas">Boas práticas</a>
+    <a class="nav-pill" href="#sec-faq">Dúvidas</a>
+  </nav>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input class="search-box" id="searchBox" placeholder="Buscar no guia… ex: produto incorreto, parada, turno…" oninput="doSearch(this.value)">
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <button class="btn-sm" onclick="toggleAll(true)">▼ Expandir tudo</button>
+  <button class="btn-sm" onclick="toggleAll(false)">▲ Recolher tudo</button>
+</div>
+
+<!-- ════════════════ SECTIONS ════════════════ -->
+<div class="sections">
+
+  <!-- 1. O QUE É -->
+  <div class="section theme-blue" id="sec-oque">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">📋</div>
+        <div>
+          <div class="section-title">O que é o Apontamento de Produção?</div>
+          <div class="section-subtitle">Conceito, finalidade e impacto dos dados</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <p class="body-text">O apontamento de produção é o <strong>registro das atividades realizadas durante o seu turno</strong>: quanto foi produzido, quando a máquina ficou parada e qual produto foi fabricado.</p>
+        <p class="body-text">Esses dados alimentam os indicadores da fábrica:</p>
+        <div class="impact-grid" style="grid-template-columns:repeat(2,1fr); margin-top:12px;">
+          <div class="impact-card" style="background:#EFF6FF;color:#1E3A8A;">
+            <strong>📈 Produtividade por turno</strong>
+            Mede quanto cada máquina ou linha entregou em relação ao esperado.
+          </div>
+          <div class="impact-card" style="background:#EFF6FF;color:#1E3A8A;">
+            <strong>⚙️ Eficiência (OEE)</strong>
+            Indicador global que combina disponibilidade, desempenho e qualidade.
+          </div>
+          <div class="impact-card" style="background:#EFF6FF;color:#1E3A8A;">
+            <strong>📦 Volume produzido</strong>
+            Base para cálculo de estoque, MRP e planejamento de materiais.
+          </div>
+          <div class="impact-card" style="background:#EFF6FF;color:#1E3A8A;">
+            <strong>🛑 Análise de paradas</strong>
+            Identifica onde e por que a produção perde tempo — base para melhorias.
+          </div>
+        </div>
+        <div class="alert alert-orange">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-text">
+            <strong>Dados errados = decisões erradas!</strong>
+            <p>Um apontamento incorreto distorce todos os indicadores e prejudica o planejamento da produção — afetando você e todos os outros setores.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. IMPORTÂNCIA -->
+  <div class="section theme-red" id="sec-importancia">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">⚠️</div>
+        <div>
+          <div class="section-title">Por que o apontamento correto é obrigatório?</div>
+          <div class="section-subtitle">Impactos, fluxo contínuo e consequências disciplinares</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <p class="body-text">O apontamento não é apenas um registro — é a <strong>base de todo o fluxo de trabalho da fábrica</strong>. Quando feito errado ou ignorado, o problema se espalha por todos os setores.</p>
+        <div class="impact-grid">
+          <div class="impact-card bad">
+            <strong>🚫 Apontamento errado gera:</strong>
+            <ul>
+              <li>Estoque desatualizado</li>
+              <li>MRP errado</li>
+              <li>Paradas não analisadas</li>
+              <li>Relatórios incorretos</li>
+            </ul>
+          </div>
+          <div class="impact-card warn">
+            <strong>⏸ Sem apontamento gera:</strong>
+            <ul>
+              <li>Setor seguinte sem saldo</li>
+              <li>Interrupção do fluxo</li>
+              <li>Atraso na produção</li>
+              <li>Sanções disciplinares</li>
+            </ul>
+          </div>
+          <div class="impact-card good">
+            <strong>✅ Apontamento correto garante:</strong>
+            <ul>
+              <li>Fluxo contínuo de trabalho</li>
+              <li>Dados reais para decisão</li>
+              <li>Indicadores confiáveis</li>
+              <li>Planejamento eficiente</li>
+            </ul>
+          </div>
+        </div>
+        <div class="alert alert-red">
+          <span class="alert-icon">🔴</span>
+          <div class="alert-text">
+            <strong>Consequências Disciplinares</strong>
+            <p>Não apontar na data correta, não registrar a quantidade correta ou ignorar o processo impacta o fluxo contínuo de trabalho — seu e de todos os outros setores. Falhas reiteradas podem resultar em <strong>sanções disciplinares</strong> conforme as normas internas da empresa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. NÃO CONSIGO APONTAR -->
+  <div class="section theme-orange" id="sec-nao-consegue">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">🆘</div>
+        <div>
+          <div class="section-title">Não consigo apontar — O que fazer?</div>
+          <div class="section-subtitle">Erro no sistema, tela travada, sem permissão — passo a passo</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <p class="body-text">Se por qualquer motivo você não conseguir realizar o apontamento (erro no sistema, tela travada, sem permissão, sem saldo), siga os passos abaixo <strong>imediatamente</strong>:</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Pare e registre o erro no papel</strong>
+              <p>Anote o horário exato, o que estava tentando apontar e a mensagem de erro. Não tente apontar de forma incorreta para "resolver" — isso piora o problema.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Comunique sua liderança imediatamente</strong>
+              <p>Procure seu supervisor ou líder de imediato — <strong>não espere até o fim do turno</strong>. Passe todas as informações anotadas para que ele possa resolver ou acionar o suporte.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Continue produzindo e registre no papel</strong>
+              <p>Continue sua produção normalmente. Registre tudo em papel para que o apontamento seja feito depois. Não pare a produção por causa de erro no sistema.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Confirme com a liderança ao final do turno</strong>
+              <p>Antes de encerrar o turno, confirme que o apontamento pendente foi regularizado. Nunca encerre com apontamentos em aberto sem comunicar.</p>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-blue">
+          <span class="alert-icon">💡</span>
+          <div class="alert-text">
+            <strong>Lembre-se</strong>
+            <p>Você NÃO será penalizado por reportar um problema no sistema. Será penalizado por não reportar e deixar o apontamento errado ou em branco.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. FALTA DE SALDO -->
+  <div class="section theme-orange" id="sec-saldo">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">📦</div>
+        <div>
+          <div class="section-title">Falta de saldo no sistema</div>
+          <div class="section-subtitle">O que fazer quando não há peças disponíveis para apontar</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <p class="body-text">Falta de saldo significa que o sistema não encontra peças disponíveis para o seu setor apontar. Isso geralmente acontece porque o <strong>setor anterior ainda não apontou a produção</strong>.</p>
+        <div class="alert alert-orange">
+          <span class="alert-icon">📌</span>
+          <div class="alert-text">
+            <strong>Regra de Falta de Saldo</strong>
+            <p>O setor <strong>ANTERIOR</strong> ao seu é responsável por realizar o apontamento para que o fluxo seja contínuo. Sem esse apontamento, você não tem saldo para trabalhar.</p>
+          </div>
+        </div>
+        <div class="label">O que fazer passo a passo:</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Verifique se o setor anterior já apontou</strong>
+              <p>Confirme se o setor que alimenta o seu já registrou a produção do período atual.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Solicite o apontamento imediatamente</strong>
+              <p>Se o setor anterior não apontou, solicite que ele realize o apontamento agora.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Comunique sua liderança</strong>
+              <p>Informe seu líder sobre a situação para que ele possa acompanhar e resolver com agilidade.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Registre no papel e continue</strong>
+              <p>Não interrompa sua produção. Registre tudo no papel e atualize o apontamento assim que o saldo for liberado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ERROS DE PRODUÇÃO -->
+  <div class="section theme-red" id="sec-erros-prod">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">❌</div>
+        <div>
+          <div class="section-title">Erros mais comuns no Apontamento de Produção</div>
+          <div class="section-subtitle">Tempo incorreto, duplicidade, sobreposição, produto errado</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+
+        <!-- ERRO 1 -->
+        <div class="label">Erro 1 — Tempo de Produção Incorreto</div>
+        <p class="body-text">Registrar o tempo total do turno sem descontar as paradas. O sistema entende que a máquina produziu durante a parada.</p>
+        <div class="timeline-wrap">
+          <div class="timeline-label">✅ Correto — Turno 06:00–14:00 com parada 12:00–13:00</div>
+          <div class="timeline-bar">
+            <div class="tl-seg prod" style="flex:6">Produção<br>06:00–12:00</div>
+            <div class="tl-seg stop" style="flex:1">PARADA<br>12:00–13:00</div>
+            <div class="tl-seg prod" style="flex:1">Prod<br>13:00–14:00</div>
+          </div>
+          <div class="alert alert-green" style="margin-top:8px;padding:10px 14px;">
+            <span class="alert-icon">✅</span>
+            <span class="alert-text">Tempo de produção: 480 − 60 = <strong>420 minutos</strong></span>
+          </div>
+        </div>
+        <div class="timeline-wrap">
+          <div class="timeline-label">❌ Incorreto — 480 min registrados sem descontar a parada</div>
+          <div class="timeline-bar">
+            <div class="tl-seg stop" style="flex:1">PRODUÇÃO REGISTRADA COMO 480 MIN — inclui parada ❌</div>
+          </div>
+          <div class="alert alert-red" style="margin-top:8px;padding:10px 14px;">
+            <span class="alert-icon">❌</span>
+            <span class="alert-text">Sistema considera produção contínua — dados <strong>inflados</strong></span>
+          </div>
         </div>
 
-        <div class="form-card">
-            <h4>Regras — Modelo Subtração</h4>
-            <div class="help-section">
-                <h4>1. Produção contínua sem sobreposição</h4>
-                <p>Dois registros de produção não podem ter horários sobrepostos no mesmo recurso.</p>
-            </div>
-            <div class="help-section">
-                <h4>2. Parada contida dentro de produção</h4>
-                <p>Toda parada deve estar completamente dentro de um período de produção ativo. Paradas fora da produção
-                    são inválidas.</p>
-            </div>
-            <div class="help-section">
-                <h4>3. Duração mínima de parada</h4>
-                <p>Registrar apenas paradas com duração <strong>maior que 5 minutos</strong>. Paradas de ≤5 min são
-                    ignoradas.</p>
-            </div>
-            <div class="help-section">
-                <h4>4. Sem lacunas (gaps) entre produções</h4>
-                <p>Entre duas produções consecutivas, o horário de fim da primeira deve ser exatamente igual ao horário
-                    de início da segunda. Se há um gap, deve ser coberto por uma parada.</p>
-            </div>
-            <div class="help-section">
-                <h4>5. Início no horário do turno</h4>
-                <p>A primeira produção do turno deve iniciar exatamente no horário de início do turno selecionado.</p>
-            </div>
+        <div class="divider"></div>
+
+        <!-- ERRO 2 -->
+        <div class="label">Erro 2 — Produção Maior que o Turno</div>
+        <p class="body-text">O tempo registrado ultrapassa o horário de fim do turno.</p>
+        <div class="timeline-wrap">
+          <div class="timeline-bar">
+            <div class="tl-seg prod" style="flex:8">Turno válido 06:00–14:00</div>
+            <div class="tl-seg stop" style="flex:3">FORA DO TURNO ❌<br>14:00–15:30</div>
+          </div>
+        </div>
+        <div class="alert alert-red" style="margin-top:8px;">
+          <span class="alert-icon">❌</span>
+          <span class="alert-text">Nunca registre produção fora do período do seu turno.</span>
         </div>
 
-        <div class="form-card">
-            <h4>Exemplos práticos — Turno 1 (06:00–14:00)</h4>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-top:.5rem;">
-                <div style="background:var(--surface2);border:1px solid var(--green);border-radius:10px;padding:1rem;">
-                    <p style="color:var(--green);font-weight:700;margin-bottom:.5rem;font-size:.8rem;"><i
-                            class="fas fa-check-circle"></i> CORRETO</p>
-                    <p style="font-size:.78rem;color:var(--text2);">Prod A: 06:00–09:00<br>Prod B:
-                        09:00–14:00<br>Paradas: ST 09–10, PR 12–13</p>
-                </div>
-                <div style="background:var(--surface2);border:1px solid var(--red);border-radius:10px;padding:1rem;">
-                    <p style="color:var(--red);font-weight:700;margin-bottom:.5rem;font-size:.8rem;"><i
-                            class="fas fa-exclamation-triangle"></i> GAP (ERRO)</p>
-                    <p style="font-size:.78rem;color:var(--text2);">Prod A: 06:00–09:00<br>Prod B: 10:00–14:00<br>Gap
-                        sem parada → inválido</p>
-                </div>
-                <div style="background:var(--surface2);border:1px solid var(--red);border-radius:10px;padding:1rem;">
-                    <p style="color:var(--red);font-weight:700;margin-bottom:.5rem;font-size:.8rem;"><i
-                            class="fas fa-calendar-times"></i> PARADA FORA</p>
-                    <p style="font-size:.78rem;color:var(--text2);">Prod: 06:00–14:00<br>Parada: 05:50–06:10<br>Início
-                        fora do período</p>
-                </div>
-            </div>
+        <div class="divider"></div>
+
+        <!-- ERRO 3 -->
+        <div class="label">Erro 3 — Apontamento Duplicado</div>
+        <p class="body-text">A mesma produção registrada duas vezes. O sistema soma tudo — dobrando a quantidade.</p>
+        <div class="compare">
+          <div class="compare-card good">
+            <strong>✅ Correto</strong>
+            <p class="mono">Registro único:<br>06:00 – 10:00 → 1.000 peças<br><br>Sistema conta: <strong>1.000 peças ✅</strong></p>
+          </div>
+          <div class="compare-card bad">
+            <strong>❌ Errado</strong>
+            <p class="mono">Registro 1: 06:00–10:00 → 1.000<br>Registro 2: 06:00–10:00 → 1.000<br><br>Sistema conta: <strong>2.000 peças ❌</strong></p>
+          </div>
         </div>
 
-        <div style="display:flex;gap:.8rem;justify-content:center;margin-top:.5rem;">
-            <button class="btn btn-blue" onclick="goTo('screen-prod')"><i class="fas fa-industry"></i> Apontar
-                Produção</button>
-            <button class="btn btn-red" onclick="goTo('screen-parada')"><i class="fas fa-pause-circle"></i> Apontar
-                Parada</button>
+        <div class="divider"></div>
+
+        <!-- ERRO 4 -->
+        <div class="label">Erro 4 — Produção Sobreposta</div>
+        <p class="body-text">Dois registros que compartilham parte do mesmo período causam duplicidade no intervalo sobreposto.</p>
+        <div class="timeline-wrap">
+          <div class="timeline-bar">
+            <div class="tl-seg prod" style="flex:7">Registro 1 — 06:00 a 10:00</div>
+            <div class="tl-seg over" style="flex:2">SOBREPOSIÇÃO<br>09:30–10:00 ❌</div>
+            <div class="tl-seg dark" style="flex:4">Registro 2 — 09:30 a 12:00</div>
+          </div>
         </div>
+        <div class="alert alert-red" style="margin-top:8px;">
+          <span class="alert-icon">❌</span>
+          <span class="alert-text">09:30–10:00 foi contado duas vezes. Verifique se os horários não se cruzam.</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ERRO 5 -->
+        <div class="label">Erro 5 — Produto Incorreto</div>
+        <p class="body-text">Registrar o código de produto errado distorce o estoque, o MRP e gera relatórios falsos.</p>
+        <div class="alert alert-green">
+          <span class="alert-icon">✅</span>
+          <div class="alert-text">
+            <strong>Antes de iniciar: sempre confirme o produto</strong>
+            <p>Confira a Ordem de Produção ou etiqueta · Verifique o código no sistema · Em caso de dúvida, pergunte ao líder — nunca "arrisque" um código.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ERROS DE PARADA -->
+  <div class="section theme-red" id="sec-erros-parada">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">⏸</div>
+        <div>
+          <div class="section-title">Erros mais comuns no Apontamento de Paradas</div>
+          <div class="section-subtitle">Parada não registrada, duplicada, sobreposta, maior que o turno</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+
+        <div class="alert alert-blue">
+          <span class="alert-icon">📌</span>
+          <div class="alert-text">
+            <strong>Regra Geral</strong>
+            <p>Toda parada acima de <strong>5 minutos DEVE ser registrada</strong>. Paradas não registradas fazem o sistema entender que a máquina estava produzindo quando estava parada.</p>
+          </div>
+        </div>
+
+        <!-- ERRO 1 -->
+        <div class="label">Erro 1 — Parada Não Registrada</div>
+        <p class="body-text">A máquina parou, mas o operador não registrou. O sistema considera produção contínua.</p>
+        <div class="timeline-wrap">
+          <div class="timeline-label">❌ Parada das 10:30 às 11:00 não foi registrada</div>
+          <div class="timeline-bar">
+            <div class="tl-seg stop" style="flex:1">Produção contínua registrada — 480 min (ERRADO ❌)</div>
+          </div>
+        </div>
+        <div class="timeline-wrap" style="margin-top:8px;">
+          <div class="timeline-label">✅ Correto — parada devidamente registrada</div>
+          <div class="timeline-bar">
+            <div class="tl-seg prod" style="flex:9">Produção 06:00–10:30</div>
+            <div class="tl-seg ok" style="flex:2">PARADA ✅<br>10:30–11:00</div>
+            <div class="tl-seg prod" style="flex:5">Produção 11:00–14:00</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ERRO 2 -->
+        <div class="label">Erro 2 — Parada Duplicada</div>
+        <p class="body-text">Registrar a mesma parada duas vezes dobra o tempo — eficiência fica incorreta.</p>
+        <div class="compare">
+          <div class="compare-card good">
+            <strong>✅ Correto</strong>
+            <p class="mono">Uma parada:<br>10:00 – 10:30 = 30 min</p>
+          </div>
+          <div class="compare-card bad">
+            <strong>❌ Errado</strong>
+            <p class="mono">Parada 1: 10:00–10:30<br>Parada 2: 10:00–10:30<br>Sistema conta: <strong>60 min ❌</strong></p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ERRO 3 -->
+        <div class="label">Erro 3 — Parada Sobreposta</div>
+        <p class="body-text">Duas paradas com horários que se cruzam — o período em comum é contado duas vezes.</p>
+        <div class="timeline-wrap">
+          <div class="timeline-bar">
+            <div class="tl-seg ok" style="flex:5">Parada 1 — 10:00–10:30</div>
+            <div class="tl-seg stop" style="flex:2">DUPLIC ❌<br>10:20–10:30</div>
+            <div class="tl-seg dark" style="flex:6">Parada 2 — 10:20–11:00</div>
+          </div>
+        </div>
+        <div class="alert alert-red" style="margin-top:8px;">
+          <span class="alert-icon">❌</span>
+          <span class="alert-text">10:20–10:30 foi contado duas vezes.</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ERRO 4 -->
+        <div class="label">Erro 4 — Total de Paradas Maior que o Turno</div>
+        <div class="alert alert-red">
+          <span class="alert-icon">❌</span>
+          <div class="alert-text">
+            <strong>Fisicamente impossível!</strong>
+            <p class="mono">Turno = 480 min<br>Parada A = 300 min + Parada B = 250 min = 550 min ❌<br>Nunca a soma das paradas pode ultrapassar o turno.</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ERRO 5 -->
+        <div class="label">Erro 5 — Parada Ultrapassando o Turno</div>
+        <p class="body-text">O horário de fim da parada ultrapassa o horário de fim do turno.</p>
+        <div class="timeline-wrap">
+          <div class="timeline-bar">
+            <div class="tl-seg prod" style="flex:7">Turno — 06:00 até 13:30</div>
+            <div class="tl-seg ok" style="flex:1">Parada ✅</div>
+            <div class="tl-seg stop" style="flex:3">FORA DO TURNO ❌<br>14:00–15:00</div>
+          </div>
+        </div>
+        <div class="alert alert-orange" style="margin-top:8px;">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text">A parada que continua no próximo turno deve ser registrada no turno seguinte, pelo operador correspondente.</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. DATA E TURNO -->
+  <div class="section theme-blue" id="sec-data">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">📅</div>
+        <div>
+          <div class="section-title">Erros de Data e Turno</div>
+          <div class="section-subtitle">Como registrar corretamente o turno 3 e evitar confusões de data</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <div class="label">Os três turnos da fábrica</div>
+        <div class="turno-grid">
+          <div class="turno-card t1">
+            <div class="t-num">1º TURNO</div>
+            <div class="t-name">Manhã</div>
+            <div class="t-hours">06:00 – 14:00</div>
+          </div>
+          <div class="turno-card t2">
+            <div class="t-num">2º TURNO</div>
+            <div class="t-name">Tarde</div>
+            <div class="t-hours">14:00 – 22:00</div>
+          </div>
+          <div class="turno-card t3">
+            <div class="t-num">3º TURNO</div>
+            <div class="t-name">Noite</div>
+            <div class="t-hours">22:00 – 06:00</div>
+          </div>
+        </div>
+
+        <div class="label">Data incorreta — Atenção ao Turno 3!</div>
+        <p class="body-text">O caso mais comum é o turno 3, que começa em um dia e termina no dia seguinte. <strong>Sempre registre na data inicio o dia que o turno começou e data fim o dia que o turno Finalizou.</strong></p>
+        <div class="compare">
+          <div class="compare-card good">
+            <strong>✅ Correto</strong>
+            <p class="mono">Turno 3: inicia dia 10 às 22:00<br>Termina dia 11 às 06:00<br><br>→ Registrar como: <strong>Data inicio DIA 10 e data fim DIA 11 ✅</strong></p>
+          </div>
+          <div class="compare-card bad">
+            <strong>❌ Errado</strong>
+            <p class="mono">Turno 3: inicia dia 10 às 22:00<br>Termina dia 11 às 06:00<br><br>→ Registrar como: <strong>data inicio e fim como DIA 11 ❌</strong></p>
+          </div>
+        </div>
+
+        <div class="label">Turno incorreto</div>
+        <p class="body-text">Selecionar o turno errado coloca sua produção no relatório de outro período. Se você produziu às 15:00, é o <strong>2º Turno</strong> — não o 1º.</p>
+        <div class="alert alert-orange">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-text">
+            <strong>Sempre verifique o turno antes de iniciar o apontamento.</strong>
+            <p>Em caso de dúvida, consulte seu líder. Um turno errado gera relatórios incorretos para o dia inteiro.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. BOAS PRÁTICAS -->
+  <div class="section theme-green" id="sec-boas">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">✅</div>
+        <div>
+          <div class="section-title">Boas Práticas — Checklist do Operador</div>
+          <div class="section-subtitle">Marque cada item antes de encerrar o turno</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <p class="body-text">Antes de encerrar cada turno, confirme que você fez tudo isso. Clique nos itens para marcar como concluído:</p>
+        <div class="checklist" id="checklist">
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Verifiquei o código do produto antes de iniciar o apontamento</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Confirmei que estou no turno correto e na data correta</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Registrei o início e fim da produção corretamente, sem ultrapassar o turno</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Registrei todas as paradas acima de 5 minutos com motivo</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Verifiquei todas as quantidades de produção antes de confirmar o envio</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Comuniquei trocas de produto ou paradas à liderança</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Revisei todos os apontamentos antes de fechar o turno</span>
+          </div>
+          <div class="check-item" onclick="checkItem(this)">
+            <div class="check-box"></div>
+            <span>Em caso de erro no sistema: anotei no papel e comuniquei o líder</span>
+          </div>
+        </div>
+        <div id="check-progress" style="margin-top:12px; font-size:13px; color:var(--mid); text-align:center;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. DÚVIDAS FREQUENTES -->
+  <div class="section theme-blue" id="sec-faq">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-header-left">
+        <div class="section-icon">❓</div>
+        <div>
+          <div class="section-title">Dúvidas Frequentes</div>
+          <div class="section-subtitle">As perguntas mais comuns dos operadores — com respostas diretas</div>
+        </div>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="section-content">
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Esqueci de apontar durante o turno. O que faço?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                Comunique imediatamente sua liderança. Não tente fazer o apontamento retroativo por conta própria sem orientação — isso pode gerar sobreposição ou duplicidade. O líder irá orientar a correção correta.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Registrei o produto errado. Consigo corrigir?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                Sim, mas NÃO faça a correção sozinho. Informe sua liderança que houve registro com produto incorreto, passe o código errado e o código correto. A correção deve ser feita de forma orientada para não gerar novos erros de estoque.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>A máquina parou menos de 5 minutos. Preciso registrar?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                Paradas com menos de 5 minutos <strong>não precisam ser registradas</strong>. Apenas registre paradas que ultrapassaram 5 minutos de duração.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Trabalhei no turno 3 (22h–06h). Em qual dia registro?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                A data inicio no dia que começou o turno e data fim o dia que o turno finalizou <strong>Voce deve informar as duas datas</strong>. Se o turno iniciou na noite do dia 10, a data inicio é do dia 10 — e a data fim é dia 11.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>O sistema trava ou dá erro ao apontar. O que fazer?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                Anote tudo no papel (horário, quantidade, produto, mensagem de erro) e <strong>comunique seu líder imediatamente</strong>. Não reinicie o processo por conta própria sem orientação — isso pode gerar registros duplicados.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Falta saldo no sistema e não consigo apontar. O que faço?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                Verifique se o setor anterior ao seu já realizou o apontamento. Se não, solicite que ele atualize agora. Comunique sua liderança e continue produzindo registrando no papel. Atualize o sistema assim que o saldo for liberado.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Posso apontar a produção de outro operador no lugar dele?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <strong>Apenas com autorização expressa da liderança.</strong> Apontamentos realizados sem autorização podem gerar inconsistências graves nos dados e responsabilidade disciplinar.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Como sei se meu apontamento está correto?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                Ao final do turno, confirme: o horário não ultrapassa o turno; as paradas foram descontadas do tempo de produção; o produto está correto; não há sobreposições de horário. Em caso de dúvida, acione a liderança <strong>antes de fechar</strong>.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span>Quais as principais causas de erro no apontamento?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                As causas mais comuns são: <strong>falta de comunicação</strong> entre operadores (troca de produção, paradas não avisadas); <strong>falta de treinamento</strong> (produto errado, turno errado, paradas esquecidas); e <strong>falta de validação pela liderança</strong> ao longo do turno. A verificação diária no BI pelo líder ajuda a identificar erros rapidamente.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="alert alert-dark" style="margin-top:20px;">
+          <span class="alert-icon">📞</span>
+          <div class="alert-text">
+            <strong>Sempre que tiver dúvida — fale com sua liderança</strong>
+            <p>Não arrisque um apontamento errado por medo de perguntar. Perguntar é correto. Errar por não perguntar gera consequências para você e para todos.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /sections -->
+
+<footer>
+  Guia de Apontamento de Produção · Uso interno · Em caso de dúvidas, comunique imediatamente sua liderança.
+</footer>
+
+<button class="back-top" id="backTop" onclick="scrollToTop()" title="Voltar ao topo">↑</button>
+
+<script>
+  // ── Toggle section ──────────────────────────────────────────
+  function toggle(header) {
+    const section = header.closest('.section');
+    section.classList.toggle('open');
+  }
+
+  function toggleAll(open) {
+    document.querySelectorAll('.section:not(.hidden-search)').forEach(s => {
+      if (open) s.classList.add('open');
+      else s.classList.remove('open');
+    });
+  }
+
+  // ── Toggle FAQ ──────────────────────────────────────────────
+  function toggleFaq(qEl) {
+    const item = qEl.closest('.faq-item');
+    item.classList.toggle('open');
+  }
+
+  // ── Checklist ───────────────────────────────────────────────
+  function checkItem(el) {
+    el.classList.toggle('checked');
+    const box = el.querySelector('.check-box');
+    box.textContent = el.classList.contains('checked') ? '✓' : '';
+    updateProgress();
+  }
+  function updateProgress() {
+    const items = document.querySelectorAll('.check-item');
+    const done = document.querySelectorAll('.check-item.checked').length;
+    const prog = document.getElementById('check-progress');
+    if (done === 0) { prog.textContent = ''; return; }
+    if (done === items.length) {
+      prog.innerHTML = '<span style="color:var(--green);font-weight:700;">✅ Turno pronto para encerrar!</span>';
+    } else {
+      prog.textContent = `${done} de ${items.length} itens verificados`;
+    }
+  }
+
+  // ── Progress bar ─────────────────────────────────────────────
+  const prog = document.getElementById('prog');
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    prog.style.width = pct + '%';
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+  // ── Smooth nav ───────────────────────────────────────────────
+  document.querySelectorAll('.nav-pill').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // auto-open
+        if (!el.classList.contains('open')) el.classList.add('open');
+        document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+        a.classList.add('active');
+      }
+    });
+  });
+
+  // ── Search ──────────────────────────────────────────────────
+  function doSearch(val) {
+    const q = val.trim().toLowerCase();
+    document.querySelectorAll('.section').forEach(sec => {
+      if (!q) {
+        sec.classList.remove('hidden-search');
+        return;
+      }
+      const text = sec.textContent.toLowerCase();
+      if (text.includes(q)) {
+        sec.classList.remove('hidden-search');
+        sec.classList.add('open');
+      } else {
+        sec.classList.add('hidden-search');
+      }
+    });
+  }
+
+  // ── Open first section by default ───────────────────────────
+  document.querySelector('.section').classList.add('open');
+</script>
     </div>
 
     <!-- ════════════════════════════════ MODAL ════════════════════════════════ -->
@@ -1185,38 +2530,94 @@
     <script src="db-data.js"></script>
     <script>
         (function () {
-            // ── STATE ──
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 1 — STATE (Memória de sessão)
+            // Arrays que guardam os registros feitos durante a sessão atual.
+            // São perdidos ao recarregar a página.
+            // produções[]: cada item = um apontamento de produção confirmado
+            // paradas[]  : cada item = uma parada confirmada
+            // ══════════════════════════════════════════════════════════════════
             const state = {
-                produções: [],   // { op, produto, desc, recursoCod, recurso, dataIni, horaIni, dataFim, horaFim, qtd, ret, setup, rnc, cestos }
-                paradas: []      // { motivo, op, recursoCod, recurso, dataIni, horaIni, dataFim, horaFim }
+                // Campos de cada produção: { matricula, senha, op, produto, desc,
+                //   recursoCod, recurso, dIni, hIni, dFim, hFim,
+                //   qtd, ret, setup, rnc, cestos, shiftKey }
+                produções: [],
+
+                // Campos de cada parada: { matricula, senha, motCod, motDesc,
+                //   op, produto, recursoCod, dIni, hIni, dFim, hFim, shiftKey }
+                paradas: []
             };
 
-            const motifsStatic = {
-                AM: 'AMOSTRA', FR: 'FERRAMENTAL', LE: 'FALTA DE EMBALAGEM', LM: 'FALTA DE MATÉRIA PRIMA',
-                LP: 'FALTA DE PROGRAMAÇÃO', PL: 'LIMPEZA / ORGANIZAÇÃO', ME: 'MANUTENÇÃO ELÉTRICA',
-                MM: 'MANUTENÇÃO MECÂNICA', MP: 'MANUTENÇÃO PREVENTIVA', IP: 'INSPEÇÃO',
-                MU: 'PANE EM UTILIDADES', PD: 'MÃO DE OBRA DESLOCADA', PJ: 'AJUSTE DE OPERAÇÃO',
-                PM: 'FALTA DE MÃO DE OBRA (OPERADOR)', PR: 'REFEIÇÃO/NECESS. PESSOAIS',
-                PT: 'PROTÓTIPO', QM: 'MATÉRIA PRIMA NÃO CONFORME', QP: 'PRODUTO NÃO CONFORME',
-                PC: 'PROCESSO SUBSEQUENTE CHEIO', ST: 'SET-UP', TO: 'TRY-OUT', TR: 'TREINAMENTO / REUNIÃO'
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 2 — DB: DADOS ESTÁTICOS
+            // Tabelas de referência embutidas no código.
+            // Estas NÃO dependem do arquivo db-data.js.
+            // Para adicionar/remover motivos, edite o objeto motivosPadrao abaixo.
+            // ══════════════════════════════════════════════════════════════════
+            const motivosPadrao = {
+                AM: 'AMOSTRA',                        FR: 'FERRAMENTAL',
+                LE: 'FALTA DE EMBALAGEM',              LM: 'FALTA DE MATÉRIA PRIMA',
+                LP: 'FALTA DE PROGRAMAÇÃO',            PL: 'LIMPEZA / ORGANIZAÇÃO',
+                ME: 'MANUTENÇÃO ELÉTRICA',             MM: 'MANUTENÇÃO MECÂNICA',
+                MP: 'MANUTENÇÃO PREVENTIVA',           IP: 'INSPEÇÃO',
+                MU: 'PANE EM UTILIDADES',              PD: 'MÃO DE OBRA DESLOCADA',
+                PJ: 'AJUSTE DE OPERAÇÃO',              PM: 'FALTA DE MÃO DE OBRA (OPERADOR)',
+                PR: 'REFEIÇÃO/NECESS. PESSOAIS',       PT: 'PROTÓTIPO',
+                QM: 'MATÉRIA PRIMA NÃO CONFORME',      QP: 'PRODUTO NÃO CONFORME',
+                PC: 'PROCESSO SUBSEQUENTE CHEIO',      ST: 'SET-UP',
+                TO: 'TRY-OUT',                        TR: 'TREINAMENTO / REUNIÃO'
             };
 
+            // Dados de fallback usados quando db-data.js NÃO está disponível.
+            // Em produção, estes dados são sobrescritos pelo merge com APP_DB.
             const db = {
-                colaboradores: { '101|123': 'Samuel Inácio', '102|123': 'João Silva', '103|123': 'Maria Oliveira' },
-                produtos: { 'P001': 'Abraçadeira T10 Blue', 'P002': 'Suporte L50 Metal', 'P003': 'Anel O-Ring 22mm' },
-                recursos: { 'INJ-01': 'Injetora Romi 130T', 'INJ-02': 'Injetora Haitian 200T', 'PRE-01': 'Prensa Hidráulica 50T' },
-                motivos: motifsStatic,
-                ops: {}
+                colaboradores: {
+                    // Formato: 'MATRICULA|SENHA' : 'Nome Completo'
+                    '101|123': 'Samuel Inácio',
+                    '102|123': 'João Silva',
+                    '103|123': 'Maria Oliveira'
+                },
+                produtos: {
+                    // Formato: 'COD_PRODUTO' : 'Descrição do Produto'
+                    'P001': 'Abraçadeira T10 Blue',
+                    'P002': 'Suporte L50 Metal',
+                    'P003': 'Anel O-Ring 22mm'
+                },
+                recursos: {
+                    // Formato: 'COD_RECURSO' : 'Nome da Máquina'
+                    'INJ-01': 'Injetora Romi 130T',
+                    'INJ-02': 'Injetora Haitian 200T',
+                    'PRE-01': 'Prensa Hidráulica 50T'
+                },
+                motivos: motivosPadrao,
+                ops: {
+                    // Formato: 'NUM_OP' : { produto: 'COD_PRODUTO', desc: 'Descrição' }
+                    // Populado via db-data.js gerado pelo Excel
+                }
             };
 
-            // Merge with Excel data if available
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 3 — DB: MERGE COM EXCEL (db-data.js → window.APP_DB)
+            // O arquivo db-data.js expõe window.APP_DB com os dados reais.
+            // Este bloco mescla os dados do Excel sobre os dados de fallback.
+            // Para regenerar db-data.js: execute `node generate_db.js`
+            // ══════════════════════════════════════════════════════════════════
             if (window.APP_DB) {
                 Object.assign(db.colaboradores, window.APP_DB.colaboradores);
-                Object.assign(db.produtos, window.APP_DB.produtos);
-                Object.assign(db.recursos, window.APP_DB.recursos);
-                Object.assign(db.motivos, window.APP_DB.motivos);
-                Object.assign(db.ops, window.APP_DB.ops);
+                Object.assign(db.produtos,      window.APP_DB.produtos);
+                Object.assign(db.recursos,      window.APP_DB.recursos);
+                Object.assign(db.motivos,       window.APP_DB.motivos);
+                Object.assign(db.ops,           window.APP_DB.ops);
             }
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 4 — AUTO-FILL (Preenchimento automático por código)
+            // Ao digitar um código, o campo de descrição é preenchido
+            // automaticamente consultando os objetos db.
+            // isProd = true  → prefixo 'p-' (tela de Produção)
+            // isProd = false → prefixo 's-' (tela de Parada)
+            // ══════════════════════════════════════════════════════════════════
 
             // Auto-fill colaborador (Matrícula + Senha)
             function fillColab(isProd) {
@@ -1270,58 +2671,335 @@
             document.getElementById('p-recurso-cod').addEventListener('input', () => fillRecurso(true));
             document.getElementById('s-recurso-cod').addEventListener('input', () => fillRecurso(false));
 
-            // Auto-fill motivo parada
+            // Auto-fill motivo de parada (somente na tela de Parada)
             document.getElementById('s-motivo-cod').addEventListener('input', function () {
                 const cod = this.value.trim().toUpperCase();
                 document.getElementById('s-motivo-desc').value = db.motivos[cod] || 'Motivo não encontrado';
             });
 
-            // ── NAVIGATION ──
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 5 — VALIDAÇÃO VISUAL EM TEMPO REAL
+            // updateFieldClass: muda a cor do campo com base na validade.
+            //   🟡 field-empty   = obrigatório e vazio
+            //   🟢 field-valid   = valor reconhecido no banco
+            //   🔴 field-invalid = valor digitado mas inválido
+            // validateLive: orquestra a validação de todos os campos da tela.
+            //   Chamada a cada input/change nos campos monitorados (liveFields).
+            // ══════════════════════════════════════════════════════════════════
+            function updateFieldClass(id, isValid, isWarning = false) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.remove('field-empty', 'field-valid', 'field-invalid');
+                const val = el.value.trim();
+                if (!val) {
+                    el.classList.add('field-empty');
+                } else if (isValid) {
+                    el.classList.add('field-valid');
+                    // Salto automático de foco (Atrito zero)
+                    if (document.activeElement === el && !el.classList.contains('p-ignore-focus')) {
+                        const activeScreen = document.querySelector('.screen.active');
+                        const focusable = Array.from(activeScreen.querySelectorAll('input:not([readonly]):not([disabled]), select:not([disabled])'))
+                            .filter(el => el.type !== 'hidden' && el.offsetParent !== null);
+                        const index = focusable.indexOf(el);
+                        if (index > -1 && index < focusable.length - 1) {
+                            focusable[index + 1].focus();
+                        }
+                    }
+                } else {
+                    el.classList.add('field-invalid');
+                }
+            }
+
+            function validateLive(isProd) {
+                const p = isProd ? 'p-' : 's-';
+                // Usuário e Senha
+                const mat = document.getElementById(p + 'matricula').value.trim();
+                const sen = document.getElementById(p + 'senha').value.trim();
+                const colabValid = !!db.colaboradores[`${mat}|${sen}`];
+                updateFieldClass(p + 'matricula', colabValid);
+                updateFieldClass(p + 'senha', colabValid);
+
+                // Recurso
+                const rCod = document.getElementById(p + 'recurso-cod').value.trim().toUpperCase();
+                updateFieldClass(p + 'recurso-cod', !!db.recursos[rCod]);
+
+                // Produto / OP
+                if (isProd) {
+                    const op = document.getElementById('p-op').value.trim();
+                    // OP é totalmente opcional — sem feedback visual de cor
+                    document.getElementById('p-op').classList.remove('field-empty', 'field-valid', 'field-invalid');
+
+                    const prod = document.getElementById('p-produto').value.trim().toUpperCase();
+                    updateFieldClass('p-produto', !!db.produtos[prod]);
+                    const qtd = parseFloat(document.getElementById('p-qtd').value) || 0;
+                    updateFieldClass('p-qtd', qtd > 0);
+                } else {
+                    const mot = document.getElementById('s-motivo-cod').value.trim().toUpperCase();
+                    updateFieldClass('s-motivo-cod', !!db.motivos[mot]);
+                    // Produto da parada também é obrigatório
+                    const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
+                    updateFieldClass('s-produto', !!db.produtos[prodPar]);
+                }
+
+                // Horas
+                const hI = document.getElementById(p + 'hora-ini').value;
+                const hF = document.getElementById(p + 'hora-fim').value;
+                updateFieldClass(p + 'hora-ini', isValidTimeStr(hI));
+                updateFieldClass(p + 'hora-fim', isValidTimeStr(hF));
+
+                updateTimeline();
+            }
+
+            const liveFields = [
+                'p-matricula', 'p-senha', 'p-recurso-cod', 'p-op', 'p-produto', 'p-qtd', 'p-hora-ini', 'p-hora-fim',
+                's-matricula', 's-senha', 's-recurso-cod', 's-motivo-cod', 's-produto', 's-hora-ini', 's-hora-fim'
+            ];
+            liveFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', () => validateLive(id.startsWith('p-')));
+                    el.addEventListener('change', () => validateLive(id.startsWith('p-')));
+                }
+            });
+            // Inicializa as classes visuais ao carregar a página
+            setTimeout(() => { validateLive(true); validateLive(false); }, 100);
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 6 — NAVEGAÇÃO ENTRE TELAS
+            // goTo(screenId): oculta todas as telas e exibe a indicada.
+            // Telas disponíveis: screen-home | screen-prod | screen-parada | screen-duvidas
+            // ══════════════════════════════════════════════════════════════════
             window.goTo = function (id) {
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 window.scrollTo(0, 0);
             };
 
-            // ── MODAL ──
-            function showModal(type, title, html) {
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 7 — MODAL (Diálogos de feedback)
+            // showModal(type, title, html, confirmCallback)
+            //   type: 'erro' | 'aviso' | 'sucesso' | 'confirm'
+            //   confirmCallback: se passado, exibe botões Cancelar + Confirmar.
+            //     Se null, exibe apenas botão Fechar.
+            // ══════════════════════════════════════════════════════════════════
+            function showModal(type, title, html, confirmCallback = null) {
                 const box = document.getElementById('modalBox');
                 box.className = 'modal-box type-' + type;
-                const icons = { erro: 'fas fa-times-circle', aviso: 'fas fa-exclamation-triangle', sucesso: 'fas fa-check-circle' };
-                const colors = { erro: 'var(--red)', aviso: 'var(--yellow)', sucesso: 'var(--green)' };
+                const icons = { erro: 'fas fa-times-circle', aviso: 'fas fa-exclamation-triangle', sucesso: 'fas fa-check-circle', confirm: 'fas fa-clipboard-check' };
+                const colors = { erro: 'var(--red)', aviso: 'var(--yellow)', sucesso: 'var(--green)', confirm: 'var(--accent)' };
                 const ico = document.getElementById('modalIcon');
                 ico.className = icons[type];
                 ico.style.color = colors[type];
                 document.getElementById('modalTitle').style.color = colors[type];
                 document.getElementById('modalTitle').textContent = title;
                 document.getElementById('modalBody').innerHTML = html;
+
+                const foot = document.querySelector('.modal-foot');
+                foot.innerHTML = '';
+                if (confirmCallback) {
+                    const btnCancel = document.createElement('button');
+                    btnCancel.className = 'btn btn-ghost';
+                    btnCancel.textContent = 'Cancelar';
+                    btnCancel.onclick = () => document.getElementById('modalOverlay').classList.remove('open');
+
+                    const btnConfirm = document.createElement('button');
+                    btnConfirm.className = 'btn btn-primary';
+                    btnConfirm.textContent = 'Confirmar Registro';
+                    btnConfirm.onclick = () => {
+                        confirmCallback();
+                        document.getElementById('modalOverlay').classList.remove('open');
+                    };
+
+                    foot.appendChild(btnCancel);
+                    foot.appendChild(btnConfirm);
+                } else {
+                    const btnClose = document.createElement('button');
+                    btnClose.className = 'btn btn-ghost';
+                    btnClose.textContent = 'Fechar';
+                    btnClose.onclick = () => document.getElementById('modalOverlay').classList.remove('open');
+                    foot.appendChild(btnClose);
+                }
+
                 document.getElementById('modalOverlay').classList.add('open');
             }
             document.getElementById('fecharModal').onclick = () => document.getElementById('modalOverlay').classList.remove('open');
             document.getElementById('modalOverlay').onclick = e => { if (e.target.id === 'modalOverlay') e.target.classList.remove('open'); };
 
-            // ── HELPERS ──
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 8 — SESSÃO DO OPERADOR
+            // trocarOperador: limpa apenas os campos de login (matrícula/senha/nome).
+            // sairOperadorProd / sairOperadorParada: limpa o formulário inteiro
+            //   e redireciona para a tela inicial (HomeScreen).
+            // ══════════════════════════════════════════════════════════════════
+            window.trocarOperador = function (isProd) {
+                const prefix = isProd ? 'p-' : 's-';
+                ['matricula', 'senha', 'nome'].forEach(f => {
+                    const el = document.getElementById(prefix + f);
+                    if (el) el.value = '';
+                });
+                validateLive(isProd);
+            };
 
-            // ── HELPERS ──
+            // Sair do operador e voltar para home (Produção)
+            window.sairOperadorProd = function () {
+                // Limpa campos de operador
+                ['p-matricula', 'p-senha', 'p-nome'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+                // Limpa o formulário inteiro
+                limparFormProd();
+                // Volta para a tela inicial
+                goTo('screen-home');
+            };
+
+            // Sair do operador e voltar para home (Parada)
+            window.sairOperadorParada = function () {
+                ['s-matricula', 's-senha', 's-nome'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+                limparFormParada();
+                goTo('screen-home');
+            };
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 9 — TIMELINE VISUAL DO TURNO
+            // updateTimeline: redesenha a barra de progresso do turno.
+            //   Verde  = segmentos de produção
+            //   Vermelho = segmentos de parada
+            //   Alerta de GAP: aparece quando o horário atual do campo
+            //   é maior que o fim do último registro (lacuna detectada).
+            // ══════════════════════════════════════════════════════════════════
+            function updateTimeline() {
+                const isProd = document.getElementById('screen-prod').classList.contains('active');
+                const suffix = isProd ? 'p-' : 's-';
+                const turnoVal = document.getElementById(suffix + 'turno').value;
+                const dataSel = document.getElementById(suffix + 'data-ini').value;
+                const rCod = document.getElementById(suffix + 'recurso-cod').value.trim().toUpperCase();
+
+                const bar = document.getElementById(suffix + 'timeline-bar');
+                const labelStart = document.getElementById(suffix + 'timeline-start');
+                const labelEnd = document.getElementById(suffix + 'timeline-end');
+                const alertEl = document.getElementById(suffix + 'timeline-alert');
+
+                if (!turnoVal || !bar) return;
+                const [tId, tIni, tFim] = turnoVal.split('|');
+                labelStart.textContent = tIni;
+                labelEnd.textContent = tFim;
+                bar.innerHTML = '';
+
+                const sT = parseDateTime(dataSel, tIni);
+                const eT = parseDateTime(dataSel, tFim);
+                if (tFim < tIni) eT.setDate(eT.getDate() + 1);
+                const totalMin = (eT - sT) / 60000;
+
+                // GAP DETECT
+                let lastEnd = sT;
+                const regs = [...state.produções, ...state.paradas]
+                    .filter(i => i.recursoCod.toUpperCase() === rCod.toUpperCase() && i.shiftKey === turnoVal && i.dIni === dataSel);
+                regs.sort((a, b) => parseDateTime(a.dIni, a.hIni) - parseDateTime(b.dIni, b.hIni));
+                if (regs.length > 0) {
+                    const last = regs[regs.length - 1];
+                    lastEnd = parseDateTime(last.dFim, last.hFim);
+                }
+
+                const currentHIni = document.getElementById(suffix + 'hora-ini').value;
+                if (alertEl) {
+                    if (isValidTimeStr(currentHIni)) {
+                        const cStart = parseDateTime(dataSel, currentHIni);
+                        alertEl.style.display = (cStart > lastEnd && (cStart - lastEnd) / 60000 > 1) ? 'block' : 'none';
+                    } else alertEl.style.display = 'none';
+                }
+
+                const renderSegs = (list, styleClass) => {
+                    list.filter(item => item.recursoCod.toUpperCase() === rCod.toUpperCase() && item.shiftKey === turnoVal && item.dIni === dataSel)
+                        .forEach(item => {
+                            const start = parseDateTime(item.dIni, item.hIni);
+                            const end = parseDateTime(item.dFim, item.hFim);
+                            if (end > start) {
+                                const offset = Math.max(0, (start - sT) / 60000);
+                                const duration = (end - start) / 60000;
+                                const left = (offset / totalMin) * 100;
+                                const width = (duration / totalMin) * 100;
+
+                                const seg = document.createElement('div');
+                                seg.className = 'timeline-segment ' + styleClass;
+                                seg.style.left = left + '%';
+                                seg.style.width = width + '%';
+                                seg.title = `${item.hIni} - ${item.hFim}`;
+                                bar.appendChild(seg);
+                            }
+                        });
+                };
+
+                renderSegs(state.produções, 'segment-prod');
+                renderSegs(state.paradas, 'segment-para');
+            }
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 10 — HELPERS (Utilitários)
+            // maskTime(id)       : aplica máscara HH:MM ao digitar
+            // isValidTimeStr(t)  : valida se a string está no formato HH:MM
+            // parseDateTime(d,t) : converte 'YYYY-MM-DD' + 'HH:MM' em Date
+            // fmt(date)          : extrai HH:MM de um objeto Date
+            // today()            : retorna a data de hoje no formato YYYY-MM-DD
+            // ══════════════════════════════════════════════════════════════════
             function maskTime(id) {
                 const el = document.getElementById(id);
                 el.addEventListener('input', e => {
                     let v = e.target.value.replace(/\D/g, "");
                     if (v.length > 4) v = v.slice(0, 4);
+
+                    // Bloqueio de valores impossíveis durante a digitação
+                    if (v.length >= 2) {
+                        let h = parseInt(v.slice(0, 2));
+                        if (h > 23) v = "23" + v.slice(2);
+                    }
+                    if (v.length >= 4) {
+                        let m = parseInt(v.slice(2, 4));
+                        if (m > 59) v = v.slice(0, 2) + "59";
+                    }
+
                     if (v.length > 2) v = v.slice(0, 2) + ":" + v.slice(2);
                     e.target.value = v;
                 });
                 el.addEventListener('blur', e => {
                     let v = e.target.value;
                     if (v.length === 0) return;
+                    // Auto-completar formato básico
                     if (v.length === 1) v = "0" + v + ":00";
                     else if (v.length === 2) v = v + ":00";
-                    else if (v.length === 3) v = v.slice(0, 2) + ":" + v[2] + "0";
-                    else if (v.length === 4) v = v.slice(0, 3) + "0" + v[3]; // format case like 12:3 to 12:03
+                    else if (v.length === 3 && v.includes(':')) v = v + "00";
+                    else if (v.length === 4 && v.includes(':')) v = v.slice(0, 3) + "0" + v[3];
+
                     e.target.value = v;
                 });
             }
             ['p-hora-ini', 'p-hora-fim', 's-hora-ini', 's-hora-fim'].forEach(maskTime);
+
+            function isValidTimeStr(t) {
+                if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(t)) return false;
+                return true;
+            }
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 11 — SINCRONIZAÇÃO DAS LISTAS
+            // syncLists: atualiza as tabelas de histórico (produções e paradas)
+            //   e redesenha a timeline. Chamada após confirmar ou remover um registro.
+            // ══════════════════════════════════════════════════════════════════
+            function syncLists() {
+                const isProd = document.getElementById('screen-prod').classList.contains('active');
+                const prefix = isProd ? 'p-' : 's-';
+
+                const turno = document.getElementById(prefix + 'turno').value;
+                const data = document.getElementById(prefix + 'data-ini').value;
+                const recurso = document.getElementById(prefix + 'recurso-cod').value.trim().toUpperCase();
+
+                renderProdLista(turno, data, recurso);
+                renderParadaLista(turno, data, recurso);
+                updateTimeline();
+            }
+
+            // Registrar listeners para atualização dinâmica do histórico
+            ['p-turno', 'p-data-ini', 'p-recurso-cod', 's-turno', 's-data-ini', 's-recurso-cod'].forEach(id => {
+                document.getElementById(id).addEventListener('change', syncLists);
+                if (id.includes('recurso')) document.getElementById(id).addEventListener('input', syncLists);
+            });
 
             function parseDateTime(d, t) { if (!d || !t) return null; return new Date(d + 'T' + t + ':00'); }
             function fmt(d) { return d.toTimeString().slice(0, 5); }
@@ -1333,11 +3011,71 @@
             document.getElementById('s-data-ini').value = today();
             document.getElementById('s-data-fim').value = today();
 
-            // ── CONFIRMAR PRODUÇÃO ──
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 12 — TESTAR PRODUÇÃO
+            // Executa as mesmas validações do Confirmar, mas SEM gravar.
+            // Exibe modal de sucesso ou erro para feedback visual ao operador.
+            // Uso: botão [Testar] na tela de Produção.
+            // ══════════════════════════════════════════════════════════════════
+            window.testarProd = function () {
+                const op = document.getElementById('p-op').value.trim();
+                const prod = document.getElementById('p-produto').value.trim().toUpperCase();
+                const rCod = document.getElementById('p-recurso-cod').value.trim().toUpperCase();
+                const dIni = document.getElementById('p-data-ini').value;
+                const hIni = document.getElementById('p-hora-ini').value;
+                const dFim = document.getElementById('p-data-fim').value;
+                const hFim = document.getElementById('p-hora-fim').value;
+                const qtd = parseFloat(document.getElementById('p-qtd').value) || 0;
+
+                const matricula = document.getElementById('p-matricula').value.trim();
+                const senha = document.getElementById('p-senha').value.trim();
+                const turnoInfo = document.getElementById('p-turno').value.split('|');
+                if (turnoInfo.length < 3) { showModal('erro', 'Turno', 'Selecione um turno válido.'); return; }
+                const iniT = turnoInfo[1], fimT = turnoInfo[2];
+
+                // Validações básicas (igual confirmarProd)
+                if (!matricula || !senha) { showModal('erro', 'Usuário/Senha', 'Preencha os campos de operador.'); return; }
+                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Usuário ou Senha incorretos.'); return; }
+                if (op && !db.ops[op]) { showModal('erro', 'OP não encontrada', 'A Ordem de Produção informada não existe no cadastro.'); return; }
+                if (!prod || !db.produtos[prod]) { showModal('erro', 'Produto Inválido', 'Código do produto não encontrado.'); return; }
+                if (!rCod || !db.recursos[rCod]) { showModal('erro', 'Recurso Inválido', 'Máquina não encontrada no cadastro.'); return; }
+                if (qtd <= 0) { showModal('erro', 'Quantidade', 'A quantidade produzida deve ser maior que zero.'); return; }
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Datas/Horas', 'Preencha todos os campos de período.'); return; }
+                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'Hora inválida', 'Formato HH:MM.'); return; }
+
+                const start = parseDateTime(dIni, hIni);
+                let end = parseDateTime(dFim, hFim);
+                if (hFim < hIni && dIni === dFim) end.setDate(end.getDate() + 1);
+                if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Inicial.'); return; }
+
+                const durMin = (end - start) / 60000;
+                if (durMin > 720) { showModal('erro', 'Duração Excedida', 'Máximo 12 horas.'); return; }
+
+                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
+                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
+
+                if (start < shiftStart || end > shiftEnd) { showModal('erro', 'Fora do Turno', `Período deve estar entre ${iniT} e ${fimT}.`); return; }
+
+                // Se passou tudo — apenas exibe aviso visual, os botões já estão visíveis
+                showModal('sucesso', 'Apontamento Válido!', 'Os dados estão corretos. Clique em <b>Confirmar</b> para registrar.');
+            };
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 13 — CONFIRMAR PRODUÇÃO
+            // Valida todos os campos, exibe resumo de confirmação e, após
+            // aprovação do operador, grava em state.produções[].
+            // Após gravar: chama limparFormProd(hFim) para continuidade inteligente
+            //   (hFim torna-se o novo hIni do próximo registro).
+            // Regras verificadas:
+            //   ✔ Credenciais válidas  ✔ Produto existente  ✔ Recurso existente
+            //   ✔ Quantidade > 0       ✔ Horário dentro do turno
+            //   ✔ Duração ≤ 720 min   ✔ Cadência (ritmo) razoável
+            // ══════════════════════════════════════════════════════════════════
             window.confirmarProd = function () {
                 const op = document.getElementById('p-op').value.trim();
-                const prod = document.getElementById('p-produto').value.trim();
-                const rCod = document.getElementById('p-recurso-cod').value.trim();
+                const prod = document.getElementById('p-produto').value.trim().toUpperCase();
+                const rCod = document.getElementById('p-recurso-cod').value.trim().toUpperCase();
                 const dIni = document.getElementById('p-data-ini').value;
                 const hIni = document.getElementById('p-hora-ini').value;
                 const dFim = document.getElementById('p-data-fim').value;
@@ -1348,200 +3086,441 @@
                 const rnc = parseFloat(document.getElementById('p-rnc').value) || 0;
                 const cestos = parseInt(document.getElementById('p-cestos').value) || 1;
 
-                const matricula = document.getElementById('p-matricula').value;
-                const senha = document.getElementById('p-senha').value;
+                const matricula = document.getElementById('p-matricula').value.trim();
+                const senha = document.getElementById('p-senha').value.trim();
+                const turnoInfo = document.getElementById('p-turno').value.split('|');
+                const iniT = turnoInfo[1], fimT = turnoInfo[2];
 
-                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as Datas e Horários.'); return; }
+                // Validações de campos vazios e incorretos
+                if (!matricula || !senha) { showModal('erro', 'Usuário/Senha', 'Preencha os campos de operador.'); return; }
+                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Usuário ou Senha incorretos.'); return; }
+
+                // OP agora é opcional, mas se informada deve ser válida
+                if (op && !db.ops[op]) { showModal('erro', 'OP não encontrada', 'A Ordem de Produção informada não existe no cadastro.'); return; }
+
+                if (!prod || !db.produtos[prod.toUpperCase()]) { showModal('erro', 'Produto Inválido', 'Código do produto não encontrado.'); return; }
+                if (!rCod || !db.recursos[rCod.toUpperCase()]) { showModal('erro', 'Recurso Inválido', 'Máquina não encontrada no cadastro.'); return; }
+                if (qtd <= 0) { showModal('erro', 'Quantidade', 'A quantidade produzida deve ser maior que zero.'); return; }
+
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Datas/Horas', 'Preencha todos os campos de período.'); return; }
+                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'Hora inválida', 'Formato de hora incorreto (HH:MM).'); return; }
+
                 const start = parseDateTime(dIni, hIni);
-                const end = parseDateTime(dFim, hFim);
+                let end = parseDateTime(dFim, hFim);
+
+                // AUTO-AJUSTE DE DATA PARA TURNO NOTURNO
+                if (hFim < hIni && dIni === dFim) {
+                    end.setDate(end.getDate() + 1);
+                    document.getElementById('p-data-fim').value = end.toISOString().slice(0, 10);
+                }
+
                 if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
 
-                state.produções.push({ matricula, senha, op, produto: prod, desc: '', recursoCod: rCod, recurso: '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos });
-                renderProdLista();
-                showModal('sucesso', 'Produção registrada!',
-                    `<b>OP:</b> ${op}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Qtd. Produzida:</b> ${qtd.toFixed(2)}<br><b>Qtd. Retrabalhada:</b> ${ret.toFixed(2)}<br><b>Peças Setup:</b> ${setup.toFixed(2)}<br><b>RNC:</b> ${rnc.toFixed(2)}<br><br>Registro adicionado. Clique em <b>Validar turno completo</b> para verificar o turno.`
-                );
-                limparFormProd();
+                // Trava de 12 horas
+                const durMin = (end - start) / 60000;
+                if (durMin > 720) { showModal('erro', 'Duração Excedida', 'Nenhum apontamento pode ter mais de 12 horas.'); return; }
+
+                // VALIDAÇÃO DE RITMO (CADÊNCIA)
+                if (qtd / durMin > 200) {
+                    showModal('aviso', 'Ritmo Elevado', `Detectamos uma produção de ${Math.round(qtd / durMin * 60)} pç/h. Esta quantidade está correta?`);
+                }
+
+                // Validação básica contra o horário do turno
+                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
+                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
+
+                if (start < shiftStart) { showModal('erro', 'Fora do Turno', `A hora inicial (${hIni}) é anterior ao início do turno (${iniT}).`); return; }
+                if (end > shiftEnd) { showModal('erro', 'Fora do Turno', `A hora final (${hFim}) ultrapassa o limite do turno (${fimT}).`); return; }
+
+                // --- RESUMO DE CONFIRMAÇÃO (ITEM 7) ---
+                const htmlConfirm = `
+                    <div class="confirm-summary">
+                        <h4>Resumo do Apontamento</h4>
+                        <p><span>Máquina:</span> <b>${rCod}</b></p>
+                        <p><span>Produto:</span> <b>${prod}</b></p>
+                        <p><span>Período:</span> <b>${hIni} às ${hFim}</b></p>
+                        <p><span>Quantidade:</span> <b>${qtd} peças</b></p>
+                    </div>
+                `;
+
+                showModal('confirm', 'Confirmar Produção?', htmlConfirm, () => {
+                    state.produções.push({ matricula, senha, op, produto: prod, desc: '', recursoCod: rCod.toUpperCase(), recurso: '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos, shiftKey: document.getElementById('p-turno').value });
+                    syncLists();
+
+                    let msgSucesso = `<b>OP:</b> ${op}<br><b>Máquina:</b> ${rCod}<br><b>Período:</b> ${hIni} – ${hFim}<br><br>Registro adicionado.`;
+
+                    if (start > shiftStart) {
+                        msgSucesso += `<br><br><span style="color:var(--yellow);font-weight:600;"><i class="fas fa-exclamation-circle"></i> Atenção: O registro inicia após o começo do turno (${iniT}). Garanta que houve produção antes das ${hIni}.</span>`;
+                    }
+                    if (end < shiftEnd) {
+                        msgSucesso += `<br><br><span style="color:var(--accent);font-weight:600;"><i class="fas fa-info-circle"></i> Produção lançada! Lembre-se de apontar uma nova produção a partir das ${hFim} para completar o turno até às ${fimT}.</span>`;
+                    }
+                    showModal('sucesso', 'Produção registrada!', msgSucesso);
+                    limparFormProd(hFim); // Continuidade inteligente
+                });
             };
 
-            // ── CONFIRMAR PARADA ──
-            window.confirmarParada = function () {
-                const motCod = document.getElementById('s-motivo-cod').value;
-                const op = document.getElementById('s-op').value.trim();
-                const rCod = document.getElementById('s-recurso-cod').value.trim();
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 14 — TESTAR PARADA
+            // Mesmo comportamento do testarProd, mas para a tela de Parada.
+            // Valida sem gravar. Uso: botão [Testar] na tela de Parada.
+            // ══════════════════════════════════════════════════════════════════
+            window.testarParada = function () {
+                const motCod = document.getElementById('s-motivo-cod').value.trim().toUpperCase();
+                const rCod = document.getElementById('s-recurso-cod').value.trim().toUpperCase();
                 const dIni = document.getElementById('s-data-ini').value;
                 const hIni = document.getElementById('s-hora-ini').value;
                 const dFim = document.getElementById('s-data-fim').value;
                 const hFim = document.getElementById('s-hora-fim').value;
 
-                const matricula = document.getElementById('s-matricula').value;
-                const senha = document.getElementById('s-senha').value;
+                const matricula = document.getElementById('s-matricula').value.trim();
+                const senha = document.getElementById('s-senha').value.trim();
+                const turnoInfo = document.getElementById('s-turno').value.split('|');
+                if (turnoInfo.length < 3) { showModal('erro', 'Turno', 'Selecione um turno válido.'); return; }
+                const iniT = turnoInfo[1], fimT = turnoInfo[2];
 
-                if (!motCod) { showModal('erro', 'Motivo obrigatório', 'Selecione o motivo da parada.'); return; }
-                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as datas e horários.'); return; }
+                const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
+                if (!matricula || !senha) { showModal('erro', 'Operador', 'Preencha usuário/senha.'); return; }
+                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Credenciais inválidas.'); return; }
+                if (!motCod || !db.motivos[motCod]) { showModal('erro', 'Motivo', 'Selecione um motivo válido.'); return; }
+                if (!prodPar || !db.produtos[prodPar]) { showModal('erro', 'Produto Obrigatório', 'Informe o código do produto da parada.'); return; }
+                if (!rCod || !db.recursos[rCod]) { showModal('erro', 'Recurso', 'Máquina não encontrada.'); return; }
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Período', 'Preencha datas/horas.'); return; }
 
                 const start = parseDateTime(dIni, hIni);
-                const end = parseDateTime(dFim, hFim);
+                let end = parseDateTime(dFim, hFim);
+                if (hFim < hIni && dIni === dFim) end.setDate(end.getDate() + 1);
+                if (!start || !end || end <= start) { showModal('erro', 'Horário', 'Inválido.'); return; }
+
+                const durMin = (end - start) / 60000;
+                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
+                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
+
+                if (start < shiftStart || end > shiftEnd) { showModal('erro', 'Fora do Turno', `Período deve estar entre ${iniT} e ${fimT}.`); return; }
+
+                // Se passou tudo — apenas exibe aviso visual, os botões já estão visíveis
+                showModal('sucesso', 'Apontamento Válido!', 'Os dados estão corretos. Clique em <b>Confirmar</b> para registrar.');
+            };
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 15 — CONFIRMAR PARADA
+            // Valida, exibe resumo e grava em state.paradas[].
+            // Após gravar: chama limparFormParada(hFim) — lógica de pulo:
+            //   mantém produto e recurso, avança a hora inicial automaticamente.
+            // Regras verificadas:
+            //   ✔ Credenciais válidas  ✔ Motivo existente   ✔ Produto obrigatório
+            //   ✔ Recurso existente    ✔ Duração > 5 min    ✔ Duração ≤ 720 min
+            //   ✔ Horário dentro do turno
+            // ══════════════════════════════════════════════════════════════════
+            window.confirmarParada = function () {
+                const motCod = document.getElementById('s-motivo-cod').value.trim().toUpperCase();
+                const op = document.getElementById('s-op').value.trim();
+                const rCod = document.getElementById('s-recurso-cod').value.trim().toUpperCase();
+                const dIni = document.getElementById('s-data-ini').value;
+                const hIni = document.getElementById('s-hora-ini').value;
+                const dFim = document.getElementById('s-data-fim').value;
+                const hFim = document.getElementById('s-hora-fim').value;
+
+                const matricula = document.getElementById('s-matricula').value.trim();
+                const senha = document.getElementById('s-senha').value.trim();
+                const turnoInfo = document.getElementById('s-turno').value.split('|');
+                const iniT = turnoInfo[1], fimT = turnoInfo[2];
+
+                const prodParConf = document.getElementById('s-produto').value.trim().toUpperCase();
+                // Validações
+                if (!matricula || !senha) { showModal('erro', 'Operador', 'Identifique-se com usuário e senha.'); return; }
+                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Credenciais inválidas.'); return; }
+                if (!motCod || !db.motivos[motCod.toUpperCase()]) { showModal('erro', 'Motivo', 'Selecione um motivo de parada válido.'); return; }
+                if (!prodParConf || !db.produtos[prodParConf]) { showModal('erro', 'Produto Obrigatório', 'Informe o código do produto da parada.'); return; }
+                if (!rCod || !db.recursos[rCod.toUpperCase()]) { showModal('erro', 'Recurso', 'Máquina/Recurso não encontrado.'); return; }
+
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as datas e horários.'); return; }
+                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'Hora inválida', 'Use o formato HH:MM (ex: 14:30).'); return; }
+
+                const start = parseDateTime(dIni, hIni);
+                let end = parseDateTime(dFim, hFim);
+
+                // AUTO-AJUSTE DE DATA PARA TURNO NOTURNO
+                if (hFim < hIni && dIni === dFim) {
+                    end.setDate(end.getDate() + 1);
+                    document.getElementById('s-data-fim').value = end.toISOString().slice(0, 10);
+                }
+
                 if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
 
                 const durMin = (end - start) / 60000;
-                if (durMin <= 5) { showModal('aviso', 'Parada curta', `Paradas de ≤5 min (${durMin} min) não devem ser registradas conforme regra de apontamento.`); return; }
+                if (durMin > 720) { showModal('erro', 'Duração Excedida', 'Uma parada não pode ter mais de 12 horas.'); return; }
+                if (durMin <= 5) { showModal('aviso', 'Parada curta', `Paradas de ≤5 min (${durMin} min) não devem ser registradas.`); return; }
 
-                state.paradas.push({ matricula, senha, motCod, motDesc: db.motivos[motCod] || '', op, recursoCod: rCod, dIni, hIni, dFim, hFim });
-                renderParadaLista();
-                showModal('sucesso', 'Parada registrada!',
-                    `<b>Motivo:</b> ${motCod} - ${db.motivos[motCod] || ''}<br><b>OP:</b> ${op || '—'}<br><b>Período:</b> ${hIni} – ${hFim}<br><b>Duração:</b> ${durMin} min`
-                );
-                limparFormParada();
+                // Validação básica contra o turno
+                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
+                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
+
+                if (start < shiftStart || end > shiftEnd) {
+                    showModal('erro', 'Fora do Turno', `O período da parada deve estar dentro do turno (${iniT}-${fimT}).`);
+                    return;
+                }
+
+                // --- RESUMO DE CONFIRMAÇÃO (ITEM 7) ---
+                const htmlConfirm = `
+                    <div class="confirm-summary">
+                        <h4>Resumo da Parada</h4>
+                        <p><span>Máquina:</span> <b>${rCod}</b></p>
+                        <p><span>Motivo:</span> <b>${motCod}</b></p>
+                        <p><span>Duração:</span> <b>${hIni} às ${hFim} (${durMin} min)</b></p>
+                    </div>
+                `;
+
+                showModal('confirm', 'Confirmar Parada?', htmlConfirm, () => {
+                    const prodParReg = document.getElementById('s-produto').value.trim().toUpperCase();
+                    state.paradas.push({ matricula, senha, motCod, motDesc: db.motivos[motCod] || '', op, produto: prodParReg, recursoCod: rCod, dIni, hIni, dFim, hFim, shiftKey: document.getElementById('s-turno').value });
+                    syncLists();
+                    let msgSucesso = `<b>Motivo:</b> ${motCod}<br><b>Máquina:</b> ${rCod}<br><b>Duração:</b> ${durMin} min`;
+                    if (start > shiftStart) {
+                        msgSucesso += `<br><br><span style="color:var(--yellow);font-weight:600;"><i class="fas fa-exclamation-circle"></i> Atenção: Início após o começo do turno (${iniT}). Verifique se houve produção antes das ${hIni}.</span>`;
+                    }
+                    if (end < shiftEnd) {
+                        msgSucesso += `<br><br><span style="color:var(--accent);font-weight:600;"><i class="fas fa-info-circle"></i> Registro lançado! Lembre-se de continuar o apontamento a partir das ${hFim} para completar o turno.</span>`;
+                    }
+                    showModal('sucesso', 'Parada registrada!', msgSucesso);
+                    limparFormParada(hFim); // Continuidade inteligente (pulo de hora)
+                });
             };
 
-            // ── RENDERIZAR LISTAS ──
-            function renderProdLista() {
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 16 — RENDERIZAÇÃO DAS LISTAS DE HISTÓRICO
+            // renderProdLista / renderParadaLista:
+            //   Filtram state por turno + data + recurso e renderizam na tabela.
+            // removeProd / removeParada:
+            //   Removem um item do state pelo índice e chamam syncLists.
+            // ══════════════════════════════════════════════════════════════════
+            function renderProdLista(turno, data, recurso) {
                 const body = document.getElementById('prod-lista-body');
                 body.innerHTML = '';
-                state.produções.forEach((p, i) => {
+                const filtrados = state.produções.filter(p =>
+                    (!turno || p.shiftKey === turno) &&
+                    (!data || p.dIni === data) &&
+                    (!recurso || p.recursoCod === recurso)
+                );
+                filtrados.forEach((p, i) => {
+                    const realIndex = state.produções.indexOf(p);
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${p.op}</td><td>${p.produto || '—'}</td><td>${p.recursoCod || '—'}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${p.qtd.toFixed(2)}</td><td>${p.ret.toFixed(2)}</td><td>${p.setup.toFixed(2)}</td><td>${p.rnc.toFixed(2)}</td><td><button class="btn-rm" onclick="removeProd(${i})"><i class="fas fa-trash"></i></button></td>`;
+                    tr.innerHTML = `<td>${p.op}</td><td>${p.produto || '—'}</td><td>${p.recursoCod}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${p.qtd.toFixed(2)}</td><td>${p.ret.toFixed(2)}</td><td>${p.setup.toFixed(2)}</td><td>${p.rnc.toFixed(2)}</td><td><button class="btn-rm" onclick="removeProd(${realIndex})"><i class="fas fa-trash"></i></button></td>`;
                     body.appendChild(tr);
                 });
-                document.getElementById('prod-lista-wrap').style.display = state.produções.length ? '' : 'none';
+                document.getElementById('prod-lista-wrap').style.display = filtrados.length ? '' : 'none';
             }
-            function renderParadaLista() {
+            function renderParadaLista(turno, data, recurso) {
                 const body = document.getElementById('parada-lista-body');
                 body.innerHTML = '';
-                state.paradas.forEach((p, i) => {
+                const filtrados = state.paradas.filter(p =>
+                    (!turno || p.shiftKey === turno) &&
+                    (!data || p.dIni === data) &&
+                    (!recurso || p.recursoCod === recurso)
+                );
+                filtrados.forEach((p, i) => {
+                    const realIndex = state.paradas.indexOf(p);
                     const s = parseDateTime(p.dIni, p.hIni);
                     const e = parseDateTime(p.dFim, p.hFim);
                     const dur = s && e ? Math.round((e - s) / 60000) + ' min' : '—';
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${p.motCod} - ${p.motDesc}</td><td>${p.op || '—'}</td><td>${p.recursoCod || '—'}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${dur}</td><td><button class="btn-rm" onclick="removeParada(${i})"><i class="fas fa-trash"></i></button></td>`;
+                    tr.innerHTML = `<td>${p.motCod}</td><td>${p.op || '—'}</td><td>${p.recursoCod}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${dur}</td><td><button class="btn-rm" onclick="removeParada(${realIndex})"><i class="fas fa-trash"></i></button></td>`;
                     body.appendChild(tr);
                 });
-                document.getElementById('parada-lista-wrap').style.display = state.paradas.length ? '' : 'none';
+                document.getElementById('parada-lista-wrap').style.display = filtrados.length ? '' : 'none';
             }
-            window.removeProd = i => { state.produções.splice(i, 1); renderProdLista(); };
-            window.removeParada = i => { state.paradas.splice(i, 1); renderParadaLista(); };
+            window.removeProd = i => { state.produções.splice(i, 1); syncLists(); };
+            window.removeParada = i => { state.paradas.splice(i, 1); syncLists(); };
 
-            // ── LIMPAR FORMS ──
-            window.limparFormProd = function () {
-                ['p-matricula', 'p-senha', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => document.getElementById(id).value = '');
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 17 — LIMPEZA DOS FORMULÁRIOS
+            // limparFormProd(nextStart):
+            //   Limpa campos de produção. Se nextStart informado, preenche
+            //   hora-ini com esse valor (continuidade inteligente).
+            // limparFormParada(nextStart):
+            //   Limpeza parcial — MANTÉM produto e recurso (lógica de pulo).
+            //   Preenche hora-ini com nextStart se informado.
+            // limparFormParadaCompleto():
+            //   Limpeza total — apaga todos os campos inclusive produto.
+            //   Chamado pelo botão [Limpar] manual.
+            // ══════════════════════════════════════════════════════════════════
+            window.limparFormProd = function (nextStart = '') {
+                ['p-op', 'p-produto', 'p-desc', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                if (nextStart) document.getElementById('p-hora-ini').value = nextStart;
+                validateLive(true);
             };
-            window.limparFormParada = function () {
-                ['s-matricula', 's-senha', 's-nome', 's-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
-                document.getElementById('s-motivo-cod').value = '';
-            };
-
-            // ── EXEMPLOS (usa turno da tela de produção) ──
-            window.carregarExemploProd = function (tipo) {
-                const d = today();
-                document.getElementById('p-data-ini').value = d;
-                document.getElementById('p-data-fim').value = d;
-                if (tipo === 'correto') {
-                    document.getElementById('p-matricula').value = '101';
-                    document.getElementById('p-nome').value = db.colaboradores['101'];
-                    document.getElementById('p-turno').value = '1|06:00|14:00';
-                    document.getElementById('p-op').value = 'OP2456A';
-                    document.getElementById('p-produto').value = 'PROD001';
-                    document.getElementById('p-hora-ini').value = '06:00';
-                    document.getElementById('p-hora-fim').value = '09:00';
-                    document.getElementById('p-qtd').value = '150';
-                } else if (tipo === 'gap') {
-                    document.getElementById('p-turno').value = '1|06:00|14:00';
-                    document.getElementById('p-op').value = 'OP2456B';
-                    document.getElementById('p-produto').value = 'PROD001';
-                    document.getElementById('p-hora-ini').value = '10:00';
-                    document.getElementById('p-hora-fim').value = '14:00';
-                    document.getElementById('p-qtd').value = '200';
-                } else if (tipo === 'parcial') {
-                    document.getElementById('p-turno').value = '1|06:00|14:00';
-                    document.getElementById('p-op').value = 'OP2456C';
-                    document.getElementById('p-produto').value = 'PROD002';
-                    document.getElementById('p-hora-ini').value = '06:00';
-                    document.getElementById('p-hora-fim').value = '10:00';
-                    document.getElementById('p-qtd').value = '100';
-                }
+            window.limparFormParada = function (nextStart = '') {
+                // Lógica de pulo: mantém produto, recurso, turno e data para agilizar o próximo lançamento
+                ['s-op', 's-desc', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                // Mantém s-produto para facilitar o próximo apontamento de parada
+                if (nextStart) document.getElementById('s-hora-ini').value = nextStart;
+                validateLive(false);
             };
 
-            // ── VALIDAR TURNO COMPLETO ──
+            // Limpar completo (para quando clicar em "Limpar" manualmente)
+            window.limparFormParadaCompleto = function () {
+                ['s-op', 's-produto', 's-desc', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                validateLive(false);
+            };
+
+
+
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 18 — VALIDAÇÃO DO TURNO COMPLETO
+            // validarTudo(): analisa TODOS os registros do turno/data/máquina.
+            // Verificações realizadas:
+            //   1. Primeira produção inicia no horário do turno?
+            //   2. Há gaps (lacunas) entre produções consecutivas?
+            //   3. Há sobreposições entre produções?
+            //   4. Todas as paradas estão dentro de períodos de produção?
+            //   5. A última produção cobre até o fim do turno?
+            // Resultado: modal de erro com lista de problemas, aviso ou sucesso.
+            // ══════════════════════════════════════════════════════════════════
             window.validarTudo = function () {
-                const turnoInfo = document.getElementById('p-turno').value.split('|');
-                const iniT = turnoInfo[1], fimT = turnoInfo[2];
+                const turnoSel = document.getElementById('p-turno').value;
                 const dataBase = document.getElementById('p-data-ini').value;
-                if (!dataBase) { showModal('erro', 'Data inválida', 'Selecione a data de referência.'); return; }
-                if (state.produções.length === 0) { showModal('erro', 'Sem produção', 'Registre ao menos uma produção.'); return; }
+                const recCod = document.getElementById('p-recurso-cod').value.trim().toUpperCase();
 
-                const prodInts = state.produções.map(p => ({
+                if (!dataBase || !recCod) {
+                    showModal('erro', 'Dados Ausentes', 'Selecione a Data e o Cód. Recurso (Máquina) para validar.');
+                    return;
+                }
+
+                const turnoInfo = turnoSel.split('|');
+                const iniT = turnoInfo[1], fimT = turnoInfo[2];
+
+                // Filtrar registros APENAS da máquina, turno e data selecionados
+                const prodInts = state.produções.filter(p =>
+                    p.shiftKey === turnoSel && p.dIni === dataBase && p.recursoCod === recCod
+                ).map(p => ({
                     ...p,
                     start: parseDateTime(p.dIni, p.hIni),
                     end: parseDateTime(p.dFim, p.hFim)
-                })).filter(p => p.start && p.end).sort((a, b) => a.start - b.start);
+                })).sort((a, b) => a.start - b.start);
 
-                const paradaInts = state.paradas.map(p => ({
+                if (prodInts.length === 0) {
+                    showModal('erro', 'Sem Registros', `Não há produções registradas para a máquina ${recCod} neste turno.`);
+                    return;
+                }
+
+                const paradaInts = state.paradas.filter(p =>
+                    p.shiftKey === turnoSel && p.dIni === dataBase && p.recursoCod === recCod
+                ).map(p => ({
                     ...p,
                     start: parseDateTime(p.dIni, p.hIni),
                     end: parseDateTime(p.dFim, p.hFim)
-                })).filter(p => p.start && p.end).sort((a, b) => a.start - b.start);
+                })).sort((a, b) => a.start - b.start);
 
                 let shiftStart = new Date(dataBase + 'T' + iniT + ':00');
                 let shiftEnd = new Date(dataBase + 'T' + fimT + ':00');
                 if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
-                const shiftMin = (shiftEnd - shiftStart) / 60000;
 
+                const shiftMin = (shiftEnd - shiftStart) / 60000;
                 let errors = [], warnings = [];
 
-                // sobreposição prod
-                for (let i = 0; i < prodInts.length; i++) for (let j = i + 1; j < prodInts.length; j++)
-                    if (prodInts[j].start < prodInts[i].end) {
-                        const opA = prodInts[i].op || 'Sem O.P.';
-                        const opB = prodInts[j].op || 'Sem O.P.';
-                        errors.push(`Sobreposição: "${opA}" e "${opB}".`);
-                    }
-
-                // sobreposição parada
-                for (let i = 0; i < paradaInts.length; i++) for (let j = i + 1; j < paradaInts.length; j++)
-                    if (paradaInts[j].start < paradaInts[i].end)
-                        errors.push(`Paradas sobrepostas: ${paradaInts[i].motCod} e ${paradaInts[j].motCod}.`);
-
-                // parada contida em produção
-                paradaInts.forEach(par => {
-                    if (!prodInts.some(p => par.start >= p.start && par.end <= p.end))
-                        errors.push(`Parada ${par.motCod} (${par.hIni}–${par.hFim}) fora de produção.`);
-                    const dur = (par.end - par.start) / 60000;
-                    if (dur <= 5) errors.push(`Parada ${par.motCod} ≤5 min (${dur} min).`);
-                });
-
-                // gaps
-                for (let i = 0; i < prodInts.length - 1; i++) {
-                    if (Math.abs(prodInts[i + 1].start - prodInts[i].end) > 60000)
-                        errors.push(`Gap entre ${fmt(prodInts[i].end)} e ${fmt(prodInts[i + 1].start)}. Cubra com produção ou parada.`);
+                // 1. Verificar início do turno
+                const firstProd = prodInts[0];
+                if (Math.abs(firstProd.start - shiftStart) > 60000) {
+                    errors.push(`A primeira produção deve iniciar às ${iniT}. Início detectado: ${fmt(firstProd.start)}.`);
                 }
 
-                const first = prodInts[0], last = prodInts[prodInts.length - 1];
-                if (Math.abs(first.start - shiftStart) > 60000)
-                    errors.push(`Produção deve iniciar às ${iniT}. Início: ${fmt(first.start)}.`);
-                const diffEnd = (last.end - shiftEnd) / 60000;
-                if (diffEnd > 1)
-                    errors.push(`Produção ultrapassa fim do turno (${fimT}): término ${fmt(last.end)}.`);
-                else if (diffEnd < -1 && errors.length === 0)
-                    warnings.push(`✅ Apontamento lançado! Registre próxima produção a partir das ${fmt(last.end)} para continuar o turno.`);
+                // 2. Verificar Gaps e Sobreposições entre produções
+                for (let i = 0; i < prodInts.length - 1; i++) {
+                    const currentEnd = prodInts[i].end;
+                    const nextStart = prodInts[i + 1].start;
+                    const diff = (nextStart - currentEnd) / 60000;
+
+                    if (diff > 1) {
+                        errors.push(`Há um GAP de ${diff} min entre ${fmt(currentEnd)} e ${fmt(nextStart)}. Cubra com outra produção.`);
+                    } else if (diff < -1) {
+                        errors.push(`Sobreposição entre produções na máquina ${recCod} (${fmt(currentEnd)} vs ${fmt(nextStart)}).`);
+                    }
+                }
+
+                // 3. Verificar Paradas
+                paradaInts.forEach(par => {
+                    // Parada deve estar totalmente dentro de UMA única produção
+                    const inProd = prodInts.some(p => par.start >= p.start && par.end <= p.end);
+                    if (!inProd) {
+                        errors.push(`Parada ${par.motCod} (${par.hIni}-${par.hFim}) está fora de qualquer período de produção válido.`);
+                    }
+                });
+
+                // 4. Verificar fim do turno
+                const lastProd = prodInts[prodInts.length - 1];
+                const diffEnd = (lastProd.end - shiftEnd) / 60000;
+
+                if (diffEnd > 1) {
+                    errors.push(`A última produção ultrapassa o fim do turno (${fimT}). Término: ${fmt(lastProd.end)}.`);
+                } else if (diffEnd < -1) {
+                    warnings.push(`O apontamento atual para em ${fmt(lastProd.end)}. Faltam ${Math.round(-diffEnd)} min para completar o turno.`);
+                }
 
                 if (errors.length) {
-                    showModal('erro', `Erros encontrados (${errors.length})`, `<ul>${errors.map(e => '<li>' + e + '</li>').join('')}</ul>`);
+                    showModal('erro', `Erros de Apontamento (${errors.length})`, `<ul>${errors.map(e => '<li>' + e + '</li>').join('')}</ul>`);
                 } else if (warnings.length) {
-                    showModal('aviso', 'Atenção', warnings[0]);
+                    showModal('aviso', 'Turno Incompleto', warnings[0]);
                 } else {
                     const totPar = paradaInts.reduce((a, p) => a + (p.end - p.start) / 60000, 0);
-                    const bruta = (last.end - first.start) / 60000;
+                    const bruta = (lastProd.end - firstProd.start) / 60000;
                     const liq = bruta - totPar;
-                    showModal('sucesso', 'Turno válido! ✅',
-                        `<b>Turno:</b> ${Math.round(shiftMin)} min<br><b>Produção bruta:</b> ${Math.round(bruta)} min<br><b>Paradas:</b> ${Math.round(totPar)} min<br><b>Produção líquida:</b> ${Math.round(liq)} min<br><br><b>Produções registradas:</b> ${state.produções.length} &nbsp;|&nbsp; <b>Paradas:</b> ${state.paradas.length}`
+                    showModal('sucesso', 'Turno Validado com Sucesso! ✅',
+                        `<b>Duração do Turno:</b> ${Math.round(shiftMin)} min<br>
+                         <b>Tempo Produzido (Bruto):</b> ${Math.round(bruta)} min<br>
+                         <b>Tempo em Parada:</b> ${Math.round(totPar)} min<br>
+                         <b>Tempo Líquido:</b> ${Math.round(liq)} min<br><br>
+                         Tudo em conformidade com as regras de apontamento.`
                     );
                 }
             };
 
+            // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 19 — NAVEGAÇÃO POR TECLADO (Enter)
+            // Em qualquer campo de input/select:
+            //   → Se há campo seguinte: avança o foco
+            //   → Se é o último campo : dispara confirmarProd() ou confirmarParada()
+            // Não interfere quando o foco já está em um <button>.
+            // ══════════════════════════════════════════════════════════════════
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    // Ignorar se o foco já estiver em um botão
+                    if (e.target.tagName === 'BUTTON' || e.target.type === 'submit') return;
+
+                    const activeScreen = document.querySelector('.screen.active');
+                    if (!activeScreen) return;
+
+                    // Lista de campos focáveis visíveis na tela ativa
+                    const focusable = Array.from(activeScreen.querySelectorAll('input:not([readonly]):not([disabled]), select:not([disabled])'))
+                        .filter(el => el.type !== 'hidden' && el.offsetParent !== null);
+
+                    const index = focusable.indexOf(e.target);
+                    if (index > -1 && index < focusable.length - 1) {
+                        // Ainda há campos → pula para o próximo
+                        e.preventDefault();
+                        focusable[index + 1].focus();
+                    } else if (index === focusable.length - 1) {
+                        // Último campo → dispara o botão Confirmar da tela ativa
+                        e.preventDefault();
+                        const screenId = activeScreen.id;
+                        if (screenId === 'screen-prod') {
+                            confirmarProd();
+                        } else if (screenId === 'screen-parada') {
+                            confirmarParada();
+                        }
+                    }
+                }
+            });
+
         })();
 
-        // ── SERVICE WORKER ──
+        // ══════════════════════════════════════════════════════════════════
+        // SEÇÃO 20 — SERVICE WORKER (Modo Offline / PWA)
+        // Registra o arquivo sw.js para cache dos assets.
+        // Permite uso do app sem conexão com a internet.
+        // ══════════════════════════════════════════════════════════════════
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
