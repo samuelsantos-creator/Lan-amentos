@@ -812,15 +812,15 @@
             <div class="fields-grid cols-3">
                 <div class="field">
                     <label>Usuário</label>
-                    <input type="text" id="p-matricula" placeholder="Usuário">
+                    <input type="text" id="p-matricula" placeholder="Usuário" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
                 <div class="field">
                     <label>Senha</label>
-                    <input type="password" id="p-senha" placeholder="••••••">
+                    <input type="password" id="p-senha" placeholder="••••••" autocomplete="off">
                 </div>
                 <div class="field">
                     <label>Nome do Colaborador</label>
-                    <input type="text" id="p-nome" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="p-nome" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
             </div>
         </div>
@@ -845,24 +845,24 @@
                 <div class="field">
                     <label>Data Inicial</label>
                     <div class="field-inner">
-                        <input type="date" id="p-data-ini" class="with-btn">
+                        <input type="text" id="p-data-ini" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Data Final</label>
                     <div class="field-inner">
-                        <input type="date" id="p-data-fim" class="with-btn">
+                        <input type="text" id="p-data-fim" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Hora Inicial</label>
-                    <input type="text" id="p-hora-ini" placeholder="00:00" maxlength="5">
+                    <input type="text" id="p-hora-ini" placeholder="00:00" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
                 <div class="field">
                     <label>Hora Final</label>
-                    <input type="text" id="p-hora-fim" placeholder="00:00" maxlength="5">
+                    <input type="text" id="p-hora-fim" placeholder="00:00" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
             </div>
 
@@ -888,31 +888,31 @@
                 <div class="field field-span2">
                     <label>O.P.</label>
                     <div class="field-inner">
-                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn">
+                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Produto</label>
                     <div class="field-inner">
-                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn">
+                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Descrição</label>
-                    <input type="text" id="p-desc" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="p-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
                 <div class="field">
                     <label>Cód. Recurso</label>
                     <div class="field-inner">
-                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn">
+                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Recurso</label>
-                    <input type="text" id="p-recurso" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="p-recurso" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
             </div>
         </div>
@@ -925,34 +925,34 @@
                     <label>Qtd. Produzida</label>
                     <div class="field-inner">
                         <input type="number" id="p-qtd" placeholder="0.00" step="0.01" min="0"
-                            class="with-btn p-ignore-focus">
+                            class="with-btn p-ignore-focus" autocomplete="off" inputmode="decimal">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Qtd. Retrabalhada</label>
                     <div class="field-inner">
-                        <input type="number" id="p-qtd-ret" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <input type="number" id="p-qtd-ret" placeholder="0.00" step="0.01" min="0" class="with-btn" autocomplete="off" inputmode="decimal">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Peças Setup</label>
                     <div class="field-inner">
-                        <input type="number" id="p-setup" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <input type="number" id="p-setup" placeholder="0.00" step="0.01" min="0" class="with-btn" autocomplete="off" inputmode="decimal">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Peças NC (RNC)</label>
                     <div class="field-inner">
-                        <input type="number" id="p-rnc" placeholder="0.00" step="0.01" min="0" class="with-btn">
+                        <input type="number" id="p-rnc" placeholder="0.00" step="0.01" min="0" class="with-btn" autocomplete="off" inputmode="decimal">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Qtde Cestos</label>
-                    <input type="number" id="p-cestos" placeholder="1" min="0">
+                    <input type="number" id="p-cestos" placeholder="1" min="0" autocomplete="off" inputmode="numeric">
                 </div>
             </div>
         </div>
@@ -1020,15 +1020,15 @@
             <div class="fields-grid cols-3">
                 <div class="field">
                     <label>Usuário</label>
-                    <input type="text" id="s-matricula" placeholder="Usuário">
+                    <input type="text" id="s-matricula" placeholder="Usuário" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
                 <div class="field">
                     <label>Senha</label>
-                    <input type="password" id="s-senha" placeholder="••••••">
+                    <input type="password" id="s-senha" placeholder="••••••" autocomplete="off">
                 </div>
                 <div class="field">
                     <label>Nome do Colaborador</label>
-                    <input type="text" id="s-nome" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="s-nome" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
             </div>
         </div>
@@ -1053,24 +1053,24 @@
                 <div class="field">
                     <label>Data Inicial</label>
                     <div class="field-inner">
-                        <input type="date" id="s-data-ini" class="with-btn">
+                        <input type="text" id="s-data-ini" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Data Final</label>
                     <div class="field-inner">
-                        <input type="date" id="s-data-fim" class="with-btn">
+                        <input type="text" id="s-data-fim" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Hora Inicial</label>
-                    <input type="text" id="s-hora-ini" placeholder="00:00" maxlength="5">
+                    <input type="text" id="s-hora-ini" placeholder="00:00" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
                 <div class="field">
                     <label>Hora Final</label>
-                    <input type="text" id="s-hora-fim" placeholder="00:00" maxlength="5">
+                    <input type="text" id="s-hora-fim" placeholder="00:00" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
             </div>
 
@@ -1096,41 +1096,41 @@
                 <div class="field field-span2">
                     <label>O.P.</label>
                     <div class="field-inner">
-                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn">
+                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Produto</label>
                     <div class="field-inner">
-                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn">
+                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Descrição</label>
-                    <input type="text" id="s-desc" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="s-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
                 <div class="field">
                     <label>Cód. Motivo</label>
                     <div class="field-inner">
-                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)">
+                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                     </div>
                 </div>
                 <div class="field">
                     <label>Descrição Motivo</label>
-                    <input type="text" id="s-motivo-desc" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="s-motivo-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
                 <div class="field">
                     <label>Cód. Recurso</label>
                     <div class="field-inner">
-                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn">
+                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                         <button class="help-btn">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Recurso</label>
-                    <input type="text" id="s-recurso" readonly placeholder="Preenchimento automático">
+                    <input type="text" id="s-recurso" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
             </div>
         </div>
@@ -2972,6 +2972,30 @@
             }
             ['p-hora-ini', 'p-hora-fim', 's-hora-ini', 's-hora-fim'].forEach(maskTime);
 
+            function maskDate(id) {
+                const el = document.getElementById(id);
+                el.addEventListener('input', e => {
+                    let v = e.target.value.replace(/\D/g, "");
+                    if (v.length > 8) v = v.slice(0, 8);
+                    if (v.length > 4) v = v.slice(0, 2) + "/" + v.slice(2, 4) + "/" + v.slice(4);
+                    else if (v.length > 2) v = v.slice(0, 2) + "/" + v.slice(2);
+                    e.target.value = v;
+                });
+                el.addEventListener('blur', e => {
+                    let v = e.target.value;
+                    if (v.length === 0) return;
+                    // Tenta completar se faltar dígitos
+                    if (v.length <= 5) {
+                        // Se digitou só DD/MM, assume o ano atual
+                        const year = new Date().getFullYear();
+                        if (v.length === 2) v = v + "/" + (new Date().getMonth() + 1).toString().padStart(2, '0') + "/" + year;
+                        else if (v.length === 5) v = v + "/" + year;
+                    }
+                    e.target.value = v;
+                });
+            }
+            ['p-data-ini', 'p-data-fim', 's-data-ini', 's-data-fim'].forEach(maskDate);
+
             function isValidTimeStr(t) {
                 if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(t)) return false;
                 return true;
@@ -3001,9 +3025,22 @@
                 if (id.includes('recurso')) document.getElementById(id).addEventListener('input', syncLists);
             });
 
-            function parseDateTime(d, t) { if (!d || !t) return null; return new Date(d + 'T' + t + ':00'); }
+            function parseDateTime(d, t) {
+                if (!d || !t) return null;
+                if (d.includes('/')) {
+                    const [day, month, year] = d.split('/');
+                    return new Date(`${year}-${month}-${day}T${t}:00`);
+                }
+                return new Date(d + 'T' + t + ':00');
+            }
             function fmt(d) { return d.toTimeString().slice(0, 5); }
-            function today() { return new Date().toISOString().slice(0, 10); }
+            function today() {
+                const now = new Date();
+                const d = String(now.getDate()).padStart(2, '0');
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const y = now.getFullYear();
+                return `${d}/${m}/${y}`;
+            }
 
             // Init dates
             document.getElementById('p-data-ini').value = today();
@@ -3111,7 +3148,10 @@
                 // AUTO-AJUSTE DE DATA PARA TURNO NOTURNO
                 if (hFim < hIni && dIni === dFim) {
                     end.setDate(end.getDate() + 1);
-                    document.getElementById('p-data-fim').value = end.toISOString().slice(0, 10);
+                    const d = String(end.getDate()).padStart(2, '0');
+                    const m = String(end.getMonth() + 1).padStart(2, '0');
+                    const y = end.getFullYear();
+                    document.getElementById('p-data-fim').value = `${d}/${m}/${y}`;
                 }
 
                 if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
@@ -3245,7 +3285,10 @@
                 // AUTO-AJUSTE DE DATA PARA TURNO NOTURNO
                 if (hFim < hIni && dIni === dFim) {
                     end.setDate(end.getDate() + 1);
-                    document.getElementById('s-data-fim').value = end.toISOString().slice(0, 10);
+                    const d = String(end.getDate()).padStart(2, '0');
+                    const m = String(end.getMonth() + 1).padStart(2, '0');
+                    const y = end.getFullYear();
+                    document.getElementById('s-data-fim').value = `${d}/${m}/${y}`;
                 }
 
                 if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
@@ -3486,30 +3529,19 @@
             // ══════════════════════════════════════════════════════════════════
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
-                    // Ignorar se o foco já estiver em um botão
-                    if (e.target.tagName === 'BUTTON' || e.target.type === 'submit') return;
+                    // Se estiver em um botão ou modal aberto, deixa o comportamento padrão do navegador
+                    if (e.target.tagName === 'BUTTON' || document.getElementById('modalOverlay').classList.contains('open')) return;
 
                     const activeScreen = document.querySelector('.screen.active');
-                    if (!activeScreen) return;
+                    if (!activeScreen || activeScreen.id === 'screen-home') return;
 
-                    // Lista de campos focáveis visíveis na tela ativa
-                    const focusable = Array.from(activeScreen.querySelectorAll('input:not([readonly]):not([disabled]), select:not([disabled])'))
-                        .filter(el => el.type !== 'hidden' && el.offsetParent !== null);
-
-                    const index = focusable.indexOf(e.target);
-                    if (index > -1 && index < focusable.length - 1) {
-                        // Ainda há campos → pula para o próximo
-                        e.preventDefault();
-                        focusable[index + 1].focus();
-                    } else if (index === focusable.length - 1) {
-                        // Último campo → dispara o botão Confirmar da tela ativa
-                        e.preventDefault();
-                        const screenId = activeScreen.id;
-                        if (screenId === 'screen-prod') {
-                            confirmarProd();
-                        } else if (screenId === 'screen-parada') {
-                            confirmarParada();
-                        }
+                    // Se pressionar Enter em qualquer campo, tenta confirmar o formulário
+                    // (A lógica de pular campo já é feita individualmente em updateFieldClass para atrito zero)
+                    e.preventDefault();
+                    if (activeScreen.id === 'screen-prod') {
+                        window.confirmarProd();
+                    } else if (activeScreen.id === 'screen-parada') {
+                        window.confirmarParada();
                     }
                 }
             });
