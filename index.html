@@ -3529,19 +3529,40 @@
             // ══════════════════════════════════════════════════════════════════
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
-                    // Se estiver em um botão ou modal aberto, deixa o comportamento padrão do navegador
-                    if (e.target.tagName === 'BUTTON' || document.getElementById('modalOverlay').classList.contains('open')) return;
+                    // 1. Lidar com Modal Aberto
+                    const modal = document.getElementById('modalOverlay');
+                    if (modal.classList.contains('open')) {
+                        e.preventDefault();
+                        const btnPrimary = modal.querySelector('.btn-primary');
+                        const btnGhost = modal.querySelector('.btn-ghost');
+                        if (btnPrimary) btnPrimary.click();
+                        else if (btnGhost) btnGhost.click();
+                        return;
+                    }
+
+                    // Ignorar se o foco já estiver em um botão (deixa o comportamento padrão)
+                    if (e.target.tagName === 'BUTTON' || e.target.type === 'submit') return;
 
                     const activeScreen = document.querySelector('.screen.active');
                     if (!activeScreen || activeScreen.id === 'screen-home') return;
 
-                    // Se pressionar Enter em qualquer campo, tenta confirmar o formulário
-                    // (A lógica de pular campo já é feita individualmente em updateFieldClass para atrito zero)
-                    e.preventDefault();
-                    if (activeScreen.id === 'screen-prod') {
-                        window.confirmarProd();
-                    } else if (activeScreen.id === 'screen-parada') {
-                        window.confirmarParada();
+                    // 2. Lidar com Campos do Formulário (Pular campos ou Confirmar no fim)
+                    const focusable = Array.from(activeScreen.querySelectorAll('input:not([readonly]):not([disabled]), select:not([disabled])'))
+                        .filter(el => el.type !== 'hidden' && el.offsetParent !== null);
+
+                    const index = focusable.indexOf(e.target);
+                    if (index > -1 && index < focusable.length - 1) {
+                        // Ainda há campos -> pula para o próximo
+                        e.preventDefault();
+                        focusable[index + 1].focus();
+                    } else if (index === focusable.length - 1 || index === -1) {
+                        // Último campo ou campo não listado (ex: fora da grade de foco padrão) -> confirma
+                        e.preventDefault();
+                        if (activeScreen.id === 'screen-prod') {
+                            window.confirmarProd();
+                        } else if (activeScreen.id === 'screen-parada') {
+                            window.confirmarParada();
+                        }
                     }
                 }
             });
