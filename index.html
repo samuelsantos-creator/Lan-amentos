@@ -2715,9 +2715,13 @@
                 // Usuário e Senha
                 const mat = document.getElementById(p + 'matricula').value.trim();
                 const sen = document.getElementById(p + 'senha').value.trim();
-                const colabValid = !!db.colaboradores[`${mat}|${sen}`];
-                updateFieldClass(p + 'matricula', colabValid);
-                updateFieldClass(p + 'senha', colabValid);
+                
+                // Matrícula fica verde se existir no cadastro (independente da senha)
+                const matriculaExiste = mat && Object.keys(db.colaboradores).some(k => k.split('|')[0] === mat);
+                const loginCompleto = !!db.colaboradores[`${mat}|${sen}`];
+                
+                updateFieldClass(p + 'matricula', matriculaExiste);
+                updateFieldClass(p + 'senha', loginCompleto);
 
                 // Recurso
                 const rCod = document.getElementById(p + 'recurso-cod').value.trim().toUpperCase();
@@ -2968,6 +2972,7 @@
                     else if (v.length === 4 && v.includes(':')) v = v.slice(0, 3) + "0" + v[3];
 
                     e.target.value = v;
+                    validateLive(id.startsWith('p-'));
                 });
             }
             ['p-hora-ini', 'p-hora-fim', 's-hora-ini', 's-hora-fim'].forEach(maskTime);
@@ -3088,8 +3093,8 @@
                 const durMin = (end - start) / 60000;
                 if (durMin > 720) { showModal('erro', 'Duração Excedida', 'Máximo 12 horas.'); return; }
 
-                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
-                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                let shiftStart = parseDateTime(dIni, iniT);
+                let shiftEnd = parseDateTime(dIni, fimT);
                 if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
 
                 if (start < shiftStart || end > shiftEnd) { showModal('erro', 'Fora do Turno', `Período deve estar entre ${iniT} e ${fimT}.`); return; }
@@ -3125,27 +3130,24 @@
 
                 const matricula = document.getElementById('p-matricula').value.trim();
                 const senha = document.getElementById('p-senha').value.trim();
-                const turnoInfo = document.getElementById('p-turno').value.split('|');
+                const shiftVal = document.getElementById('p-turno').value;
+                const turnoInfo = shiftVal.split('|');
                 const iniT = turnoInfo[1], fimT = turnoInfo[2];
 
-                // Validações de campos vazios e incorretos
-                if (!matricula || !senha) { showModal('erro', 'Usuário/Senha', 'Preencha os campos de operador.'); return; }
-                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Usuário ou Senha incorretos.'); return; }
+                // ─── VALIDAÇÃO 1: IDENTIFICAÇÃO ───────────────────────────
+                if (!matricula || !senha) { showModal('erro', 'ERRO: Operador', 'Identificação do operador é obrigatória.'); return; }
+                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'ERRO: Acesso', 'Usuário ou Senha incorretos.'); return; }
+                if (op && !db.ops[op]) { showModal('erro', 'ERRO: O.P.', 'Ordem de Produção não encontrada no cadastro.'); return; }
+                if (!prod || !db.produtos[prod]) { showModal('erro', 'ERRO: Produto', 'Código do produto inválido ou não encontrado.'); return; }
+                if (!rCod || !db.recursos[rCod]) { showModal('erro', 'ERRO: Recurso/Máquina', 'Máquina não encontrada no cadastro.'); return; }
+                if (qtd <= 0) { showModal('erro', 'ERRO: Quantidade', 'A quantidade produzida deve ser maior que zero.'); return; }
 
-                // OP agora é opcional, mas se informada deve ser válida
-                if (op && !db.ops[op]) { showModal('erro', 'OP não encontrada', 'A Ordem de Produção informada não existe no cadastro.'); return; }
-
-                if (!prod || !db.produtos[prod.toUpperCase()]) { showModal('erro', 'Produto Inválido', 'Código do produto não encontrado.'); return; }
-                if (!rCod || !db.recursos[rCod.toUpperCase()]) { showModal('erro', 'Recurso Inválido', 'Máquina não encontrada no cadastro.'); return; }
-                if (qtd <= 0) { showModal('erro', 'Quantidade', 'A quantidade produzida deve ser maior que zero.'); return; }
-
-                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Datas/Horas', 'Preencha todos os campos de período.'); return; }
-                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'Hora inválida', 'Formato de hora incorreto (HH:MM).'); return; }
+                // ─── VALIDAÇÃO 2: PERÍODO E TURNO ─────────────────────────
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'ERRO: Período', 'Preencha todos os campos de Data e Hora.'); return; }
+                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'ERRO: Hora', 'Formato de hora inválido (Use HH:MM).'); return; }
 
                 const start = parseDateTime(dIni, hIni);
                 let end = parseDateTime(dFim, hFim);
-
-                // AUTO-AJUSTE DE DATA PARA TURNO NOTURNO
                 if (hFim < hIni && dIni === dFim) {
                     end.setDate(end.getDate() + 1);
                     const d = String(end.getDate()).padStart(2, '0');
@@ -3153,51 +3155,98 @@
                     const y = end.getFullYear();
                     document.getElementById('p-data-fim').value = `${d}/${m}/${y}`;
                 }
+                if (!start || !end || end <= start) { showModal('erro', 'ERRO: Horário', 'A Hora Final deve ser maior que a Hora Inicial.'); return; }
 
-                if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
-
-                // Trava de 12 horas
                 const durMin = (end - start) / 60000;
-                if (durMin > 720) { showModal('erro', 'Duração Excedida', 'Nenhum apontamento pode ter mais de 12 horas.'); return; }
+                if (durMin > 720) { showModal('erro', 'ERRO: Duração', 'Um único apontamento não pode exceder 12 horas.'); return; }
 
-                // VALIDAÇÃO DE RITMO (CADÊNCIA)
-                if (qtd / durMin > 200) {
-                    showModal('aviso', 'Ritmo Elevado', `Detectamos uma produção de ${Math.round(qtd / durMin * 60)} pç/h. Esta quantidade está correta?`);
-                }
-
-                // Validação básica contra o horário do turno
-                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
-                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                const shiftStart = parseDateTime(dIni, iniT);
+                let shiftEnd = parseDateTime(dIni, fimT);
                 if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
 
-                if (start < shiftStart) { showModal('erro', 'Fora do Turno', `A hora inicial (${hIni}) é anterior ao início do turno (${iniT}).`); return; }
-                if (end > shiftEnd) { showModal('erro', 'Fora do Turno', `A hora final (${hFim}) ultrapassa o limite do turno (${fimT}).`); return; }
+                if (start < shiftStart) { showModal('erro', 'ERRO: Fora do Turno', `Início (${hIni}) é anterior ao início do turno (${iniT}).`); return; }
+                if (end > shiftEnd) { showModal('erro', 'ERRO: Fora do Turno', `Fim (${hFim}) ultrapassa o fim do turno (${fimT}).`); return; }
 
-                // --- RESUMO DE CONFIRMAÇÃO (ITEM 7) ---
+                // ─── VALIDAÇÃO 3: SOBREPOSIÇÃO (INTRA-TIPO) ───────────────
+                // Não pode sobrepor outra PRODUÇÃO (mesmo horário e máquina)
+                const overProd = state.produções.find(p => {
+                    if (p.recursoCod !== rCod || p.shiftKey !== shiftVal || p.dIni !== dIni) return false;
+                    const s2 = parseDateTime(p.dIni, p.hIni), e2 = parseDateTime(p.dFim, p.hFim);
+                    return Math.max(start, s2) < Math.min(end, e2);
+                });
+                if (overProd) { showModal('erro', 'ERRO: Sobreposição', `Já existe outra PRODUÇÃO registrada para esta máquina entre ${overProd.hIni} e ${overProd.hFim}.`); return; }
+
+                // ─── VALIDAÇÃO 4: RITMO ───────────────────────────────────
+                if (qtd / durMin > 250) {
+                    showModal('aviso', 'AVISO: Ritmo Elevado', `Produção de ${Math.round(qtd / durMin * 60)} pç/h detectada. Confirme se a quantidade está correta.`);
+                }
+
+                // ─── CONFIRMAÇÃO ──────────────────────────────────────────
                 const htmlConfirm = `
                     <div class="confirm-summary">
                         <h4>Resumo do Apontamento</h4>
                         <p><span>Máquina:</span> <b>${rCod}</b></p>
-                        <p><span>Produto:</span> <b>${prod}</b></p>
                         <p><span>Período:</span> <b>${hIni} às ${hFim}</b></p>
                         <p><span>Quantidade:</span> <b>${qtd} peças</b></p>
                     </div>
                 `;
 
-                showModal('confirm', 'Confirmar Produção?', htmlConfirm, () => {
-                    state.produções.push({ matricula, senha, op, produto: prod, desc: '', recursoCod: rCod.toUpperCase(), recurso: '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos, shiftKey: document.getElementById('p-turno').value });
+                showModal('confirm', 'Confirmar Registro?', htmlConfirm, () => {
+                    const recProd = { matricula, senha, op, produto: prod, desc: db.produtos[prod] || '', recursoCod: rCod, recurso: db.recursos[rCod] || '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos, shiftKey: shiftVal };
+                    state.produções.push(recProd);
                     syncLists();
 
-                    let msgSucesso = `<b>OP:</b> ${op}<br><b>Máquina:</b> ${rCod}<br><b>Período:</b> ${hIni} – ${hFim}<br><br>Registro adicionado.`;
+                    // CÁLCULO DE COBERTURA DO TURNO (União de intervalos)
+                    const sStart = parseDateTime(dIni, iniT);
+                    let sEnd = parseDateTime(dIni, fimT);
+                    if (fimT < iniT) sEnd.setDate(sEnd.getDate() + 1);
+                    const totalTimeMin = (sEnd - sStart) / 60000;
 
-                    if (start > shiftStart) {
-                        msgSucesso += `<br><br><span style="color:var(--yellow);font-weight:600;"><i class="fas fa-exclamation-circle"></i> Atenção: O registro inicia após o começo do turno (${iniT}). Garanta que houve produção antes das ${hIni}.</span>`;
+                    // Unir todos os registros desta máquina/turno para ver o que falta cobrir no relógio
+                    const allIntervals = [...state.produções, ...state.paradas]
+                        .filter(x => x.recursoCod === rCod && x.shiftKey === shiftVal && x.dIni === dIni)
+                        .map(x => ({ start: parseDateTime(x.dIni, x.hIni), end: parseDateTime(x.dIni, x.hFim) }));
+                    
+                    // Ordenar e achatar intervalos para calcular cobertura real
+                    allIntervals.sort((a, b) => a.start - b.start);
+                    let coveredMin = 0;
+                    if (allIntervals.length > 0) {
+                        let currentStart = allIntervals[0].start;
+                        let currentEnd = allIntervals[0].end;
+                        for (let i = 1; i < allIntervals.length; i++) {
+                            if (allIntervals[i].start < currentEnd) {
+                                currentEnd = new Date(Math.max(currentEnd, allIntervals[i].end));
+                            } else {
+                                coveredMin += (currentEnd - currentStart) / 60000;
+                                currentStart = allIntervals[i].start;
+                                currentEnd = allIntervals[i].end;
+                            }
+                        }
+                        coveredMin += (currentEnd - currentStart) / 60000;
                     }
-                    if (end < shiftEnd) {
-                        msgSucesso += `<br><br><span style="color:var(--accent);font-weight:600;"><i class="fas fa-info-circle"></i> Produção lançada! Lembre-se de apontar uma nova produção a partir das ${hFim} para completar o turno até às ${fimT}.</span>`;
+
+                    let msg = `<b>Registro realizado com sucesso!</b><br><br>`;
+                    const remaining = Math.round(totalTimeMin - coveredMin);
+
+                    // Alerta de Início de Turno
+                    if (start > sStart) {
+                        msg += `<div style="background:var(--orange2); color:var(--orange); padding:10px; border-radius:8px; margin-bottom:12px; font-size:13px; border-left:4px solid var(--orange);">
+                                    <i class="fas fa-exclamation-triangle"></i> <b>Regra de Início:</b> Garanta que seja lançado um apontamento antes das <b>${hIni}</b> para o turno não ficar incompleto.
+                                </div>`;
                     }
-                    showModal('sucesso', 'Produção registrada!', msgSucesso);
-                    limparFormProd(hFim); // Continuidade inteligente
+
+                    if (remaining > 1) {
+                        msg += `<div style="background:var(--blue3); color:var(--blue); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--blue);">
+                                    <i class="fas fa-clock"></i> <b>Próximo Passo:</b> Aponte a partir das <b>${hFim}</b> para o turno não ficar incompleto (Faltam ${remaining} min).
+                                </div>`;
+                    } else if (remaining <= 1) {
+                        msg += `<div style="background:var(--green2); color:var(--green); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--green);">
+                                    <i class="fas fa-check-double"></i> <b>Turno Completo:</b> Cobertura total do horário atingida!
+                                </div>`;
+                    }
+
+                    showModal('sucesso', 'Produção Registrada', msg);
+                    limparFormProd(hFim);
                 });
             };
 
@@ -3234,8 +3283,8 @@
                 if (!start || !end || end <= start) { showModal('erro', 'Horário', 'Inválido.'); return; }
 
                 const durMin = (end - start) / 60000;
-                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
-                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                let shiftStart = parseDateTime(dIni, iniT);
+                let shiftEnd = parseDateTime(dIni, fimT);
                 if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
 
                 if (start < shiftStart || end > shiftEnd) { showModal('erro', 'Fora do Turno', `Período deve estar entre ${iniT} e ${fimT}.`); return; }
@@ -3265,24 +3314,24 @@
 
                 const matricula = document.getElementById('s-matricula').value.trim();
                 const senha = document.getElementById('s-senha').value.trim();
-                const turnoInfo = document.getElementById('s-turno').value.split('|');
+                const shiftVal = document.getElementById('s-turno').value;
+                const turnoInfo = shiftVal.split('|');
                 const iniT = turnoInfo[1], fimT = turnoInfo[2];
+                const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
 
-                const prodParConf = document.getElementById('s-produto').value.trim().toUpperCase();
-                // Validações
-                if (!matricula || !senha) { showModal('erro', 'Operador', 'Identifique-se com usuário e senha.'); return; }
-                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Credenciais inválidas.'); return; }
-                if (!motCod || !db.motivos[motCod.toUpperCase()]) { showModal('erro', 'Motivo', 'Selecione um motivo de parada válido.'); return; }
-                if (!prodParConf || !db.produtos[prodParConf]) { showModal('erro', 'Produto Obrigatório', 'Informe o código do produto da parada.'); return; }
-                if (!rCod || !db.recursos[rCod.toUpperCase()]) { showModal('erro', 'Recurso', 'Máquina/Recurso não encontrado.'); return; }
+                // ─── VALIDAÇÃO 1: IDENTIFICAÇÃO ───────────────────────────
+                if (!matricula || !senha) { showModal('erro', 'ERRO: Operador', 'Identifique-se com usuário e senha.'); return; }
+                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'ERRO: Acesso', 'Credenciais inválidas.'); return; }
+                if (!motCod || !db.motivos[motCod]) { showModal('erro', 'ERRO: Motivo', 'Selecione um motivo de parada válido.'); return; }
+                if (!prodPar || !db.produtos[prodPar]) { showModal('erro', 'ERRO: Produto', 'Informe o código do produto da parada.'); return; }
+                if (!rCod || !db.recursos[rCod]) { showModal('erro', 'ERRO: Recurso', 'Máquina/Recurso não encontrado.'); return; }
 
-                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'Campos obrigatórios', 'Preencha as datas e horários.'); return; }
-                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'Hora inválida', 'Use o formato HH:MM (ex: 14:30).'); return; }
+                // ─── VALIDAÇÃO 2: PERÍODO E TURNO ─────────────────────────
+                if (!dIni || !hIni || !dFim || !hFim) { showModal('erro', 'ERRO: Período', 'Preencha as datas e horários.'); return; }
+                if (!isValidTimeStr(hIni) || !isValidTimeStr(hFim)) { showModal('erro', 'ERRO: Hora', 'Use o formato HH:MM (ex: 14:30).'); return; }
 
                 const start = parseDateTime(dIni, hIni);
                 let end = parseDateTime(dFim, hFim);
-
-                // AUTO-AJUSTE DE DATA PARA TURNO NOTURNO
                 if (hFim < hIni && dIni === dFim) {
                     end.setDate(end.getDate() + 1);
                     const d = String(end.getDate()).padStart(2, '0');
@@ -3290,46 +3339,102 @@
                     const y = end.getFullYear();
                     document.getElementById('s-data-fim').value = `${d}/${m}/${y}`;
                 }
-
-                if (!start || !end || end <= start) { showModal('erro', 'Horário inválido', 'Hora Final deve ser após Hora Inicial.'); return; }
+                if (!start || !end || end <= start) { showModal('erro', 'ERRO: Horário', 'A Hora Final deve ser maior que a Hora Inicial.'); return; }
 
                 const durMin = (end - start) / 60000;
-                if (durMin > 720) { showModal('erro', 'Duração Excedida', 'Uma parada não pode ter mais de 12 horas.'); return; }
-                if (durMin <= 5) { showModal('aviso', 'Parada curta', `Paradas de ≤5 min (${durMin} min) não devem ser registradas.`); return; }
+                if (durMin > 720) { showModal('erro', 'ERRO: Duração', 'Uma parada não pode exceder 12 horas.'); return; }
+                if (durMin <= 5) { showModal('erro', 'ERRO: Parada Curta', `Paradas de 5 min ou menos não devem ser registradas.`); return; }
 
-                // Validação básica contra o turno
-                let shiftStart = new Date(dIni + 'T' + iniT + ':00');
-                let shiftEnd = new Date(dIni + 'T' + fimT + ':00');
+                const shiftStart = parseDateTime(dIni, iniT);
+                let shiftEnd = parseDateTime(dIni, fimT);
                 if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
 
-                if (start < shiftStart || end > shiftEnd) {
-                    showModal('erro', 'Fora do Turno', `O período da parada deve estar dentro do turno (${iniT}-${fimT}).`);
+                if (start < shiftStart || end > shiftEnd) { showModal('erro', 'ERRO: Fora do Turno', `A parada deve estar dentro do horário do turno (${iniT}-${fimT}).`); return; }
+
+                // ─── VALIDAÇÃO 3: SOBREPOSIÇÃO (INTRA-TIPO) ───────────────
+                // Não pode sobrepor outra PARADA (mesmo horário e máquina)
+                const overStop = state.paradas.find(s => {
+                    if (s.recursoCod !== rCod || s.shiftKey !== shiftVal || s.dIni !== dIni) return false;
+                    const s2 = parseDateTime(s.dIni, s.hIni), e2 = parseDateTime(s.dFim, s.hFim);
+                    return Math.max(start, s2) < Math.min(end, e2);
+                });
+                if (overStop) { showModal('erro', 'ERRO: Sobreposição', `Já existe outra PARADA registrada para esta máquina entre ${overStop.hIni} e ${overStop.hFim}.`); return; }
+
+                // ─── VALIDAÇÃO 4: TEMPO TOTAL ─────────────────────────────
+                const totalShiftMin = (shiftEnd - shiftStart) / 60000;
+                const currentStopTotal = state.paradas
+                    .filter(s => s.recursoCod === rCod && s.shiftKey === shiftVal && s.dIni === dIni)
+                    .reduce((acc, s) => acc + (parseDateTime(s.dIni, s.hFim) - parseDateTime(s.dIni, s.hIni)) / 60000, 0);
+
+                if (currentStopTotal + durMin > totalShiftMin) {
+                    showModal('erro', 'ERRO: Impossível', `A soma das paradas (${Math.round(currentStopTotal + durMin)} min) não pode ser maior que o tempo do turno (${totalShiftMin} min).`);
                     return;
                 }
 
-                // --- RESUMO DE CONFIRMAÇÃO (ITEM 7) ---
+                // ─── CONFIRMAÇÃO ──────────────────────────────────────────
                 const htmlConfirm = `
                     <div class="confirm-summary">
                         <h4>Resumo da Parada</h4>
                         <p><span>Máquina:</span> <b>${rCod}</b></p>
                         <p><span>Motivo:</span> <b>${motCod}</b></p>
-                        <p><span>Duração:</span> <b>${hIni} às ${hFim} (${durMin} min)</b></p>
+                        <p><span>Duração:</span> <b>${durMin} minutos</b></p>
                     </div>
                 `;
 
                 showModal('confirm', 'Confirmar Parada?', htmlConfirm, () => {
-                    const prodParReg = document.getElementById('s-produto').value.trim().toUpperCase();
-                    state.paradas.push({ matricula, senha, motCod, motDesc: db.motivos[motCod] || '', op, produto: prodParReg, recursoCod: rCod, dIni, hIni, dFim, hFim, shiftKey: document.getElementById('s-turno').value });
+                    const recStop = { matricula, senha, motCod, motDesc: db.motivos[motCod] || '', op, produto: prodPar, recursoCod: rCod, dIni, hIni, dFim, hFim, shiftKey: shiftVal };
+                    state.paradas.push(recStop);
                     syncLists();
-                    let msgSucesso = `<b>Motivo:</b> ${motCod}<br><b>Máquina:</b> ${rCod}<br><b>Duração:</b> ${durMin} min`;
-                    if (start > shiftStart) {
-                        msgSucesso += `<br><br><span style="color:var(--yellow);font-weight:600;"><i class="fas fa-exclamation-circle"></i> Atenção: Início após o começo do turno (${iniT}). Verifique se houve produção antes das ${hIni}.</span>`;
+
+                    // CÁLCULO DE COBERTURA DO TURNO (União de intervalos)
+                    const sStart = parseDateTime(dIni, iniT);
+                    let sEnd = parseDateTime(dIni, fimT);
+                    if (fimT < iniT) sEnd.setDate(sEnd.getDate() + 1);
+                    const totalTimeMin = (sEnd - sStart) / 60000;
+
+                    const allIntervals = [...state.produções, ...state.paradas]
+                        .filter(x => x.recursoCod === rCod && x.shiftKey === shiftVal && x.dIni === dIni)
+                        .map(x => ({ start: parseDateTime(x.dIni, x.hIni), end: parseDateTime(x.dIni, x.hFim) }));
+                    
+                    allIntervals.sort((a, b) => a.start - b.start);
+                    let coveredMin = 0;
+                    if (allIntervals.length > 0) {
+                        let currentStart = allIntervals[0].start;
+                        let currentEnd = allIntervals[0].end;
+                        for (let i = 1; i < allIntervals.length; i++) {
+                            if (allIntervals[i].start < currentEnd) {
+                                currentEnd = new Date(Math.max(currentEnd, allIntervals[i].end));
+                            } else {
+                                coveredMin += (currentEnd - currentStart) / 60000;
+                                currentStart = allIntervals[i].start;
+                                currentEnd = allIntervals[i].end;
+                            }
+                        }
+                        coveredMin += (currentEnd - currentStart) / 60000;
                     }
-                    if (end < shiftEnd) {
-                        msgSucesso += `<br><br><span style="color:var(--accent);font-weight:600;"><i class="fas fa-info-circle"></i> Registro lançado! Lembre-se de continuar o apontamento a partir das ${hFim} para completar o turno.</span>`;
+
+                    let msg = `<b>Parada registrada com sucesso!</b><br><br>`;
+                    const remaining = Math.round(totalTimeMin - coveredMin);
+
+                    // Alerta de Início de Turno
+                    if (start > sStart) {
+                        msg += `<div style="background:var(--orange2); color:var(--orange); padding:10px; border-radius:8px; margin-bottom:12px; font-size:13px; border-left:4px solid var(--orange);">
+                                    <i class="fas fa-exclamation-triangle"></i> <b>Atenção:</b> Garanta que haja um apontamento registrado antes das <b>${hIni}</b>.
+                                </div>`;
                     }
-                    showModal('sucesso', 'Parada registrada!', msgSucesso);
-                    limparFormParada(hFim); // Continuidade inteligente (pulo de hora)
+
+                    if (remaining > 1) {
+                        msg += `<div style="background:var(--blue3); color:var(--blue); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--blue);">
+                                    <i class="fas fa-clock"></i> <b>Aponte a partir das ${hFim}</b> para o turno não ficar incompleto (Faltam ${remaining} min).
+                                </div>`;
+                    } else {
+                        msg += `<div style="background:var(--green2); color:var(--green); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--green);">
+                                    <i class="fas fa-check-double"></i> <b>Turno Completo:</b> Cobertura total do horário atingida!
+                                </div>`;
+                    }
+
+                    showModal('sucesso', 'Parada Registrada', msg);
+                    limparFormParada(hFim);
                 });
             };
 
@@ -3391,14 +3496,18 @@
             //   Chamado pelo botão [Limpar] manual.
             // ══════════════════════════════════════════════════════════════════
             window.limparFormProd = function (nextStart = '') {
-                ['p-op', 'p-produto', 'p-desc', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                ['p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
                 if (nextStart) document.getElementById('p-hora-ini').value = nextStart;
                 validateLive(true);
             };
             window.limparFormParada = function (nextStart = '') {
-                // Lógica de pulo: mantém produto, recurso, turno e data para agilizar o próximo lançamento
-                ['s-op', 's-desc', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
-                // Mantém s-produto para facilitar o próximo apontamento de parada
+                ['s-op', 's-desc', 's-produto', 's-recurso-cod', 's-recurso', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
                 if (nextStart) document.getElementById('s-hora-ini').value = nextStart;
                 validateLive(false);
             };
@@ -3457,8 +3566,8 @@
                     end: parseDateTime(p.dFim, p.hFim)
                 })).sort((a, b) => a.start - b.start);
 
-                let shiftStart = new Date(dataBase + 'T' + iniT + ':00');
-                let shiftEnd = new Date(dataBase + 'T' + fimT + ':00');
+                let shiftStart = parseDateTime(dataBase, iniT);
+                let shiftEnd = parseDateTime(dataBase, fimT);
                 if (fimT < iniT) shiftEnd.setDate(shiftEnd.getDate() + 1);
 
                 const shiftMin = (shiftEnd - shiftStart) / 60000;
