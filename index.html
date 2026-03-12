@@ -825,6 +825,42 @@
             </div>
         </div>
 
+        <!-- OP / Produto / Recurso -->
+        <div class="form-card">
+            <h4><i class="fas fa-cubes" style="margin-right:6px;color:var(--accent)"></i>Identificação</h4>
+            <div class="fields-grid cols-2">
+                <div class="field field-span2">
+                    <label>O.P.</label>
+                    <div class="field-inner">
+                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Produto</label>
+                    <div class="field-inner">
+                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Descrição</label>
+                    <input type="text" id="p-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
+                </div>
+                <div class="field">
+                    <label>Cód. Recurso</label>
+                    <div class="field-inner">
+                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Recurso</label>
+                    <input type="text" id="p-recurso" readonly placeholder="Preenchimento automático" tabindex="-1">
+                </div>
+            </div>
+        </div>
+
         <!-- Turno / Data -->
         <div class="form-card">
             <h4><i class="fas fa-calendar-alt" style="margin-right:6px;color:var(--accent)"></i>Turno e Data</h4>
@@ -873,46 +909,11 @@
                     style="display:none; color:var(--red); font-size:10px; font-weight:700; margin-top:5px; text-align:center;">
                     <i class="fas fa-exclamation-triangle"></i> ATENÇÃO: HÁ UM GAP (ESPAÇO VAZIO) ANTES DESTE HORÁRIO
                 </div>
-                <div class="timeline-labels">
+                <div class="timeline-labels" style="position: relative;">
                     <span id="p-timeline-start">06:00</span>
+                    <span id="p-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap;"></span>
                     <span style="color:var(--accent); font-size: 9px;">PREENCHIMENTO DO TURNO</span>
                     <span id="p-timeline-end">14:00</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- OP / Produto / Recurso -->
-        <div class="form-card">
-            <h4><i class="fas fa-cubes" style="margin-right:6px;color:var(--accent)"></i>Identificação</h4>
-            <div class="fields-grid cols-2">
-                <div class="field field-span2">
-                    <label>O.P.</label>
-                    <div class="field-inner">
-                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Produto</label>
-                    <div class="field-inner">
-                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Descrição</label>
-                    <input type="text" id="p-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
-                </div>
-                <div class="field">
-                    <label>Cód. Recurso</label>
-                    <div class="field-inner">
-                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Recurso</label>
-                    <input type="text" id="p-recurso" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
             </div>
         </div>
@@ -961,7 +962,6 @@
             <div class="ml-auto" style="display:flex;gap:.8rem; width: 100%; justify-content: flex-end; flex-wrap:wrap;">
                 <button class="btn btn-ghost" onclick="sairOperadorProd()"><i class="fas fa-door-open"></i> Sair</button>
                 <button class="btn btn-ghost" onclick="limparFormProd()"><i class="fas fa-eraser"></i> Limpar</button>
-                <button class="btn btn-warning" id="p-btn-testar" onclick="testarProd()"><i class="fas fa-vial"></i> Testar</button>
                 <button class="btn btn-primary" id="p-btn-confirmar" onclick="confirmarProd()"><i class="fas fa-check-circle"></i> Confirmar</button>
             </div>
         </div>
@@ -1033,6 +1033,52 @@
             </div>
         </div>
 
+        <!-- Motivo / OP / Recurso -->
+        <div class="form-card">
+            <h4><i class="fas fa-tag" style="margin-right:6px;color:var(--accent)"></i>Identificação da Parada</h4>
+            <div class="fields-grid cols-2">
+                <div class="field field-span2">
+                    <label>O.P.</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Produto</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Descrição</label>
+                    <input type="text" id="s-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
+                </div>
+                <div class="field">
+                    <label>Cód. Motivo</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Descrição Motivo</label>
+                    <input type="text" id="s-motivo-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
+                </div>
+                <div class="field">
+                    <label>Cód. Recurso</label>
+                    <div class="field-inner">
+                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <button class="help-btn">?</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Recurso</label>
+                    <input type="text" id="s-recurso" readonly placeholder="Preenchimento automático" tabindex="-1">
+                </div>
+            </div>
+        </div>
+
         <!-- Turno / Data parada -->
         <div class="form-card">
             <h4><i class="fas fa-calendar-alt" style="margin-right:6px;color:var(--accent)"></i>Turno e Período</h4>
@@ -1081,56 +1127,11 @@
                     style="display:none; color:var(--red); font-size:10px; font-weight:700; margin-top:5px; text-align:center;">
                     <i class="fas fa-exclamation-triangle"></i> ATENÇÃO: HÁ UM GAP (ESPAÇO VAZIO) ANTES DESTE HORÁRIO
                 </div>
-                <div class="timeline-labels">
+                <div class="timeline-labels" style="position: relative;">
                     <span id="s-timeline-start">06:00</span>
+                    <span id="s-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap;"></span>
                     <span style="color:var(--accent); font-size: 9px;">PREENCHIMENTO DO TURNO</span>
                     <span id="s-timeline-end">14:00</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Motivo / OP / Recurso -->
-        <div class="form-card">
-            <h4><i class="fas fa-tag" style="margin-right:6px;color:var(--accent)"></i>Identificação da Parada</h4>
-            <div class="fields-grid cols-2">
-                <div class="field field-span2">
-                    <label>O.P.</label>
-                    <div class="field-inner">
-                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Produto</label>
-                    <div class="field-inner">
-                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Descrição</label>
-                    <input type="text" id="s-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
-                </div>
-                <div class="field">
-                    <label>Cód. Motivo</label>
-                    <div class="field-inner">
-                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Descrição Motivo</label>
-                    <input type="text" id="s-motivo-desc" readonly placeholder="Preenchimento automático" tabindex="-1">
-                </div>
-                <div class="field">
-                    <label>Cód. Recurso</label>
-                    <div class="field-inner">
-                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Recurso</label>
-                    <input type="text" id="s-recurso" readonly placeholder="Preenchimento automático" tabindex="-1">
                 </div>
             </div>
         </div>
@@ -1139,7 +1140,6 @@
             <div class="ml-auto" style="display:flex;gap:.8rem; width: 100%; justify-content: flex-end; flex-wrap:wrap;">
                 <button class="btn btn-ghost" onclick="sairOperadorParada()"><i class="fas fa-door-open"></i> Sair</button>
                 <button class="btn btn-ghost" onclick="limparFormParadaCompleto()"><i class="fas fa-eraser"></i> Limpar</button>
-                <button class="btn btn-warning" id="s-btn-testar" onclick="testarParada()"><i class="fas fa-vial"></i> Testar</button>
                 <button class="btn btn-primary" id="s-btn-confirmar" onclick="confirmarParada()"><i class="fas fa-check-circle"></i> Confirmar</button>
             </div>
         </div>
@@ -2745,10 +2745,23 @@
                     updateFieldClass('s-produto', !!db.produtos[prodPar]);
                 }
 
-                // Horas
+                // Horas e Validação de Retrocesso
                 const hI = document.getElementById(p + 'hora-ini').value;
                 const hF = document.getElementById(p + 'hora-fim').value;
-                updateFieldClass(p + 'hora-ini', isValidTimeStr(hI));
+                const dSel = document.getElementById(p + 'data-ini').value;
+                const tVal = document.getElementById(p + 'turno').value;
+                
+                let hIniValid = isValidTimeStr(hI);
+                if (hIniValid && rCod && tVal && dSel) {
+                    const lEnd = getLastEnd(rCod, tVal, dSel);
+                    if (lEnd) {
+                        const cStart = parseDateTime(dSel, hI);
+                        // Se o horário digitado for menor que o último apontado, fica vermelho
+                        if (cStart < lEnd) hIniValid = false;
+                    }
+                }
+
+                updateFieldClass(p + 'hora-ini', hIniValid);
                 updateFieldClass(p + 'hora-fim', isValidTimeStr(hF));
 
                 updateTimeline();
@@ -2892,14 +2905,27 @@
                 if (tFim < tIni) eT.setDate(eT.getDate() + 1);
                 const totalMin = (eT - sT) / 60000;
 
-                // GAP DETECT
-                let lastEnd = sT;
                 const regs = [...state.produções, ...state.paradas]
                     .filter(i => i.recursoCod.toUpperCase() === rCod.toUpperCase() && i.shiftKey === turnoVal && i.dIni === dataSel);
                 regs.sort((a, b) => parseDateTime(a.dIni, a.hIni) - parseDateTime(b.dIni, b.hIni));
+                
+                let lastEnd = sT;
+                let lastEndStr = tIni;
                 if (regs.length > 0) {
                     const last = regs[regs.length - 1];
                     lastEnd = parseDateTime(last.dFim, last.hFim);
+                    lastEndStr = last.hFim;
+                }
+
+                // Posiciona label da última hora (last pointed)
+                const labelLast = document.getElementById(suffix + 'timeline-last');
+                if (labelLast) {
+                    const offsetLast = Math.max(0, (lastEnd - sT) / 60000);
+                    const leftLast = (offsetLast / totalMin) * 100;
+                    labelLast.style.left = leftLast + '%';
+                    labelLast.textContent = lastEndStr;
+                    // Esconde se estiver muito perto das pontas para não encavalar
+                    labelLast.style.display = (leftLast < 5 || leftLast > 95) ? 'none' : 'block';
                 }
 
                 const currentHIni = document.getElementById(suffix + 'hora-ini').value;
@@ -2939,6 +2965,15 @@
             // SEÇÃO 10 — HELPERS (Utilitários)
             // maskTime(id)       : aplica máscara HH:MM ao digitar
             // isValidTimeStr(t)  : valida se a string está no formato HH:MM
+            window.getLastEnd = function(rCod, turnoVal, dataSel) {
+                const regs = [...state.produções, ...state.paradas]
+                    .filter(i => i.recursoCod.toUpperCase() === rCod.toUpperCase() && i.shiftKey === turnoVal && i.dIni === dataSel);
+                if (regs.length === 0) return null;
+                regs.sort((a, b) => parseDateTime(a.dIni, a.hIni) - parseDateTime(b.dIni, b.hIni));
+                const last = regs[regs.length - 1];
+                return parseDateTime(last.dFim, last.hFim);
+            };
+
             // parseDateTime(d,t) : converte 'YYYY-MM-DD' + 'HH:MM' em Date
             // fmt(date)          : extrai HH:MM de um objeto Date
             // today()            : retorna a data de hoje no formato YYYY-MM-DD
@@ -3245,6 +3280,10 @@
                                 </div>`;
                     }
 
+                    msg += `<div style="background:var(--yellow); color:var(--text); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--f59e0b); margin-top: 12px;">
+                                <i class="fas fa-sign-out-alt"></i> <b>Lembrete:</b> Não esqueça de <b>sair</b> do sistema após finalizar seus apontamentos.
+                            </div>`;
+
                     showModal('sucesso', 'Produção Registrada', msg);
                     limparFormProd(hFim);
                 });
@@ -3427,11 +3466,15 @@
                         msg += `<div style="background:var(--blue3); color:var(--blue); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--blue);">
                                     <i class="fas fa-clock"></i> <b>Aponte a partir das ${hFim}</b> para o turno não ficar incompleto (Faltam ${remaining} min).
                                 </div>`;
-                    } else {
+                    } else if (remaining <= 1) {
                         msg += `<div style="background:var(--green2); color:var(--green); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--green);">
                                     <i class="fas fa-check-double"></i> <b>Turno Completo:</b> Cobertura total do horário atingida!
                                 </div>`;
                     }
+
+                    msg += `<div style="background:var(--yellow); color:var(--text); padding:10px; border-radius:8px; font-size:13px; border-left:4px solid var(--f59e0b); margin-top: 12px;">
+                                <i class="fas fa-sign-out-alt"></i> <b>Lembrete:</b> Não esqueça de <b>sair</b> do sistema após finalizar seus apontamentos.
+                            </div>`;
 
                     showModal('sucesso', 'Parada Registrada', msg);
                     limparFormParada(hFim);
@@ -3496,7 +3539,7 @@
             //   Chamado pelo botão [Limpar] manual.
             // ══════════════════════════════════════════════════════════════════
             window.limparFormProd = function (nextStart = '') {
-                ['p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => {
+                ['p-matricula', 'p-senha', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.value = '';
                 });
@@ -3514,7 +3557,10 @@
 
             // Limpar completo (para quando clicar em "Limpar" manualmente)
             window.limparFormParadaCompleto = function () {
-                ['s-op', 's-produto', 's-desc', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => document.getElementById(id).value = '');
+                ['s-matricula', 's-senha', 's-nome', 's-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
                 validateLive(false);
             };
 
