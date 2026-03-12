@@ -911,9 +911,11 @@
                 </div>
                 <div class="timeline-labels" style="position: relative;">
                     <span id="p-timeline-start">06:00</span>
-                    <span id="p-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap;"></span>
-                    <span style="color:var(--accent); font-size: 9px;">PREENCHIMENTO DO TURNO</span>
+                    <span id="p-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap; top: -20px; font-size: 11px;"></span>
                     <span id="p-timeline-end">14:00</span>
+                </div>
+                <div style="text-align: center; color:var(--accent); font-size: 9px; text-transform: uppercase; font-weight: bold; margin-top: 4px;">
+                    PREENCHIMENTO DO TURNO
                 </div>
             </div>
         </div>
@@ -1129,9 +1131,11 @@
                 </div>
                 <div class="timeline-labels" style="position: relative;">
                     <span id="s-timeline-start">06:00</span>
-                    <span id="s-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap;"></span>
-                    <span style="color:var(--accent); font-size: 9px;">PREENCHIMENTO DO TURNO</span>
+                    <span id="s-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap; top: -20px; font-size: 11px;"></span>
                     <span id="s-timeline-end">14:00</span>
+                </div>
+                <div style="text-align: center; color:var(--accent); font-size: 9px; text-transform: uppercase; font-weight: bold; margin-top: 4px;">
+                    PREENCHIMENTO DO TURNO
                 </div>
             </div>
         </div>
@@ -2929,6 +2933,8 @@
                 }
 
                 const currentHIni = document.getElementById(suffix + 'hora-ini').value;
+                const currentHFim = document.getElementById(suffix + 'hora-fim').value;
+
                 if (alertEl) {
                     if (isValidTimeStr(currentHIni)) {
                         const cStart = parseDateTime(dataSel, currentHIni);
@@ -2959,6 +2965,24 @@
 
                 renderSegs(state.produções, 'segment-prod');
                 renderSegs(state.paradas, 'segment-para');
+
+                // Renderiza preview fraquinho (ghost)
+                if (isValidTimeStr(currentHIni) && isValidTimeStr(currentHFim)) {
+                    const pStart = parseDateTime(dataSel, currentHIni);
+                    let pEnd = parseDateTime(dataSel, currentHFim);
+                    if (currentHFim < currentHIni) pEnd.setDate(pEnd.getDate() + 1);
+                    if (pEnd > pStart && pStart >= sT && pEnd <= eT) {
+                        const offsetP = Math.max(0, (pStart - sT) / 60000);
+                        const durP = (pEnd - pStart) / 60000;
+                        const ghost = document.createElement('div');
+                        ghost.className = 'timeline-segment ' + (isProd ? 'segment-prod' : 'segment-para');
+                        ghost.style.left = (offsetP / totalMin) * 100 + '%';
+                        ghost.style.width = (durP / totalMin) * 100 + '%';
+                        ghost.style.opacity = '0.35';
+                        ghost.style.border = '1.5px dashed var(--text)';
+                        bar.appendChild(ghost);
+                    }
+                }
             }
 
             // ══════════════════════════════════════════════════════════════════
