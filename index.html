@@ -2668,8 +2668,24 @@
             function fillRecurso(isProd) {
                 const prefix = isProd ? 'p-' : 's-';
                 const cod = document.getElementById(prefix + 'recurso-cod').value.trim().toUpperCase();
+                
                 if (db.recursos[cod]) {
                     document.getElementById(prefix + 'recurso').value = db.recursos[cod];
+                    
+                    // Auto-preencher a hora inicial com base no histórico dessa máquina
+                    const tVal = document.getElementById(prefix + 'turno').value;
+                    const dSel = document.getElementById(prefix + 'data-ini').value;
+                    if (tVal && dSel) {
+                        const lEnd = getLastEnd(cod, tVal, dSel);
+                        if (lEnd) {
+                            document.getElementById(prefix + 'hora-ini').value = lEnd.toTimeString().slice(0, 5);
+                        } else {
+                            document.getElementById(prefix + 'hora-ini').value = '';
+                        }
+                    }
+                } else {
+                    document.getElementById(prefix + 'recurso').value = '';
+                    if (cod === '') document.getElementById(prefix + 'hora-ini').value = '';
                 }
             }
             document.getElementById('p-recurso-cod').addEventListener('input', () => fillRecurso(true));
@@ -2760,8 +2776,8 @@
                     const lEnd = getLastEnd(rCod, tVal, dSel);
                     if (lEnd) {
                         const cStart = parseDateTime(dSel, hI);
-                        // Se o horário digitado for menor que o último apontado, fica vermelho
-                        if (cStart < lEnd) hIniValid = false;
+                        // Se for PRODUÇÃO e o horário for menor que o último apontado, fica vermelho
+                        if (isProd && cStart < lEnd) hIniValid = false;
                     }
                 }
 
@@ -2827,8 +2843,8 @@
                     btnConfirm.className = 'btn btn-primary';
                     btnConfirm.textContent = 'Confirmar Registro';
                     btnConfirm.onclick = () => {
-                        confirmCallback();
                         document.getElementById('modalOverlay').classList.remove('open');
+                        setTimeout(() => confirmCallback(), 50);
                     };
 
                     foot.appendChild(btnCancel);
@@ -3309,7 +3325,7 @@
                             </div>`;
 
                     showModal('sucesso', 'Produção Registrada', msg);
-                    limparFormProd(hFim);
+                    limparFormProd();
                 });
             };
 
@@ -3562,16 +3578,16 @@
             //   Limpeza total — apaga todos os campos inclusive produto.
             //   Chamado pelo botão [Limpar] manual.
             // ══════════════════════════════════════════════════════════════════
-            window.limparFormProd = function (nextStart = '') {
+            window.limparFormProd = function () {
                 ['p-matricula', 'p-senha', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.value = '';
                 });
-                if (nextStart) document.getElementById('p-hora-ini').value = nextStart;
                 validateLive(true);
             };
             window.limparFormParada = function (nextStart = '') {
-                ['s-op', 's-desc', 's-produto', 's-recurso-cod', 's-recurso', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => {
+                // Limpeza Parcial (Lógica de pulo): mantemos O.P., Produto e Recurso
+                ['s-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.value = '';
                 });
