@@ -2626,17 +2626,40 @@
             // Auto-fill colaborador (Matrícula + Senha)
             function fillColab(isProd) {
                 const prefix = isProd ? 'p-' : 's-';
-                const mat = document.getElementById(prefix + 'matricula').value.trim();
-                const sen = document.getElementById(prefix + 'senha').value.trim();
-                if (mat && sen) {
-                    const key = `${mat}|${sen}`;
-                    document.getElementById(prefix + 'nome').value = db.colaboradores[key] || 'Colaborador/Senha inválidos';
+                const opp = isProd ? 's-' : 'p-';
+                const mat = document.getElementById(prefix + 'matricula').value;
+                const sen = document.getElementById(prefix + 'senha').value;
+                
+                // Emula a digitação em tempo real na outra tela
+                document.getElementById(opp + 'matricula').value = mat;
+                document.getElementById(opp + 'senha').value = sen;
+
+                let nome = '';
+                if (mat.trim() && sen.trim()) {
+                    nome = db.colaboradores[`${mat.trim()}|${sen.trim()}`] || 'Colaborador/Senha inválidos';
                 }
+                document.getElementById(prefix + 'nome').value = nome;
+                document.getElementById(opp + 'nome').value = nome;
+                
+                // Atualiza o feedback visual silenciosamente na outra tela
+                validateLive(!isProd);
             }
-            document.getElementById('p-matricula').addEventListener('input', () => fillColab(true));
-            document.getElementById('p-senha').addEventListener('input', () => fillColab(true));
-            document.getElementById('s-matricula').addEventListener('input', () => fillColab(false));
-            document.getElementById('s-senha').addEventListener('input', () => fillColab(false));
+            document.getElementById('p-matricula').addEventListener('input', () => { fillColab(true); validateLive(true); });
+            document.getElementById('p-senha').addEventListener('input', () => { fillColab(true); validateLive(true); });
+            document.getElementById('s-matricula').addEventListener('input', () => { fillColab(false); validateLive(false); });
+            document.getElementById('s-senha').addEventListener('input', () => { fillColab(false); validateLive(false); });
+
+            // Sincronização Turno/Datas cruzadas (Produção <=> Parada)
+            ['turno', 'data-ini', 'data-fim'].forEach(f => {
+                document.getElementById('p-' + f).addEventListener('change', e => {
+                    document.getElementById('s-' + f).value = e.target.value;
+                    validateLive(false);
+                });
+                document.getElementById('s-' + f).addEventListener('change', e => {
+                    document.getElementById('p-' + f).value = e.target.value;
+                    validateLive(true);
+                });
+            });
 
             // Auto-fill OP
             function fillOP(isProd) {
@@ -2864,35 +2887,30 @@
 
             // ══════════════════════════════════════════════════════════════════
             // SEÇÃO 8 — SESSÃO DO OPERADOR
-            // trocarOperador: limpa apenas os campos de login (matrícula/senha/nome).
-            // sairOperadorProd / sairOperadorParada: limpa o formulário inteiro
-            //   e redireciona para a tela inicial (HomeScreen).
+            // trocarOperador: limpa apenas os campos de login (matrícula/senha/nome) globais.
+            // sairOperadorGlobal: limpa TUDO e retorna para a home.
             // ══════════════════════════════════════════════════════════════════
+            function sairOperadorGlobal() {
+                ['p-matricula', 'p-senha', 'p-nome', 's-matricula', 's-senha', 's-nome'].forEach(id => { 
+                    const el = document.getElementById(id); 
+                    if (el) el.value = ''; 
+                });
+                limparFormProd();
+                limparFormParadaCompleto();
+                goTo('screen-home');
+            }
+
             window.trocarOperador = function (isProd) {
-                const prefix = isProd ? 'p-' : 's-';
-                ['matricula', 'senha', 'nome'].forEach(f => {
-                    const el = document.getElementById(prefix + f);
+                ['p-matricula', 'p-senha', 'p-nome', 's-matricula', 's-senha', 's-nome'].forEach(f => {
+                    const el = document.getElementById(f);
                     if (el) el.value = '';
                 });
-                validateLive(isProd);
+                validateLive(true);
+                validateLive(false);
             };
 
-            // Sair do operador e voltar para home (Produção)
-            window.sairOperadorProd = function () {
-                // Limpa campos de operador
-                ['p-matricula', 'p-senha', 'p-nome'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-                // Limpa o formulário inteiro
-                limparFormProd();
-                // Volta para a tela inicial
-                goTo('screen-home');
-            };
-
-            // Sair do operador e voltar para home (Parada)
-            window.sairOperadorParada = function () {
-                ['s-matricula', 's-senha', 's-nome'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-                limparFormParada();
-                goTo('screen-home');
-            };
+            window.sairOperadorProd = sairOperadorGlobal;
+            window.sairOperadorParada = sairOperadorGlobal;
 
             // ══════════════════════════════════════════════════════════════════
             // SEÇÃO 9 — TIMELINE VISUAL DO TURNO
