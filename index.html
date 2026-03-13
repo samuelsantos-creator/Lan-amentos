@@ -931,9 +931,9 @@
                     style="display:none; color:var(--red); font-size:10px; font-weight:700; margin-top:5px; text-align:center;">
                     <i class="fas fa-exclamation-triangle"></i> ATENÇÃO: HÁ UM GAP (ESPAÇO VAZIO) ANTES DESTE HORÁRIO
                 </div>
-                <div class="timeline-labels" style="position: relative;">
+                <div class="timeline-labels" style="position: relative; display: flex; justify-content: space-between; align-items: center; height: 18px;">
                     <span id="p-timeline-start">06:00</span>
-                    <span id="p-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap; top: -20px; font-size: 11px;"></span>
+                    <span id="p-timeline-last" style="position: absolute; color: var(--accent); font-weight: 800; transform: translateX(-50%); white-space: nowrap; font-size: 12px; left: 0; line-height: 1;"></span>
                     <span id="p-timeline-end">14:00</span>
                 </div>
                 <div style="text-align: center; color:var(--accent); font-size: 9px; text-transform: uppercase; font-weight: bold; margin-top: 4px;">
@@ -1150,9 +1150,9 @@
                     style="display:none; color:var(--red); font-size:10px; font-weight:700; margin-top:5px; text-align:center;">
                     <i class="fas fa-exclamation-triangle"></i> ATENÇÃO: HÁ UM GAP (ESPAÇO VAZIO) ANTES DESTE HORÁRIO
                 </div>
-                <div class="timeline-labels" style="position: relative;">
+                <div class="timeline-labels" style="position: relative; display: flex; justify-content: space-between; align-items: center; height: 18px;">
                     <span id="s-timeline-start">06:00</span>
-                    <span id="s-timeline-last" style="position: absolute; color: var(--accent); font-weight: 700; transform: translateX(-50%); white-space: nowrap; top: -20px; font-size: 11px;"></span>
+                    <span id="s-timeline-last" style="position: absolute; color: var(--accent); font-weight: 800; transform: translateX(-50%); white-space: nowrap; font-size: 12px; left: 0; line-height: 1;"></span>
                     <span id="s-timeline-end">14:00</span>
                 </div>
                 <div style="text-align: center; color:var(--accent); font-size: 9px; text-transform: uppercase; font-weight: bold; margin-top: 4px;">
@@ -2644,6 +2644,74 @@
             }
 
             // ══════════════════════════════════════════════════════════════════
+            // SEÇÃO 3.5 — BUSCA (SEARCH)
+            // Implementação dos botões de lupa (magnifying glass)
+            // ══════════════════════════════════════════════════════════════════
+            window.openSearch = function (type, targetId) {
+                let items = [];
+                let title = '';
+                
+                if (type === 'ops') {
+                    items = Object.entries(db.ops).map(([op, data]) => ({ code: op, label: (data.produto || 'N/A') + ' - ' + (db.produtos[data.produto] || data.desc || 'Sem descrição') }));
+                    title = 'Pesquisar Ordem de Produção';
+                } else if (type === 'produtos') {
+                    items = Object.entries(db.produtos).map(([code, desc]) => ({ code, label: desc }));
+                    title = 'Pesquisar Produto';
+                } else if (type === 'recursos') {
+                    items = Object.entries(db.recursos).map(([code, name]) => ({ code, label: name }));
+                    title = 'Pesquisar Recurso';
+                } else if (type === 'motivos') {
+                    items = Object.entries(db.motivos).map(([code, desc]) => ({ code, label: desc }));
+                    title = 'Pesquisar Motivo de Parada';
+                }
+
+                let html = `
+                    <div style="margin-bottom: 15px;">
+                        <input type="text" id="search-modal-input" placeholder="Digite para filtrar..." style="width:100%; padding:12px; border-radius:8px; border:2px solid var(--accent); outline:none;">
+                    </div>
+                    <div id="search-modal-results" style="max-height: 350px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;">
+                        ${items.map(item => `
+                            <div class="search-item" onclick="selectSearchItem('${targetId}', '${item.code}')" style="padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.2s; background: white;">
+                                <div style="font-weight: 700; color: var(--accent); font-size: 1rem;">${item.code}</div>
+                                <div style="color: var(--text2); font-size: 0.85rem; margin-top: 2px;">${item.label}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <style>
+                        .search-item:hover { background: var(--surface2) !important; border-left: 4px solid var(--accent); padding-left: 8px !important; }
+                        #search-modal-results::-webkit-scrollbar { width: 6px; }
+                        #search-modal-results::-webkit-scrollbar-thumb { background: var(--text3); border-radius: 10px; }
+                    </style>
+                `;
+
+                showModal('sucesso', title, html);
+                
+                setTimeout(() => {
+                    const input = document.getElementById('search-modal-input');
+                    if (input) {
+                        input.focus();
+                        input.addEventListener('input', (e) => {
+                            const val = e.target.value.toLowerCase();
+                            document.querySelectorAll('.search-item').forEach(el => {
+                                const text = el.textContent.toLowerCase();
+                                el.style.display = text.includes(val) ? 'block' : 'none';
+                            });
+                        });
+                    }
+                }, 150);
+            };
+
+            window.selectSearchItem = function (targetId, code) {
+                const el = document.getElementById(targetId);
+                if (el) {
+                    el.value = code;
+                    el.dispatchEvent(new Event('input'));
+                    el.dispatchEvent(new Event('change'));
+                }
+                document.getElementById('modalOverlay').classList.remove('open');
+            };
+
+            // ══════════════════════════════════════════════════════════════════
             // SEÇÃO 4 — AUTO-FILL (Preenchimento automático por código)
             // Ao digitar um código, o campo de descrição é preenchido
             // automaticamente consultando os objetos db.
@@ -3019,7 +3087,7 @@
                     labelLast.style.left = leftLast + '%';
                     labelLast.textContent = lastEndStr;
                     // Esconde se estiver muito perto das pontas para não encavalar
-                    labelLast.style.display = (leftLast < 5 || leftLast > 95) ? 'none' : 'block';
+                    labelLast.style.display = (leftLast < 8 || leftLast > 92) ? 'none' : 'block';
                 }
 
                 const currentHIni = document.getElementById(suffix + 'hora-ini').value;
@@ -3675,7 +3743,8 @@
             //   Chamado pelo botão [Limpar] manual.
             // ══════════════════════════════════════════════════════════════════
             window.limparFormProd = function () {
-                ['p-matricula', 'p-senha', 'p-nome', 'p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => {
+                // Manter matrícula, senha e nome do operador após o apontamento (conforme solicitado pelo usuário)
+                ['p-op', 'p-produto', 'p-desc', 'p-recurso-cod', 'p-recurso', 'p-qtd', 'p-qtd-ret', 'p-setup', 'p-rnc', 'p-cestos', 'p-hora-ini', 'p-hora-fim'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.value = '';
                 });
@@ -3693,7 +3762,8 @@
 
             // Limpar completo (para quando clicar em "Limpar" manualmente)
             window.limparFormParadaCompleto = function () {
-                ['s-matricula', 's-senha', 's-nome', 's-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => {
+                // Manter matrícula, senha e nome do operador também na parada
+                ['s-op', 's-produto', 's-desc', 's-recurso-cod', 's-recurso', 's-motivo-cod', 's-motivo-desc', 's-hora-ini', 's-hora-fim'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.value = '';
                 });
