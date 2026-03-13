@@ -291,20 +291,27 @@
 
         .field .help-btn {
             position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
+            right: 0;
+            top: 0;
+            bottom: 0;
             background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            width: 22px;
-            height: 22px;
-            font-size: .7rem;
-            color: var(--text2);
+            border: none;
+            border-left: 1.5px solid var(--border);
+            border-radius: 0 8px 8px 0;
+            width: 32px;
+            font-size: .75rem;
+            color: var(--accent);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: .1s;
+            z-index: 2;
+        }
+
+        .field .help-btn:hover {
+            background: #e2e8f0;
+            color: var(--accent2);
         }
 
         .field input.with-btn {
@@ -463,9 +470,9 @@
             border-color: #81c784 !important;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232e7d32' width='18px' height='18px'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 8px center;
+            background-position: right 36px center; /* Move para não sobrepor o botão */
             background-size: 16px;
-            padding-right: 30px !important;
+            padding-right: 56px !important;
         }
 
         input.field-invalid,
@@ -474,9 +481,26 @@
             border-color: #e57373 !important;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c62828' width='18px' height='18px'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 8px center;
+            background-position: right 36px center; /* Move para não sobrepor o botão */
             background-size: 16px;
-            padding-right: 30px !important;
+            padding-right: 56px !important;
+        }
+
+        .field-error-message {
+            color: white;
+            background-color: var(--red);
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin-top: 4px;
+            display: none;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .field-invalid ~ .field-error-message {
+            display: inline-block;
         }
 
         /* ── TIMELINE ── */
@@ -809,14 +833,10 @@
         <!-- Operador -->
         <div class="form-card">
             <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
-            <div class="fields-grid cols-3">
+            <div class="fields-grid cols-2">
                 <div class="field">
-                    <label>Usuário</label>
-                    <input type="text" id="p-matricula" placeholder="Usuário" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                </div>
-                <div class="field">
-                    <label>Senha</label>
-                    <input type="password" id="p-senha" placeholder="••••••" autocomplete="off">
+                    <label>Operador (Matrícula)</label>
+                    <input type="text" id="p-matricula" placeholder="Digite sua matrícula" autocomplete="off">
                 </div>
                 <div class="field">
                     <label>Nome do Colaborador</label>
@@ -832,15 +852,15 @@
                 <div class="field field-span2">
                     <label>O.P.</label>
                     <div class="field-inner">
-                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="p-op" placeholder="Nº da Ordem de Produção" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('ops', 'p-op')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Produto</label>
                     <div class="field-inner">
-                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="p-produto" placeholder="Código do produto" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('produtos', 'p-produto')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
@@ -850,8 +870,8 @@
                 <div class="field">
                     <label>Cód. Recurso</label>
                     <div class="field-inner">
-                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="p-recurso-cod" placeholder="Código" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('recursos', 'p-recurso-cod')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
@@ -881,15 +901,17 @@
                 <div class="field">
                     <label>Data Inicial</label>
                     <div class="field-inner">
-                        <input type="text" id="p-data-ini" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="p-data-ini" class="with-btn" placeholder="00/00/0000" maxlength="10">
+                        <button class="help-btn" onclick="openDatePicker('p-data-ini')"><i class="fas fa-calendar-alt"></i></button>
+                        <input type="date" id="p-data-ini-picker" style="position:absolute; width:0; height:0; opacity:0; pointer-events:none; bottom:0; left:0;">
                     </div>
                 </div>
                 <div class="field">
                     <label>Data Final</label>
                     <div class="field-inner">
-                        <input type="text" id="p-data-fim" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="p-data-fim" class="with-btn" placeholder="00/00/0000" maxlength="10">
+                        <button class="help-btn" onclick="openDatePicker('p-data-fim')"><i class="fas fa-calendar-alt"></i></button>
+                        <input type="date" id="p-data-fim-picker" style="position:absolute; width:0; height:0; opacity:0; pointer-events:none; bottom:0; left:0;">
                     </div>
                 </div>
                 <div class="field">
@@ -929,28 +951,28 @@
                     <div class="field-inner">
                         <input type="number" id="p-qtd" placeholder="0.00" step="0.01" min="0"
                             class="with-btn p-ignore-focus" autocomplete="off" inputmode="decimal">
-                        <button class="help-btn">?</button>
+                        <button class="help-btn" onclick="openHelp('Quantidade Produzida', 'Informe o total de peças boas produzidas neste período.')">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Qtd. Retrabalhada</label>
                     <div class="field-inner">
                         <input type="number" id="p-qtd-ret" placeholder="0.00" step="0.01" min="0" class="with-btn" autocomplete="off" inputmode="decimal">
-                        <button class="help-btn">?</button>
+                        <button class="help-btn" onclick="openHelp('Quantidade Retrabalhada', 'Informe a quantidade de peças que precisaram de retrabalho.')">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Peças Setup</label>
                     <div class="field-inner">
                         <input type="number" id="p-setup" placeholder="0.00" step="0.01" min="0" class="with-btn" autocomplete="off" inputmode="decimal">
-                        <button class="help-btn">?</button>
+                        <button class="help-btn" onclick="openHelp('Peças de Setup', 'Informe as peças utilizadas para o ajuste da máquina (setup).')">?</button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Peças NC (RNC)</label>
                     <div class="field-inner">
                         <input type="number" id="p-rnc" placeholder="0.00" step="0.01" min="0" class="with-btn" autocomplete="off" inputmode="decimal">
-                        <button class="help-btn">?</button>
+                        <button class="help-btn" onclick="openHelp('Peças Não Conformes', 'Informe a quantidade de peças rejeitadas ou enviadas para RNC.')">?</button>
                     </div>
                 </div>
                 <div class="field">
@@ -1019,14 +1041,10 @@
         <!-- Operador Parada -->
         <div class="form-card">
             <h4><i class="fas fa-user" style="margin-right:6px;color:var(--accent)"></i>Operador</h4>
-            <div class="fields-grid cols-3">
+            <div class="fields-grid cols-2">
                 <div class="field">
-                    <label>Usuário</label>
-                    <input type="text" id="s-matricula" placeholder="Usuário" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                </div>
-                <div class="field">
-                    <label>Senha</label>
-                    <input type="password" id="s-senha" placeholder="••••••" autocomplete="off">
+                    <label>Operador (Matrícula)</label>
+                    <input type="text" id="s-matricula" placeholder="Digite sua matrícula" autocomplete="off">
                 </div>
                 <div class="field">
                     <label>Nome do Colaborador</label>
@@ -1042,15 +1060,15 @@
                 <div class="field field-span2">
                     <label>O.P.</label>
                     <div class="field-inner">
-                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="s-op" placeholder="Nº da Ordem de Produção" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('ops', 's-op')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
                     <label>Produto</label>
                     <div class="field-inner">
-                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="s-produto" placeholder="Código do produto" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('produtos', 's-produto')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
@@ -1060,7 +1078,8 @@
                 <div class="field">
                     <label>Cód. Motivo</label>
                     <div class="field-inner">
-                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        <input type="text" id="s-motivo-cod" placeholder="Digite o código (ex: ST)" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('motivos', 's-motivo-cod')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
@@ -1070,8 +1089,8 @@
                 <div class="field">
                     <label>Cód. Recurso</label>
                     <div class="field-inner">
-                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="s-recurso-cod" placeholder="Código" class="with-btn">
+                        <button class="help-btn search-trigger" onclick="openSearch('recursos', 's-recurso-cod')"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
                 <div class="field">
@@ -1101,15 +1120,17 @@
                 <div class="field">
                     <label>Data Inicial</label>
                     <div class="field-inner">
-                        <input type="text" id="s-data-ini" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="s-data-ini" class="with-btn" placeholder="00/00/0000" maxlength="10">
+                        <button class="help-btn" onclick="openDatePicker('s-data-ini')"><i class="fas fa-calendar-alt"></i></button>
+                        <input type="date" id="s-data-ini-picker" style="position:absolute; width:0; height:0; opacity:0; pointer-events:none; bottom:0; left:0;">
                     </div>
                 </div>
                 <div class="field">
                     <label>Data Final</label>
                     <div class="field-inner">
-                        <input type="text" id="s-data-fim" class="with-btn" placeholder="00/00/0000" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <button class="help-btn">?</button>
+                        <input type="text" id="s-data-fim" class="with-btn" placeholder="00/00/0000" maxlength="10">
+                        <button class="help-btn" onclick="openDatePicker('s-data-fim')"><i class="fas fa-calendar-alt"></i></button>
+                        <input type="date" id="s-data-fim-picker" style="position:absolute; width:0; height:0; opacity:0; pointer-events:none; bottom:0; left:0;">
                     </div>
                 </div>
                 <div class="field">
@@ -1968,30 +1989,39 @@
     </div>
     <div class="section-body">
       <div class="section-content">
-
-        <!-- ERRO 1 -->
-        <div class="label">Erro 1 — Tempo de Produção Incorreto</div>
-        <p class="body-text">Registrar o tempo total do turno sem descontar as paradas. O sistema entende que a máquina produziu durante a parada.</p>
+        <!-- REGRA DE CÁLCULO DE HORAS -->
+        <div class="label">Regra de Ouro — O Sistema Subtrai as Paradas Automaticamente</div>
+        <p class="body-text">Você <strong>não deve descontar</strong> o tempo de parada do seu apontamento de produção. O operador deve cobrir o período integral do turno com o apontamento de produção, e o sistema subtrairá as paradas registradas automaticamente.</p>
+        
         <div class="timeline-wrap">
-          <div class="timeline-label">✅ Correto — Turno 06:00–14:00 com parada 12:00–13:00</div>
+          <div class="timeline-label">✅ Forma Correta — Produção 06:00–14:00 + Parada 12:00–13:00</div>
           <div class="timeline-bar">
-            <div class="tl-seg prod" style="flex:6">Produção<br>06:00–12:00</div>
-            <div class="tl-seg stop" style="flex:1">PARADA<br>12:00–13:00</div>
-            <div class="tl-seg prod" style="flex:1">Prod<br>13:00–14:00</div>
+            <div class="tl-seg prod" style="flex:8; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; text-align: center;">PRODUÇÃO REGISTRADA INTEGRAL (06:00–14:00)</div>
           </div>
           <div class="alert alert-green" style="margin-top:8px;padding:10px 14px;">
             <span class="alert-icon">✅</span>
-            <span class="alert-text">Tempo de produção: 480 − 60 = <strong>420 minutos</strong></span>
+            <span class="alert-text"><strong>Cálculo do Sistema:</strong> 480 min (Produção) − 60 min (Parada) = <strong>420 min reais</strong></span>
           </div>
         </div>
-        <div class="timeline-wrap">
-          <div class="timeline-label">❌ Incorreto — 480 min registrados sem descontar a parada</div>
+
+        <div class="alert alert-blue" style="margin-top:8px;">
+          <span class="alert-icon">💡</span>
+          <div class="alert-text">
+            <strong>Nunca subtraia manualmente!</strong>
+            <p>Se você descontar a parada e apontar apenas o "tempo líquido", o sistema subtrairá a parada novamente sobre o seu tempo já reduzido, gerando dados de produtividade falsos e incorretos.</p>
+          </div>
+        </div>
+
+        <div class="timeline-wrap" style="margin-top:20px; opacity: 0.8;">
+          <div class="timeline-label">❌ Forma Incorreta — Fragmentar a produção (Picar o horário)</div>
           <div class="timeline-bar">
-            <div class="tl-seg stop" style="flex:1">PRODUÇÃO REGISTRADA COMO 480 MIN — inclui parada ❌</div>
+            <div class="tl-seg prod" style="flex:3; background: #cbd5e1; color: #475569;">Produção 06:00-12:00</div>
+            <div class="tl-seg stop" style="flex:1; background: var(--red); color: white;">PARADA</div>
+            <div class="tl-seg prod" style="flex:1; background: #cbd5e1; color: #475569;">Prod 13:00-14:00</div>
           </div>
           <div class="alert alert-red" style="margin-top:8px;padding:10px 14px;">
             <span class="alert-icon">❌</span>
-            <span class="alert-text">Sistema considera produção contínua — dados <strong>inflados</strong></span>
+            <span class="alert-text"><strong>Erro:</strong> Você está "picando" a produção para abrir espaço para a parada. <strong>Não faça isso!</strong> Lance a produção de 06:00 às 14:00 direto.</span>
           </div>
         </div>
 
@@ -2525,9 +2555,7 @@
                 <h3 id="modalTitle">Título</h3>
             </div>
             <div class="modal-body" id="modalBody">Mensagem</div>
-            <div class="modal-foot">
-                <button class="btn btn-ghost" id="fecharModal">Fechar</button>
-            </div>
+            <div class="modal-foot"></div>
         </div>
     </div>
 
@@ -2623,20 +2651,20 @@
             // isProd = false → prefixo 's-' (tela de Parada)
             // ══════════════════════════════════════════════════════════════════
 
-            // Auto-fill colaborador (Matrícula + Senha)
+            // Auto-fill colaborador (Matrícula)
             function fillColab(isProd) {
                 const prefix = isProd ? 'p-' : 's-';
                 const opp = isProd ? 's-' : 'p-';
                 const mat = document.getElementById(prefix + 'matricula').value;
-                const sen = document.getElementById(prefix + 'senha').value;
                 
                 // Emula a digitação em tempo real na outra tela
                 document.getElementById(opp + 'matricula').value = mat;
-                document.getElementById(opp + 'senha').value = sen;
 
                 let nome = '';
-                if (mat.trim() && sen.trim()) {
-                    nome = db.colaboradores[`${mat.trim()}|${sen.trim()}`] || 'Colaborador/Senha inválidos';
+                if (mat.trim()) {
+                    // Busca colaborador pela matrícula no formato 'MATRICULA|SENHA' (ignorando a senha)
+                    const foundKey = Object.keys(db.colaboradores).find(k => k.split('|')[0] === mat.trim());
+                    nome = foundKey ? db.colaboradores[foundKey] : 'Colaborador não encontrado';
                 }
                 document.getElementById(prefix + 'nome').value = nome;
                 document.getElementById(opp + 'nome').value = nome;
@@ -2645,9 +2673,7 @@
                 validateLive(!isProd);
             }
             document.getElementById('p-matricula').addEventListener('input', () => { fillColab(true); validateLive(true); });
-            document.getElementById('p-senha').addEventListener('input', () => { fillColab(true); validateLive(true); });
             document.getElementById('s-matricula').addEventListener('input', () => { fillColab(false); validateLive(false); });
-            document.getElementById('s-senha').addEventListener('input', () => { fillColab(false); validateLive(false); });
 
             // Sincronização Turno/Datas cruzadas (Produção <=> Parada)
             ['turno', 'data-ini', 'data-fim'].forEach(f => {
@@ -2729,64 +2755,43 @@
             // validateLive: orquestra a validação de todos os campos da tela.
             //   Chamada a cada input/change nos campos monitorados (liveFields).
             // ══════════════════════════════════════════════════════════════════
-            function updateFieldClass(id, isValid, isWarning = false) {
+            function updateFieldClass(id, isValid, errorMsg = '') {
                 const el = document.getElementById(id);
                 if (!el) return;
+                
+                // Gerenciar mensagem de erro
+                let msgEl = el.parentNode.querySelector('.field-error-message');
+                if (!msgEl) {
+                    msgEl = document.createElement('div');
+                    msgEl.className = 'field-error-message';
+                    el.parentNode.appendChild(msgEl);
+                }
+                msgEl.textContent = errorMsg;
+
                 el.classList.remove('field-empty', 'field-valid', 'field-invalid');
                 const val = el.value.trim();
+                
                 if (!val) {
                     el.classList.add('field-empty');
                 } else if (isValid) {
                     el.classList.add('field-valid');
-                    // Salto automático de foco (Atrito zero)
-                    if (document.activeElement === el && !el.classList.contains('p-ignore-focus')) {
-                        const activeScreen = document.querySelector('.screen.active');
-                        const focusable = Array.from(activeScreen.querySelectorAll('input:not([readonly]):not([disabled]), select:not([disabled])'))
-                            .filter(el => el.type !== 'hidden' && el.offsetParent !== null);
-                        const index = focusable.indexOf(el);
-                        if (index > -1 && index < focusable.length - 1) {
-                            focusable[index + 1].focus();
-                        }
-                    }
                 } else {
-                    el.classList.add('field-invalid');
+                    // Só adiciona a classe de erro se o usuário deu "Enter" ou saiu do campo (lógica específica)
+                    if (el.classList.contains('user-interacted')) {
+                        el.classList.add('field-invalid');
+                    }
                 }
             }
 
             function validateLive(isProd) {
                 const p = isProd ? 'p-' : 's-';
-                // Usuário e Senha
+                // Usuário
                 const mat = document.getElementById(p + 'matricula').value.trim();
-                const sen = document.getElementById(p + 'senha').value.trim();
+                // Matrícula fica verde se existir no cadastro
+                const loginCompleto = mat && Object.keys(db.colaboradores).some(k => k.split('|')[0] === mat);
                 
-                // Matrícula fica verde se existir no cadastro (independente da senha)
-                const matriculaExiste = mat && Object.keys(db.colaboradores).some(k => k.split('|')[0] === mat);
-                const loginCompleto = !!db.colaboradores[`${mat}|${sen}`];
-                
-                updateFieldClass(p + 'matricula', matriculaExiste);
-                updateFieldClass(p + 'senha', loginCompleto);
-
                 // Recurso
                 const rCod = document.getElementById(p + 'recurso-cod').value.trim().toUpperCase();
-                updateFieldClass(p + 'recurso-cod', !!db.recursos[rCod]);
-
-                // Produto / OP
-                if (isProd) {
-                    const op = document.getElementById('p-op').value.trim();
-                    // OP é totalmente opcional — sem feedback visual de cor
-                    document.getElementById('p-op').classList.remove('field-empty', 'field-valid', 'field-invalid');
-
-                    const prod = document.getElementById('p-produto').value.trim().toUpperCase();
-                    updateFieldClass('p-produto', !!db.produtos[prod]);
-                    const qtd = parseFloat(document.getElementById('p-qtd').value) || 0;
-                    updateFieldClass('p-qtd', qtd > 0);
-                } else {
-                    const mot = document.getElementById('s-motivo-cod').value.trim().toUpperCase();
-                    updateFieldClass('s-motivo-cod', !!db.motivos[mot]);
-                    // Produto da parada também é obrigatório
-                    const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
-                    updateFieldClass('s-produto', !!db.produtos[prodPar]);
-                }
 
                 // Horas e Validação de Retrocesso
                 const hI = document.getElementById(p + 'hora-ini').value;
@@ -2795,30 +2800,78 @@
                 const tVal = document.getElementById(p + 'turno').value;
                 
                 let hIniValid = isValidTimeStr(hI);
+                let hFimValid = isValidTimeStr(hF);
+                
                 if (hIniValid && rCod && tVal && dSel) {
                     const lEnd = getLastEnd(rCod, tVal, dSel);
                     if (lEnd) {
                         const cStart = parseDateTime(dSel, hI);
-                        // Se for PRODUÇÃO e o horário for menor que o último apontado, fica vermelho
-                        if (isProd && cStart < lEnd) hIniValid = false;
+                        if (cStart < lEnd) {
+                            hIniValid = false;
+                            hFimValid = false; // Se o início está ocupado, o fim também reflete erro
+                        }
                     }
                 }
 
-                updateFieldClass(p + 'hora-ini', hIniValid);
-                updateFieldClass(p + 'hora-fim', isValidTimeStr(hF));
+                updateFieldClass(p + 'matricula', loginCompleto, loginCompleto ? '' : 'Usuário não encontrado');
+                updateFieldClass(p + 'recurso-cod', !!db.recursos[rCod], 'Recurso não encontrado');
+
+                if (isProd) {
+                    const op = document.getElementById('p-op').value.trim();
+                    if (op) {
+                        updateFieldClass('p-op', !!db.ops[op], 'OP não encontrada');
+                    } else {
+                        document.getElementById('p-op').classList.remove('field-empty', 'field-valid', 'field-invalid');
+                        const msgEl = document.getElementById('p-op').parentNode.querySelector('.field-error-message');
+                        if (msgEl) msgEl.textContent = '';
+                    }
+
+                    const prod = document.getElementById('p-produto').value.trim().toUpperCase();
+                    updateFieldClass('p-produto', !!db.produtos[prod], 'Produto não encontrado');
+                    const qtd = parseFloat(document.getElementById('p-qtd').value) || 0;
+                    updateFieldClass('p-qtd', qtd > 0, 'Quantidade deve ser maior que zero');
+                } else {
+                    const mot = document.getElementById('s-motivo-cod').value.trim().toUpperCase();
+                    updateFieldClass('s-motivo-cod', !!db.motivos[mot], 'Código de parada incorreto');
+                    const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
+                    updateFieldClass('s-produto', !!db.produtos[prodPar], 'Produto não encontrado');
+                }
+
+                updateFieldClass(p + 'hora-ini', hIniValid, hIniValid ? '' : 'Horário já preenchido');
+                updateFieldClass(p + 'hora-fim', hFimValid, hFimValid ? '' : 'Horário já preenchido');
 
                 updateTimeline();
             }
 
             const liveFields = [
-                'p-matricula', 'p-senha', 'p-recurso-cod', 'p-op', 'p-produto', 'p-qtd', 'p-hora-ini', 'p-hora-fim',
-                's-matricula', 's-senha', 's-recurso-cod', 's-motivo-cod', 's-produto', 's-hora-ini', 's-hora-fim'
+                'p-matricula', 'p-recurso-cod', 'p-op', 'p-produto', 'p-qtd', 'p-hora-ini', 'p-hora-fim',
+                's-matricula', 's-recurso-cod', 's-motivo-cod', 's-produto', 's-hora-ini', 's-hora-fim'
             ];
             liveFields.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.addEventListener('input', () => validateLive(id.startsWith('p-')));
                     el.addEventListener('change', () => validateLive(id.startsWith('p-')));
+                    
+                    // Alerta imediato ao pressionar Enter em campo inválido
+                    el.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            el.classList.add('user-interacted'); // Marca que o usuário tentou confirmar
+                            validateLive(id.startsWith('p-')); // Re-valida para aplicar a cor vermelha se necessário
+                            
+                            if (el.classList.contains('field-invalid')) {
+                                const msgEl = el.parentNode.querySelector('.field-error-message');
+                                const errorMsg = msgEl ? msgEl.textContent : 'Informação inválida';
+                                showModal('erro', 'Campo Inválido', errorMsg);
+                                e.preventDefault();
+                            }
+                        }
+                    });
+
+                    // Limpa o estado de erro ao digitar novamente (para não ficar vermelho enquanto corrige)
+                    el.addEventListener('input', () => {
+                        el.classList.remove('user-interacted');
+                    });
                 }
             });
             // Inicializa as classes visuais ao carregar a página
@@ -2882,8 +2935,11 @@
 
                 document.getElementById('modalOverlay').classList.add('open');
             }
-            document.getElementById('fecharModal').onclick = () => document.getElementById('modalOverlay').classList.remove('open');
-            document.getElementById('modalOverlay').onclick = e => { if (e.target.id === 'modalOverlay') e.target.classList.remove('open'); };
+
+            // Centraliza o fechamento e clique fora
+            document.getElementById('modalOverlay').addEventListener('click', e => { 
+                if (e.target.id === 'modalOverlay') e.target.classList.remove('open'); 
+            });
 
             // ══════════════════════════════════════════════════════════════════
             // SEÇÃO 8 — SESSÃO DO OPERADOR
@@ -3082,9 +3138,7 @@
                 el.addEventListener('blur', e => {
                     let v = e.target.value;
                     if (v.length === 0) return;
-                    // Tenta completar se faltar dígitos
                     if (v.length <= 5) {
-                        // Se digitou só DD/MM, assume o ano atual
                         const year = new Date().getFullYear();
                         if (v.length === 2) v = v + "/" + (new Date().getMonth() + 1).toString().padStart(2, '0') + "/" + year;
                         else if (v.length === 5) v = v + "/" + year;
@@ -3093,6 +3147,29 @@
                 });
             }
             ['p-data-ini', 'p-data-fim', 's-data-ini', 's-data-fim'].forEach(maskDate);
+
+            // Função para abrir o seletor nativo e sincronizar
+            window.openDatePicker = function(id) {
+                const picker = document.getElementById(id + '-picker');
+                if (picker) {
+                    if (picker.showPicker) picker.showPicker();
+                    else picker.focus();
+                }
+            };
+
+            // Sincronizar picker -> input text
+            ['p-data-ini', 'p-data-fim', 's-data-ini', 's-data-fim'].forEach(id => {
+                const picker = document.getElementById(id + '-picker');
+                if (picker) {
+                    picker.addEventListener('change', (e) => {
+                        if (e.target.value) {
+                            const [y, m, d] = e.target.value.split('-');
+                            document.getElementById(id).value = `${d}/${m}/${y}`;
+                            validateLive(id.startsWith('p-'));
+                        }
+                    });
+                }
+            });
 
             function isValidTimeStr(t) {
                 if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(t)) return false;
@@ -3125,6 +3202,7 @@
 
             function parseDateTime(d, t) {
                 if (!d || !t) return null;
+                // Suporta tanto DD/MM/YYYY quanto YYYY-MM-DD
                 if (d.includes('/')) {
                     const [day, month, year] = d.split('/');
                     return new Date(`${year}-${month}-${day}T${t}:00`);
@@ -3222,14 +3300,14 @@
                 const cestos = parseInt(document.getElementById('p-cestos').value) || 1;
 
                 const matricula = document.getElementById('p-matricula').value.trim();
-                const senha = document.getElementById('p-senha').value.trim();
                 const shiftVal = document.getElementById('p-turno').value;
                 const turnoInfo = shiftVal.split('|');
                 const iniT = turnoInfo[1], fimT = turnoInfo[2];
 
                 // ─── VALIDAÇÃO 1: IDENTIFICAÇÃO ───────────────────────────
-                if (!matricula || !senha) { showModal('erro', 'ERRO: Operador', 'Identificação do operador é obrigatória.'); return; }
-                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'ERRO: Acesso', 'Usuário ou Senha incorretos.'); return; }
+                if (!matricula) { showModal('erro', 'ERRO: Operador', 'A matrícula do operador é obrigatória.'); return; }
+                const userExists = Object.keys(db.colaboradores).some(k => k.split('|')[0] === matricula);
+                if (!userExists) { showModal('erro', 'ERRO: Acesso', 'Usuário não encontrado.'); return; }
                 if (op && !db.ops[op]) { showModal('erro', 'ERRO: O.P.', 'Ordem de Produção não encontrada no cadastro.'); return; }
                 if (!prod || !db.produtos[prod]) { showModal('erro', 'ERRO: Produto', 'Código do produto inválido ou não encontrado.'); return; }
                 if (!rCod || !db.recursos[rCod]) { showModal('erro', 'ERRO: Recurso/Máquina', 'Máquina não encontrada no cadastro.'); return; }
@@ -3285,7 +3363,7 @@
                 `;
 
                 showModal('confirm', 'Confirmar Registro?', htmlConfirm, () => {
-                    const recProd = { matricula, senha, op, produto: prod, desc: db.produtos[prod] || '', recursoCod: rCod, recurso: db.recursos[rCod] || '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos, shiftKey: shiftVal };
+                    const recProd = { matricula, op, produto: prod, desc: db.produtos[prod] || '', recursoCod: rCod, recurso: db.recursos[rCod] || '', dIni, hIni, dFim, hFim, qtd, ret, setup, rnc, cestos, shiftKey: shiftVal };
                     state.produções.push(recProd);
                     syncLists();
 
@@ -3361,14 +3439,14 @@
                 const hFim = document.getElementById('s-hora-fim').value;
 
                 const matricula = document.getElementById('s-matricula').value.trim();
-                const senha = document.getElementById('s-senha').value.trim();
                 const turnoInfo = document.getElementById('s-turno').value.split('|');
                 if (turnoInfo.length < 3) { showModal('erro', 'Turno', 'Selecione um turno válido.'); return; }
                 const iniT = turnoInfo[1], fimT = turnoInfo[2];
 
                 const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
-                if (!matricula || !senha) { showModal('erro', 'Operador', 'Preencha usuário/senha.'); return; }
-                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'Acesso Negado', 'Credenciais inválidas.'); return; }
+                if (!matricula) { showModal('erro', 'Operador', 'Preencha a matrícula.'); return; }
+                const userExistsStop = Object.keys(db.colaboradores).some(k => k.split('|')[0] === matricula);
+                if (!userExistsStop) { showModal('erro', 'Acesso Negado', 'Usuário não encontrado.'); return; }
                 if (!motCod || !db.motivos[motCod]) { showModal('erro', 'Motivo', 'Selecione um motivo válido.'); return; }
                 if (!prodPar || !db.produtos[prodPar]) { showModal('erro', 'Produto Obrigatório', 'Informe o código do produto da parada.'); return; }
                 if (!rCod || !db.recursos[rCod]) { showModal('erro', 'Recurso', 'Máquina não encontrada.'); return; }
@@ -3410,15 +3488,15 @@
                 const hFim = document.getElementById('s-hora-fim').value;
 
                 const matricula = document.getElementById('s-matricula').value.trim();
-                const senha = document.getElementById('s-senha').value.trim();
                 const shiftVal = document.getElementById('s-turno').value;
                 const turnoInfo = shiftVal.split('|');
                 const iniT = turnoInfo[1], fimT = turnoInfo[2];
                 const prodPar = document.getElementById('s-produto').value.trim().toUpperCase();
 
                 // ─── VALIDAÇÃO 1: IDENTIFICAÇÃO ───────────────────────────
-                if (!matricula || !senha) { showModal('erro', 'ERRO: Operador', 'Identifique-se com usuário e senha.'); return; }
-                if (!db.colaboradores[`${matricula}|${senha}`]) { showModal('erro', 'ERRO: Acesso', 'Credenciais inválidas.'); return; }
+                if (!matricula) { showModal('erro', 'ERRO: Operador', 'Identifique-se com sua matrícula.'); return; }
+                const userExistsConfirmStop = Object.keys(db.colaboradores).some(k => k.split('|')[0] === matricula);
+                if (!userExistsConfirmStop) { showModal('erro', 'ERRO: Acesso', 'Usuário não encontrado.'); return; }
                 if (!motCod || !db.motivos[motCod]) { showModal('erro', 'ERRO: Motivo', 'Selecione um motivo de parada válido.'); return; }
                 if (!prodPar || !db.produtos[prodPar]) { showModal('erro', 'ERRO: Produto', 'Informe o código do produto da parada.'); return; }
                 if (!rCod || !db.recursos[rCod]) { showModal('erro', 'ERRO: Recurso', 'Máquina/Recurso não encontrado.'); return; }
@@ -3479,7 +3557,7 @@
                 `;
 
                 showModal('confirm', 'Confirmar Parada?', htmlConfirm, () => {
-                    const recStop = { matricula, senha, motCod, motDesc: db.motivos[motCod] || '', op, produto: prodPar, recursoCod: rCod, dIni, hIni, dFim, hFim, shiftKey: shiftVal };
+                    const recStop = { matricula, motCod, motDesc: db.motivos[motCod] || '', op, produto: prodPar, recursoCod: rCod, dIni, hIni, dFim, hFim, shiftKey: shiftVal };
                     state.paradas.push(recStop);
                     syncLists();
 
@@ -3557,7 +3635,7 @@
                 filtrados.forEach((p, i) => {
                     const realIndex = state.produções.indexOf(p);
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${p.op}</td><td>${p.produto || '—'}</td><td>${p.recursoCod}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${p.qtd.toFixed(2)}</td><td>${p.ret.toFixed(2)}</td><td>${p.setup.toFixed(2)}</td><td>${p.rnc.toFixed(2)}</td><td><button class="btn-rm" onclick="removeProd(${realIndex})"><i class="fas fa-trash"></i></button></td>`;
+                    tr.innerHTML = `<td>${p.op}</td><td>${p.produto || '—'}</td><td>${p.recursoCod}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${p.qtd.toFixed(2)}</td><td>${p.ret.toFixed(2)}</td><td>${p.setup.toFixed(2)}</td><td>${p.rnc.toFixed(2)}</td><td></td>`;
                     body.appendChild(tr);
                 });
                 document.getElementById('prod-lista-wrap').style.display = filtrados.length ? '' : 'none';
@@ -3576,7 +3654,7 @@
                     const e = parseDateTime(p.dFim, p.hFim);
                     const dur = s && e ? Math.round((e - s) / 60000) + ' min' : '—';
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${p.motCod}</td><td>${p.op || '—'}</td><td>${p.recursoCod}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${dur}</td><td><button class="btn-rm" onclick="removeParada(${realIndex})"><i class="fas fa-trash"></i></button></td>`;
+                    tr.innerHTML = `<td>${p.motCod}</td><td>${p.op || '—'}</td><td>${p.recursoCod}</td><td>${p.hIni}</td><td>${p.hFim}</td><td>${dur}</td><td></td>`;
                     body.appendChild(tr);
                 });
                 document.getElementById('parada-lista-wrap').style.display = filtrados.length ? '' : 'none';
